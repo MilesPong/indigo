@@ -3,18 +3,18 @@
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
-<html>
+<html lang="{{ config('app.locale') }}">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{{ $page_title or "AdminLTE Dashboard" }}</title>
+  <title>{{ config('app.name', 'Laravel') }} - Dashboard</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <!-- Bootstrap 3.3.6 -->
+  <!-- Bootstrap -->
   <!-- Font Awesome -->
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{ mix('css/app.css') }}">
@@ -63,7 +63,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini" id="app" v-cloak>
 <div class="wrapper">
 
   @include('admin.partials.header')
