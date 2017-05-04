@@ -12,4 +12,14 @@ const { mix } = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+   .sass('resources/assets/sass/app.scss', 'public/css')
+   .less('resources/assets/less/adminlte.less', 'public/css')
+   .copyDirectory('node_modules/admin-lte/plugins/', 'public/plugins/');
+
+if (!mix.config.inProduction) {
+	mix.sourceMaps();
+}
+
+if (mix.config.inProduction) {
+ 	mix.version();
+}
