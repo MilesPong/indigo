@@ -9,6 +9,7 @@
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "rap2hpoutre/laravel-log-viewer": "^0.10.0",
+        "thomaswelton/laravel-gravatar": "^1.1",
         "zizaco/entrust": "^1.8"
     },
     "require-dev": {
