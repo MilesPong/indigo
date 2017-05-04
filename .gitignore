@@ -11,3 +11,4 @@ npm-debug.log
 .env
 .phpstorm.meta.php
 _ide_helper.php
+/storage/debugbar
