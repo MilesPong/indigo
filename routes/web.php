@@ -21,6 +21,8 @@ Auth::routes();
 
 Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'dashboard'], function () {
     Route::get('/', 'DashboardController@index')->name('dashboard.index');
+
+    Route::resource('roles', 'RoleController');
 });
 
 Route::group(['namespace' => 'Frontend'], function () {

@@ -40,7 +40,7 @@
       </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="#"><i class="fa fa-circle-o"></i>Roles</a></li>
+        <li><a href="{{ route('roles.index') }}"><i class="fa fa-circle-o"></i>Roles</a></li>
         <li><a href="#"><i class="fa fa-circle-o"></i>Permissions</a></li>
       </ul>
       </li>
