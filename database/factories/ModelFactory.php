@@ -33,3 +33,14 @@ $factory->define(\App\Models\Role::class, function (\Faker\Generator $faker) {
         'description' => $faker->sentences(2, true)
     ];
 });
+
+$factory->define(\App\Models\Permission::class, function (\Faker\Generator $faker) {
+    $name = $faker->unique()->word;
+    $displayName = studly_case($name);
+
+    return [
+        'name' => 'can-' . $name,
+        'display_name' => $displayName,
+        'description' => $faker->sentences(2, true)
+    ];
+});
