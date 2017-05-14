@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\StoreUpdateRoleRequest;
+use App\Repositories\Contracts\PermissionRepository;
 use App\Repositories\Contracts\RoleRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,12 +16,19 @@ class RoleController extends Controller
     protected $roleRepo;
 
     /**
+     * @var PermissionRepository
+     */
+    protected $permRepo;
+
+    /**
      * RoleController constructor.
      * @param RoleRepository $roleRepo
+     * @param PermissionRepository $permRepo
      */
-    public function __construct(RoleRepository $roleRepo)
+    public function __construct(RoleRepository $roleRepo, PermissionRepository $permRepo)
     {
         $this->roleRepo = $roleRepo;
+        $this->permRepo = $permRepo;
     }
 
     /**
@@ -42,7 +50,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('admin.roles.create');
+        $permissions = $this->permRepo->all();
+
+        return view('admin.roles.create', compact('permissions'));
     }
 
     /**
@@ -53,7 +63,7 @@ class RoleController extends Controller
      */
     public function store(StoreUpdateRoleRequest $request)
     {
-        $role = $this->roleRepo->create($request->all());
+        $role = $this->roleRepo->createRole($request->all());
 
         return redirect()->route('roles.index');
     }
@@ -81,7 +91,11 @@ class RoleController extends Controller
     {
         $role = $this->roleRepo->find($id);
 
-        return view('admin.roles.edit', compact('role'));
+        $permissions = $this->permRepo->all();
+
+        $selected_perms = $this->roleRepo->getPermissionIds($role);
+
+        return view('admin.roles.edit', compact('role', 'permissions', 'selected_perms'));
     }
 
     /**
@@ -93,7 +107,7 @@ class RoleController extends Controller
      */
     public function update(StoreUpdateRoleRequest $request, $id)
     {
-        $role = $this->roleRepo->update($request->all(), $id);
+        $role = $this->roleRepo->updateRole($request->all(), $id);
 
         return redirect()->route('roles.index');
     }
