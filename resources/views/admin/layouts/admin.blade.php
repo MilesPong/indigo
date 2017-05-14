@@ -42,6 +42,9 @@ desired effect
     <!-- Main content -->
     <section class="content">
 
+      <!-- Content Header (Page header) -->
+      @include('admin.partials.error')
+
       <!-- Your Page Content Here -->
       @yield('content')
 
