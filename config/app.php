@@ -179,7 +179,9 @@ return [
 
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-        Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider::class
+        Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider::class,
+
+        App\Providers\RepositoryServiceProvider::class,
 
     ],
 

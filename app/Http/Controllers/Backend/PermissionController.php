@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\StoreUpdatePermissionRequest;
-use App\Repositories\Eloquent\PermissionRepository;
+use App\Repositories\Contracts\PermissionRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -13,7 +13,7 @@ class PermissionController extends Controller
 
     /**
      * PermissionController constructor.
-     * @param PermissionRepository $permRepo
+     * @param \App\Repositories\Contracts\PermissionRepository $permRepo
      */
     public function __construct(PermissionRepository $permRepo)
     {

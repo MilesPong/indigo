@@ -3,12 +3,13 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Role;
+use App\Repositories\Contracts\RoleRepository;
 
 /**
- * Class RoleRepository
+ * Class RoleRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class RoleRepository extends Repository
+class RoleRepositoryEloquent extends Repository implements RoleRepository
 {
     /**
      * @return string

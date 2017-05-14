@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\StoreUpdateRoleRequest;
-use App\Repositories\Eloquent\RoleRepository;
+use App\Repositories\Contracts\RoleRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
