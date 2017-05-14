@@ -44,7 +44,7 @@
         <li><a href="{{ route('permissions.index') }}"><i class="fa fa-circle-o"></i>Permissions</a></li>
       </ul>
       </li>
-      <li><a href="#"><i class="fa fa-users"></i> <span>Users</span></a></li>
+      <li><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>Users</span></a></li>
       <li><a href="#"><i class="fa fa-list"></i> <span>Posts</span></a></li>
       <li><a href="#"><i class="fa fa-tag"></i> <span>Tags</span></a></li>
     </ul>
