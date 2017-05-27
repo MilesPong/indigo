@@ -8,5 +8,16 @@ namespace App\Repositories\Contracts;
  */
 interface CategoryRepository extends RepositoryInterface
 {
+    /**
+     * @param array $attributes
+     * @return mixed
+     */
+    public function createCategory(array $attributes);
 
+    /**
+     * @param array $attributes
+     * @param $id
+     * @return mixed
+     */
+    public function updateCategory(array $attributes, $id);
 }

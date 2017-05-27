@@ -25,6 +25,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::resource('roles', 'RoleController');
     Route::resource('permissions', 'PermissionController');
     Route::resource('users', 'UserController');
+    Route::resource('categories', 'CategoryController');
 });
 
 Route::group(['namespace' => 'Frontend'], function () {
