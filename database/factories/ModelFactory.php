@@ -44,3 +44,13 @@ $factory->define(\App\Models\Permission::class, function (\Faker\Generator $fake
         'description' => $faker->sentences(2, true)
     ];
 });
+
+$factory->define(\App\Models\Category::class, function (\Faker\Generator $faker) {
+    $name = $faker->unique()->sentence(2);
+
+    return [
+        'name' => $name,
+        'description' => $faker->sentence(),
+        'slug' => str_slug($name),
+    ];
+});
