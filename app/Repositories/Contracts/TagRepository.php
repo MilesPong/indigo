@@ -16,6 +16,7 @@ interface TagRepository extends RepositoryInterface
 
     /**
      * @param array $attributes
+     * @param $id
      * @return mixed
      */
     public function updateTag(array $attributes, $id);
