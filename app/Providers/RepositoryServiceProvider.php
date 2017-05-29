@@ -33,5 +33,7 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Eloquent\CategoryRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\Contracts\TagRepository::class,
             \App\Repositories\Eloquent\TagRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\Contracts\PostRepository::class,
+            \App\Repositories\Eloquent\PostRepositoryEloquent::class);
     }
 }
