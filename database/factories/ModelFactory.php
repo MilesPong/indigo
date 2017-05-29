@@ -54,3 +54,13 @@ $factory->define(\App\Models\Category::class, function (\Faker\Generator $faker)
         'slug' => str_slug($name),
     ];
 });
+
+$factory->define(\App\Models\Tag::class, function (\Faker\Generator $faker) {
+    $name = $faker->unique()->word;
+
+    return [
+        'name' => $name,
+        'description' => $faker->sentence(),
+        'slug' => str_slug($name)
+    ];
+});
