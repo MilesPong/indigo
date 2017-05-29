@@ -69,4 +69,10 @@ interface RepositoryInterface
      * @return mixed
      */
     public function findWhere(array $where, $columns = ['*']);
+
+    /**
+     * @param $relations
+     * @return mixed
+     */
+    public function with($relations);
 }
