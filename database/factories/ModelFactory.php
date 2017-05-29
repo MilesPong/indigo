@@ -22,3 +22,58 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(\App\Models\Role::class, function (\Faker\Generator $faker) {
+    $name = $faker->unique()->word;
+    $displayName = studly_case($name);
+
+    return [
+        'name' => $name,
+        'display_name' => $displayName,
+        'description' => $faker->sentences(2, true)
+    ];
+});
+
+$factory->define(\App\Models\Permission::class, function (\Faker\Generator $faker) {
+    $name = $faker->unique()->word;
+    $displayName = studly_case($name);
+
+    return [
+        'name' => 'can-' . $name,
+        'display_name' => $displayName,
+        'description' => $faker->sentences(2, true)
+    ];
+});
+
+$factory->define(\App\Models\Category::class, function (\Faker\Generator $faker) {
+    $name = $faker->unique()->sentence(2);
+
+    return [
+        'name' => $name,
+        'description' => $faker->sentence(),
+        'slug' => str_slug($name),
+    ];
+});
+
+$factory->define(\App\Models\Tag::class, function (\Faker\Generator $faker) {
+    $name = $faker->unique()->word;
+
+    return [
+        'name' => $name,
+        'description' => $faker->sentence(),
+        'slug' => str_slug($name)
+    ];
+});
+
+$factory->define(\App\Models\Post::class, function (\Faker\Generator $faker) {
+    $title = $faker->unique()->sentence(mt_rand(3, 6));
+
+    return [
+        'title' => $title,
+        'user_id' => App\Models\User::inRandomOrder()->first()->id,
+        'category_id' => \App\Models\Category::pluck('id')->random(),
+        'description' => $faker->sentence(10),
+        'slug' => str_slug($title),
+        'content' => markdownContent($faker)
+    ];
+});

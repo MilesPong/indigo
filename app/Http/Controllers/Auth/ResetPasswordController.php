@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Auth\Traits\AuthRedirect;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class ResetPasswordController extends Controller
 {
+    use AuthRedirect;
+
     /*
     |--------------------------------------------------------------------------
     | Password Reset Controller

@@ -15,6 +15,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'dashboard'], function () {
+    Route::get('/', 'DashboardController@index')->name('dashboard.index');
+
+    Route::resource('roles', 'RoleController');
+    Route::resource('permissions', 'PermissionController');
+    Route::resource('users', 'UserController');
+    Route::resource('categories', 'CategoryController');
+    Route::resource('tags', 'TagController');
+    Route::resource('posts', 'PostController');
+});
+
+Route::group(['namespace' => 'Frontend'], function () {
+
+});
