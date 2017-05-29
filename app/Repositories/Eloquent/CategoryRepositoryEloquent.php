@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepository;
+use App\Repositories\Eloquent\Traits\Slugable;
 
 /**
  * Class CategoryRepositoryEloquent
@@ -11,6 +12,8 @@ use App\Repositories\Contracts\CategoryRepository;
  */
 class CategoryRepositoryEloquent extends Repository implements CategoryRepository
 {
+    use Slugable;
+
     /**
      * @return string
      */
@@ -36,10 +39,7 @@ class CategoryRepositoryEloquent extends Repository implements CategoryRepositor
      */
     protected function preHandleData(array $attributes)
     {
-        if (array_get($attributes, 'slug') == null) {
-            $name = array_get($attributes, 'name');
-            array_set($attributes, 'slug', str_slug($name));
-        }
+        $attributes = $this->autoSlug($attributes);
 
         return $attributes;
     }

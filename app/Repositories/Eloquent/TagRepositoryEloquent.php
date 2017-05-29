@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Tag;
 use App\Repositories\Contracts\TagRepository;
+use App\Repositories\Eloquent\Traits\Slugable;
 
 /**
  * Class TagRepositoryEloquent
@@ -11,6 +12,8 @@ use App\Repositories\Contracts\TagRepository;
  */
 class TagRepositoryEloquent extends Repository implements TagRepository
 {
+    use Slugable;
+
     /**
      * @return string
      */
@@ -36,10 +39,7 @@ class TagRepositoryEloquent extends Repository implements TagRepository
      */
     protected function preHandleData(array $attributes)
     {
-        if (array_get($attributes, 'slug') == null) {
-            $name = array_get($attributes, 'name');
-            array_set($attributes, 'slug', str_slug($name));
-        }
+        $attributes = $this->autoSlug($attributes);
 
         return $attributes;
     }
