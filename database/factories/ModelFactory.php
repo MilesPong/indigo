@@ -64,3 +64,16 @@ $factory->define(\App\Models\Tag::class, function (\Faker\Generator $faker) {
         'slug' => str_slug($name)
     ];
 });
+
+$factory->define(\App\Models\Post::class, function (\Faker\Generator $faker) {
+    $title = $faker->unique()->sentence(mt_rand(3, 6));
+
+    return [
+        'title' => $title,
+        'user_id' => App\Models\User::inRandomOrder()->first()->id,
+        'category_id' => \App\Models\Category::pluck('id')->random(),
+        'description' => $faker->sentence(10),
+        'slug' => str_slug($title),
+        'content' => markdownContent($faker)
+    ];
+});
