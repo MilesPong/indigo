@@ -20,4 +20,11 @@ interface PostRepository extends RepositoryInterface
      * @return mixed
      */
     public function updatePost(array $attributes, $id);
+
+    /**
+     * @param $post
+     * @param bool $toArray
+     * @return mixed
+     */
+    public function getTags($post, $toArray = true);
 }
