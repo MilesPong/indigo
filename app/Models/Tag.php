@@ -16,10 +16,10 @@ class Tag extends Model
     protected $fillable = ['name', 'description', 'slug'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function taggable()
+    public function posts()
     {
-        return $this->morphTo();
+        return $this->morphedByMany(Post::class, 'taggable');
     }
 }
