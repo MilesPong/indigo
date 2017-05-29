@@ -2,8 +2,8 @@
 
 ## Backend
 
-- [ ] Category
-- [ ] Tag
+- [x] Category
+- [x] Tag
 - [ ] Comment
 - [ ] Visitor & view count(use Middleware)
 - [ ] Cache
