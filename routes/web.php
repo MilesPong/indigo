@@ -27,6 +27,8 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::resource('users', 'UserController');
     Route::resource('categories', 'CategoryController');
     Route::resource('tags', 'TagController');
+    Route::post('posts/{id}/restore', 'PostController@restore')->name('posts.restore');
+    Route::post('posts/{id}/force-delete', 'PostController@forceDelete')->name('posts.force-delete');
     Route::resource('posts', 'PostController');
 });
 

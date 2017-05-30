@@ -43,11 +43,15 @@ class PostController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('trash')) {
+            $this->postRepo = $this->postRepo->onlyTrashed();
+        }
+
         $posts = $this->postRepo->with(['category', 'author'])->paginate();
 
         return view('admin.posts.index', compact('posts'));
@@ -133,5 +137,27 @@ class PostController extends Controller
         $this->postRepo->delete($id);
 
         return redirect()->route('posts.index');
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function restore($id)
+    {
+        $this->postRepo->restore($id);
+
+        return redirect()->route('posts.index');
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function forceDelete($id)
+    {
+        $this->postRepo->forceDelete($id);
+
+        return redirect()->back();
     }
 }
