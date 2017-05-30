@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Presenters\PostPresenter;
 use Illuminate\Database\Eloquent\Model;
+use Laracasts\Presenter\PresentableTrait;
 
 /**
  * Class Post
@@ -10,6 +12,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Post extends Model
 {
+    use PresentableTrait;
+
+    /**
+     * @var string
+     */
+    protected $presenter = PostPresenter::class;
+
     /**
      * @var array
      */

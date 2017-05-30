@@ -4,7 +4,10 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Post;
 use App\Repositories\Contracts\PostRepository;
+use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\Slugable;
+use App\Repositories\Exceptions\RepositoryException;
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -14,6 +17,22 @@ use Illuminate\Database\Eloquent\Model;
 class PostRepositoryEloquent extends Repository implements PostRepository
 {
     use Slugable;
+
+    /**
+     * @var TagRepository
+     */
+    protected $tagRepo;
+
+    /**
+     * PostRepositoryEloquent constructor.
+     * @param Container $app
+     * @param TagRepository $tagRepo
+     */
+    public function __construct(Container $app, TagRepository $tagRepo)
+    {
+        parent::__construct($app);
+        $this->tagRepo = $tagRepo;
+    }
 
     /**
      * @return string
@@ -31,7 +50,10 @@ class PostRepositoryEloquent extends Repository implements PostRepository
     {
         $attributes = $this->preHandleData($attributes);
 
-        return $this->create($attributes);
+        // TODO use transaction
+        $this->model = request()->user()->posts()->create($attributes);
+
+        return $this->syncTags(data_get($attributes, 'tag'));
     }
 
     /**
@@ -46,6 +68,32 @@ class PostRepositoryEloquent extends Repository implements PostRepository
     }
 
     /**
+     * @param array $tags
+     * @throws RepositoryException
+     */
+    protected function syncTags(array $tags)
+    {
+        if (!$this->model->exists) {
+            throw new RepositoryException('Model is not exist');
+        }
+
+        if (empty($tags)) {
+            return;
+        }
+
+        $ids = [];
+        foreach ($tags as $tagName) {
+            $tag = $this->tagRepo->firstOrCreate([
+                'name' => $tagName,
+                'slug' => str_slug($tagName)
+            ]);
+            array_push($ids, $tag->id);
+        }
+
+        return $this->model->tags()->sync($ids);
+    }
+
+    /**
      * @param array $attributes
      * @param $id
      * @return \Illuminate\Database\Eloquent\Collection|Model
@@ -54,28 +102,9 @@ class PostRepositoryEloquent extends Repository implements PostRepository
     {
         $attributes = $this->preHandleData($attributes);
 
-        return $this->update($attributes, $id);
-    }
+        // TODO use transaction
+        $this->model = $this->update($attributes, $id);
 
-    /**
-     * @param $post
-     * @param bool $toArray
-     * @return mixed
-     */
-    public function getTags($post, $toArray = true)
-    {
-        if (!$this->model->exists) {
-            $this->model = $this->find($post);
-        } elseif ($post instanceof Model) {
-            $this->model = $post;
-        }
-
-        $tagIds = $this->model->tags()->get()->pluck('pivot.tag_id');
-
-        if ($toArray) {
-            return $tagIds->toArray();
-        }
-
-        return $tagIds;
+        return $this->syncTags(data_get($attributes, 'tag'));
     }
 }

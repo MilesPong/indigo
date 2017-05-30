@@ -19,7 +19,6 @@
 <div class="form-group">
     <label>Category</label>
     <select class="form-control select2 category-selected" name="category_id" style="width: 100%;">
-        <option>Select Category</option>
         @foreach($categories as $category)
             <option value="{{ $category->id }}">{{ $category->name }}</option>
         @endforeach
@@ -30,7 +29,7 @@
     <label>Tags</label>
     <select name="tag[]" class="form-control select2 tags-selected" multiple="multiple" data-placeholder="Select Tag(s)" style="width: 100%;">
         @foreach($tags as $tag)
-            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+            <option value="{{ $tag->name }}">{{ $tag->name }}</option>
         @endforeach
     </select>
 </div>
@@ -56,14 +55,8 @@
         var simplemde = new SimpleMDE({element: $("#mdeditor")[0]});
     });
 
-    $(".select2").select2();
+    $(".category-selected").select2().val([{{ old('category_id', isset($post->category_id) ? $post->category_id : null)}}]).trigger('change');
 
-    @if(old('category_id') || isset($post->id))
-        $(".category-selected").select2().val({{ old('category_id', isset($post->category_id) ? $post->category_id : null)}}).trigger('change');
-    @endif
-
-    @if(old('tag') || isset($selected_tags))
-        $(".tags-selected").select2().val([{{ implode(',', old('tag', isset($selected_tags) ? $selected_tags : null)) }}]).trigger('change');
-    @endif
+    $(".tags-selected").select2({tags:true}).val([{!! $post->present()->selectedTags !!}]).trigger('change');
 </script>
 @endpush

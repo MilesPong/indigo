@@ -100,12 +100,10 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = $this->postRepo->find($id);
+        $post = $this->postRepo->with('tags')->find($id);
 
         $categories = $this->cateRepo->all();
         $tags = $this->tagRepo->all();
-
-        $selected_tags = $this->postRepo->getTags($post);
 
         return view('admin.posts.edit', compact('post', 'categories', 'tags', 'selected_tags'));
     }
