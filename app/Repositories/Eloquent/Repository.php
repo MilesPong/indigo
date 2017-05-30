@@ -194,4 +194,53 @@ abstract class Repository implements RepositoryInterface
     {
         return $this->model->firstOrCreate($attributes);
     }
+
+    /**
+     * @param bool $only
+     * @return $this
+     */
+    public function trashed($only = false)
+    {
+        if ($only) {
+            $this->model = $this->model->onlyTrashed();
+        } else {
+            $this->model = $this->model->withTrashed();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Repository
+     */
+    public function onlyTrashed()
+    {
+        return $this->trashed(true);
+    }
+
+    /**
+     * @return Repository
+     */
+    public function withTrashed()
+    {
+        return $this->trashed();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function restore($id)
+    {
+        return $this->withTrashed()->find($id)->restore();
+    }
+
+    /**
+     * @param $id
+     * @return bool|null
+     */
+    public function forceDelete($id)
+    {
+        return $this->withTrashed()->find($id)->forceDelete();
+    }
 }

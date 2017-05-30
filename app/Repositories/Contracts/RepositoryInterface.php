@@ -81,4 +81,32 @@ interface RepositoryInterface
      * @return mixed
      */
     public function firstOrCreate(array $attributes = []);
+
+    /**
+     * @param bool $only
+     * @return mixed
+     */
+    public function trashed($only = false);
+
+    /**
+     * @return mixed
+     */
+    public function onlyTrashed();
+
+    /**
+     * @return mixed
+     */
+    public function withTrashed();
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function restore($id);
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function forceDelete($id);
 }
