@@ -14,6 +14,10 @@
 - [ ] Schedule(backup,stat,)
 - [ ] I18N
 - [ ] Highlight tab
+- [ ] Links
+- [ ] Settings
+- [ ] File management
+- [ ] Feature image
 
 ## Frontend
 
