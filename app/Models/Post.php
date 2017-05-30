@@ -22,6 +22,11 @@ class Post extends Model
     ];
 
     /**
+     * @var array
+     */
+    protected $dates = ['published_at'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function category()
