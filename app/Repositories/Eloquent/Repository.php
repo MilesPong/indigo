@@ -185,4 +185,13 @@ abstract class Repository implements RepositoryInterface
         $this->model = $this->model->with($relations);
         return $this;
     }
+
+    /**
+     * @param array $attributes
+     * @return Model
+     */
+    public function firstOrCreate(array $attributes = [])
+    {
+        return $this->model->firstOrCreate($attributes);
+    }
 }

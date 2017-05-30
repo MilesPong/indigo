@@ -75,4 +75,10 @@ interface RepositoryInterface
      * @return mixed
      */
     public function with($relations);
+
+    /**
+     * @param array $attributes
+     * @return mixed
+     */
+    public function firstOrCreate(array $attributes = []);
 }
