@@ -2,45 +2,66 @@
 
 <!-- text input -->
 <div class="form-group">
-    <label>Title</label>
-    <input type="text" class="form-control" placeholder="Title" name="title" value="{{ old('title', $post->title) }}">
+    <label for="title" class="col-sm-1 control-label">Title</label>
+
+    <div class="col-sm-11">
+        <input type="text" class="form-control" id="title" placeholder="Title" value="{{ old('title', $post->title) }}">
+    </div>
 </div>
 
 <div class="form-group">
-    <label>Description</label>
-    <input type="text" class="form-control" placeholder="Description" name="description" value="{{ old('description', $post->description) }}">
+    <label for="description" class="col-sm-1 control-label">Description</label>
+
+    <div class="col-sm-11">
+        <input type="text" class="form-control" id="description" placeholder="Description" value="{{ old('description', $post->description) }}">
+    </div>
 </div>
 
 <div class="form-group">
-    <label>Slug</label>
-    <input type="text" class="form-control" placeholder="Slug" name="slug" value="{{ old('slug', $post->slug) }}">
+    <label for="slug" class="col-sm-1 control-label">Slug</label>
+
+    <div class="col-sm-11">
+        <input type="text" class="form-control" id="slug" placeholder="Slug" value="{{ old('slug', $post->slug) }}">
+    </div>
 </div>
 
 <div class="form-group">
-    <label>Category</label>
-    <select class="form-control select2 category-selected" name="category_id" style="width: 100%;">
-        @foreach($categories as $category)
-            <option value="{{ $category->id }}">{{ $category->name }}</option>
-        @endforeach
-    </select>
+    <label for="category_id" class="col-sm-1 control-label">Category</label>
+    <div class="col-sm-11">
+        <select class="form-control select2 category-selected" name="category_id" style="width: 100%;">
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+            @endforeach
+        </select>
+    </div>
 </div>
 
 <div class="form-group">
-    <label>Tags</label>
-    <select name="tag[]" class="form-control select2 tags-selected" multiple="multiple" data-placeholder="Select Tag(s)" style="width: 100%;">
-        @foreach($tags as $tag)
-            <option value="{{ $tag->name }}">{{ $tag->name }}</option>
-        @endforeach
-    </select>
+    <label for="tag" class="col-sm-1 control-label">Tags</label>
+    <div class="col-sm-11">
+        <select name="tag[]" class="form-control select2 tags-selected" multiple="multiple" data-placeholder="Select Tag(s)" style="width: 100%;">
+            @foreach($tags as $tag)
+                <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+            @endforeach
+        </select>
+    </div>
 </div>
 
-<textarea id="mdeditor" name="content">{{ old('content') ?: $post->content }}</textarea>
-
 <div class="form-group">
-    <button class="btn btn-primary pull-right" type="submit">
+    <label for="content" class="col-sm-1 control-label">Content</label>
+
+    <div class="col-sm-11">
+        <textarea id="mdeditor" name="content">{{ old('content') ?: $post->content }}</textarea>
+    </div>
+</div>
+
+@push('box-footer')
+<div class="box-footer">
+    <button class="btn btn-primary btn-lg btn-flag pull-right" type="submit">
         {{ isset($post->id) ? 'Save' : 'Submit' }}
     </button>
 </div>
+@endpush
 
 @push('css')
 <link rel="stylesheet" href="{{ asset('plugins/select2/select2.min.css') }}">
