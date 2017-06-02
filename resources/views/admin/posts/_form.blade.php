@@ -5,7 +5,7 @@
     <label for="title" class="col-sm-1 control-label">Title</label>
 
     <div class="col-sm-11">
-        <input type="text" class="form-control" id="title" placeholder="Title" value="{{ old('title', $post->title) }}">
+        <input type="text" class="form-control" name="title" id="title" placeholder="Title" value="{{ old('title', $post->title) }}">
     </div>
 </div>
 
