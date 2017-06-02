@@ -16,7 +16,10 @@ mix.js('resources/assets/js/app.js', 'public/js')
    .less('resources/assets/less/adminlte.less', 'public/css')
    .copyDirectory('node_modules/admin-lte/plugins/', 'public/plugins/')
    .copy('node_modules/simplemde/dist/simplemde.min.css', 'public/css')
-   .copy('node_modules/simplemde/dist/simplemde.min.js', 'public/js');
+   .copy('node_modules/simplemde/dist/simplemde.min.js', 'public/js')
+   .copy('node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css', 'public/css')
+   .copy('node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js', 'public/js')
+   .copy('node_modules/moment/min/moment.min.js', 'public/js');
 
 if (!mix.config.inProduction) {
 	mix.sourceMaps();
