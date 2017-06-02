@@ -59,7 +59,7 @@
     <label for="published_at" class="col-sm-1 control-label">Published At</label>
 
     <div class='col-sm-11'>
-        <input type='text' class="form-control" name="published_at" id="published_at" placeholder="Published At" value="{{ old('published_at', $post->published_at) }}"/>
+        <input type='text' class="form-control" name="published_at" id="published_at" placeholder="Published At" value="{{ $post->present()->publishedTime }}"/>
     </div>
 </div>
 

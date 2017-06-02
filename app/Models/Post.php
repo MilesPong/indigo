@@ -28,7 +28,9 @@ class Post extends Model
         'title',
         'slug',
         'description',
-        'content'
+        'content',
+        'published_at',
+        'is_draft'
     ];
 
     /**

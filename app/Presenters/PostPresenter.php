@@ -27,4 +27,20 @@ class PostPresenter extends Presenter
             return '"' . $tagName . '"';
         })->implode(',');
     }
+
+    /**
+     * @return false|mixed|null|string
+     */
+    public function publishedTime()
+    {
+        if ($old = old('published_at')) {
+            return $old;
+        }
+
+        if ($this->published_at) {
+            return date('m/d/Y g:i A', $this->published_at->timestamp);
+        }
+
+        return null;
+    }
 }
