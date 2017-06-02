@@ -7,6 +7,7 @@ use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
+use Carbon\Carbon;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,7 +65,42 @@ class PostRepositoryEloquent extends Repository implements PostRepository
     {
         $attributes = $this->autoSlug($attributes, 'title');
 
+        $publishedAt = $this->getPublishedAt(array_get($attributes, 'published_at'));
+
+        $isDraft = $this->getIsDraft(array_get($attributes, 'is_draft'));
+
+        $attributes = array_merge($attributes, [
+            'published_at' => $publishedAt,
+            'is_draft' => $isDraft,
+        ]);
+
         return $attributes;
+    }
+
+    /**
+     * @param $value
+     * @return Carbon
+     */
+    protected function getPublishedAt($value)
+    {
+        if (empty($value)) {
+            return Carbon::now();
+        }
+
+        return Carbon::createFromTimestamp(strtotime($value));
+    }
+
+    /**
+     * @param $value
+     * @return int
+     */
+    protected function getIsDraft($value)
+    {
+        if (empty($value)) {
+            return 0;
+        }
+
+        return 1;
     }
 
     /**
