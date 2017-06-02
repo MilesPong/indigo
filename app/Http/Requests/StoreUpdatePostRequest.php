@@ -24,7 +24,7 @@ class StoreUpdatePostRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'title' => 'required|max:25',
+            'title' => 'required',
             'description' => 'max:100',
             'category_id' => 'required',
             'slug' => 'unique:posts',
