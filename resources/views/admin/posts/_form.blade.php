@@ -13,7 +13,7 @@
     <label for="description" class="col-sm-1 control-label">Description</label>
 
     <div class="col-sm-11">
-        <input type="text" class="form-control" id="description" placeholder="Description" value="{{ old('description', $post->description) }}">
+        <input type="text" class="form-control" name="description" id="description" placeholder="Description" value="{{ old('description', $post->description) }}">
     </div>
 </div>
 
@@ -21,7 +21,7 @@
     <label for="slug" class="col-sm-1 control-label">Slug</label>
 
     <div class="col-sm-11">
-        <input type="text" class="form-control" id="slug" placeholder="Slug" value="{{ old('slug', $post->slug) }}">
+        <input type="text" class="form-control" name="slug" id="slug" placeholder="Slug" value="{{ old('slug', $post->slug) }}">
     </div>
 </div>
 
