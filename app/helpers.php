@@ -22,3 +22,16 @@ if (!function_exists('markdownContent')) {
         return $content;
     }
 }
+
+if (!function_exists('setActiveClass')) {
+    /**
+     * @param $route
+     * @param string $class
+     * @param string $adminPrefix
+     * @return string
+     */
+    function setActiveClass($route, $class = 'active', $adminPrefix = 'dashboard')
+    {
+        return Request::is($adminPrefix . '/' . $route . '*') ? $class : '';
+    }
+}
