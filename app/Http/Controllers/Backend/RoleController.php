@@ -65,7 +65,7 @@ class RoleController extends Controller
     {
         $role = $this->roleRepo->createRole($request->all());
 
-        return redirect()->route('roles.index');
+        return redirect()->route('roles.index')->withSuccess('Create role successfully!');
     }
 
     /**
@@ -109,7 +109,7 @@ class RoleController extends Controller
     {
         $role = $this->roleRepo->updateRole($request->all(), $id);
 
-        return redirect()->route('roles.index');
+        return redirect()->route('roles.index')->withSuccess('Update role successfully!');
     }
 
     /**
@@ -122,6 +122,6 @@ class RoleController extends Controller
     {
         $this->roleRepo->delete($id);
 
-        return redirect()->route('roles.index');
+        return redirect()->route('roles.index')->withSuccess('Delete role successfully!');
     }
 }
