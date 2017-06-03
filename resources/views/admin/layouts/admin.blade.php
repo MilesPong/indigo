@@ -43,7 +43,7 @@ desired effect
     <section class="content">
 
       <!-- Content Header (Page header) -->
-      @include('admin.partials.error')
+      @include('admin.partials.alerts')
 
       <!-- Your Page Content Here -->
       @yield('content')
