@@ -18,6 +18,7 @@
 - [ ] Settings
 - [ ] File management
 - [ ] Feature image
+- [ ] Flash session
 
 ## Frontend
 
@@ -31,3 +32,4 @@
 - [ ] API
 - [ ] Package
 - [ ] Unit test
+- [ ] Pjax
