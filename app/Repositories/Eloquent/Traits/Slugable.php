@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Eloquent\Traits;
 
+use Carbon\Carbon;
+
 /**
  * Trait Slugable
  * @package App\Repositories\Eloquent\Traits
@@ -20,9 +22,34 @@ trait Slugable
     {
         if (array_get($attributes, $keySlug) == null) {
             $name = array_get($attributes, $keyName);
-            array_set($attributes, $keySlug, str_slug($name));
+
+            $slug = str_slug($name);
+            if ($this->slugExists($slug, $keySlug)) {
+                $slug = $this->unique($name);
+            }
+
+            array_set($attributes, $keySlug, $slug);
         }
 
         return $attributes;
+    }
+
+    /**
+     * @param $slug
+     * @param string $column
+     * @return mixed
+     */
+    protected function slugExists($slug, $column = 'slug')
+    {
+        return $this->model->where($column, $slug)->exists();
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    protected function unique($value)
+    {
+        return str_slug($value) . '-' . Carbon::now()->toDateTimeString();
     }
 }
