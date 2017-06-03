@@ -85,6 +85,13 @@
 <link rel="stylesheet" href="{{ asset('css/simplemde.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('plugins/iCheck/all.css') }}">
+<style>
+    .editor-toolbar.fullscreen,
+    .CodeMirror-fullscreen,
+    .editor-preview-side {
+        z-index: 2000
+    }
+</style>
 @endpush
 
 @push('js')
