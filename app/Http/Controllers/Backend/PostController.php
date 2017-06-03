@@ -80,7 +80,7 @@ class PostController extends Controller
     {
         $this->postRepo->createPost($request->all());
 
-        return redirect()->route('posts.index')->withSuccess('Create post successfully!');
+        return redirect()->route('admin.posts.index')->withSuccess('Create post successfully!');
     }
 
     /**
@@ -123,7 +123,7 @@ class PostController extends Controller
     {
         $this->postRepo->updatePost($request->all(), $id);
 
-        return redirect()->route('posts.index')->withSuccess('Update post successfully!');
+        return redirect()->route('admin.posts.index')->withSuccess('Update post successfully!');
     }
 
     /**
@@ -136,7 +136,7 @@ class PostController extends Controller
     {
         $this->postRepo->delete($id);
 
-        return redirect()->route('posts.index')->withSuccess('Move post to trash successfully!');
+        return redirect()->route('admin.posts.index')->withSuccess('Move post to trash successfully!');
     }
 
     /**
@@ -147,7 +147,7 @@ class PostController extends Controller
     {
         $this->postRepo->restore($id);
 
-        return redirect()->route('posts.index')->withSuccess('Restore post successfully!');
+        return redirect()->route('admin.posts.index')->withSuccess('Restore post successfully!');
     }
 
     /**

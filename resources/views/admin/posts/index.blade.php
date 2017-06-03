@@ -1,12 +1,12 @@
 @extends('admin.layouts.admin')
 
 @section('content')
-    <a href="{{ route('posts.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
+    <a href="{{ route('admin.posts.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
 
     @if(request()->has('trash'))
-        <a href="{{ route('posts.index') }}" class="btn btn-lg btn-warning btn-flat pull-right" style="margin-bottom: 15px;">All</a>
+        <a href="{{ route('admin.posts.index') }}" class="btn btn-lg btn-warning btn-flat pull-right" style="margin-bottom: 15px;">All</a>
     @else
-        <a href="{{ route('posts.index', ['trash' => 'true']) }}" class="btn btn-lg btn-warning btn-flat pull-right" style="margin-bottom: 15px;">Trash</a>
+        <a href="{{ route('admin.posts.index', ['trash' => 'true']) }}" class="btn btn-lg btn-warning btn-flat pull-right" style="margin-bottom: 15px;">Trash</a>
     @endif
 
     <div class="row">
@@ -35,18 +35,18 @@
                                 <td>{{ $post->created_at }}</td>
                                 <td>
                                     @if(request()->has('trash'))
-                                        <form action="{{ route('posts.restore', $post->id) }}" method="POST" style="display: inline;">
+                                        <form action="{{ route('admin.posts.restore', $post->id) }}" method="POST" style="display: inline;">
                                             {{ csrf_field() }}
                                             <button type='submit' class="btn btn-success">Restore</button>
                                         </form>
-                                        <form action="{{ route('posts.force-delete', $post->id) }}" method="POST" style="display: inline;">
+                                        <form action="{{ route('admin.posts.force-delete', $post->id) }}" method="POST" style="display: inline;">
                                             {{ csrf_field() }}
                                             <button type='submit' class="btn btn-danger">Force Delete</button>
                                         </form>
                                     @else
-                                        <a class="btn btn-success" href="{{ route('posts.show', $post->id) }}">View</a>
-                                        <a class="btn btn-primary" href="{{ route('posts.edit', $post->id) }}">Edit</a>
-                                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display: inline;">
+                                        <a class="btn btn-success" href="{{ route('admin.posts.show', $post->id) }}">View</a>
+                                        <a class="btn btn-primary" href="{{ route('admin.posts.edit', $post->id) }}">Edit</a>
+                                        <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" style="display: inline;">
                                             {{ csrf_field() }}
                                             {{ method_field('DELETE') }}
                                             <button type='submit' class="btn btn-danger">Delete</button>

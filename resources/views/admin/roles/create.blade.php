@@ -14,7 +14,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
 
-                    <form role="form" action="{{ route('roles.store') }}" method="POST">
+                    <form role="form" action="{{ route('admin.roles.store') }}" method="POST">
 
                         @include('admin.roles._form')
 

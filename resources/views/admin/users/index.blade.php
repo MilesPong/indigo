@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
 @section('content')
-    <a href="{{ route('users.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
+    <a href="{{ route('admin.users.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
 
     <div class="row">
         <div class="col-xs-12">
@@ -26,9 +26,9 @@
                                 <td>{{ $user->created_at }}</td>
                                 <td>{{ $user->updated_at }}</td>
                                 <td>
-                                    <a class="btn btn-success" href="{{ route('users.show', $user->id) }}">View</a>
-                                    <a class="btn btn-primary" href="{{ route('users.edit', $user->id) }}">Edit</a>
-                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
+                                    <a class="btn btn-success" href="{{ route('admin.users.show', $user->id) }}">View</a>
+                                    <a class="btn btn-primary" href="{{ route('admin.users.edit', $user->id) }}">Edit</a>
+                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display: inline;">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
                                         <button type='submit' class="btn btn-danger">Delete</button>

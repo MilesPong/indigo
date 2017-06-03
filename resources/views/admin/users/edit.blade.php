@@ -12,7 +12,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
 
-                    <form role="form" action="{{ route('users.update', $user->id) }}" method="POST">
+                    <form role="form" action="{{ route('admin.users.update', $user->id) }}" method="POST">
                         {{ method_field('PATCH') }}
 
                         @include('admin.users._form')

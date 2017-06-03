@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
 @section('content')
-    <a href="{{ route('categories.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
+    <a href="{{ route('admin.categories.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
 
     <div class="row">
         <div class="col-xs-12">
@@ -26,9 +26,9 @@
                                 <td>{{ $category->slug }}</td>
                                 <td>{{ $category->parent_id }}</td>
                                 <td>
-                                    <a class="btn btn-success" href="{{ route('categories.show', $category->id) }}">View</a>
-                                    <a class="btn btn-primary" href="{{ route('categories.edit', $category->id) }}">Edit</a>
-                                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display: inline;">
+                                    <a class="btn btn-success" href="{{ route('admin.categories.show', $category->id) }}">View</a>
+                                    <a class="btn btn-primary" href="{{ route('admin.categories.edit', $category->id) }}">Edit</a>
+                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display: inline;">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
                                         <button type='submit' class="btn btn-danger">Delete</button>

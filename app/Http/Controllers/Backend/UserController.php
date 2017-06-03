@@ -65,7 +65,7 @@ class UserController extends Controller
     {
         $this->userRepo->createUser($request->all());
 
-        return redirect()->route('users.index')->withSuccess('Create user successfully!');
+        return redirect()->route('admin.users.index')->withSuccess('Create user successfully!');
     }
 
     /**
@@ -109,7 +109,7 @@ class UserController extends Controller
     {
         $this->userRepo->updateUser($request->all(), $id);
 
-        return redirect()->route('users.index')->withSuccess('Update user successfully!');
+        return redirect()->route('admin.users.index')->withSuccess('Update user successfully!');
     }
 
     /**
@@ -122,6 +122,6 @@ class UserController extends Controller
     {
         $this->userRepo->delete($id);
 
-        return redirect()->route('users.index')->withSuccess('Delete user successfully!');
+        return redirect()->route('admin.users.index')->withSuccess('Delete user successfully!');
     }
 }

@@ -52,7 +52,7 @@ class PermissionController extends Controller
     {
         $perm = $this->permRepo->create($request->all());
 
-        return redirect()->route('permissions.index')->withSuccess('Create permission successfully!');
+        return redirect()->route('admin.permissions.index')->withSuccess('Create permission successfully!');
     }
 
     /**
@@ -92,7 +92,7 @@ class PermissionController extends Controller
     {
         $perm = $this->permRepo->update($request->all(), $id);
 
-        return redirect()->route('permissions.index')->withSuccess('Update permission successfully!');
+        return redirect()->route('admin.permissions.index')->withSuccess('Update permission successfully!');
     }
 
     /**
@@ -105,6 +105,6 @@ class PermissionController extends Controller
     {
         $this->permRepo->delete($id);
 
-        return redirect()->route('permissions.index')->withSuccess('Delete permission successfully!');
+        return redirect()->route('admin.permissions.index')->withSuccess('Delete permission successfully!');
     }
 }

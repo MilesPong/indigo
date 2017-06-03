@@ -40,14 +40,14 @@
         </span>
         </a>
         <ul class="treeview-menu">
-          <li class="{!! $roleActive !!}"><a href="{{ route('roles.index') }}"><i class="fa fa-circle-o"></i>Roles</a></li>
-          <li class="{!! $permActive !!}"><a href="{{ route('permissions.index') }}"><i class="fa fa-circle-o"></i>Permissions</a></li>
+          <li class="{!! $roleActive !!}"><a href="{{ route('admin.roles.index') }}"><i class="fa fa-circle-o"></i>Roles</a></li>
+          <li class="{!! $permActive !!}"><a href="{{ route('admin.permissions.index') }}"><i class="fa fa-circle-o"></i>Permissions</a></li>
         </ul>
       </li>
-      <li class="{!! setActiveClass('users') !!}"><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>Users</span></a></li>
-      <li class="{!! setActiveClass('categories') !!}"><a href="{{ route('categories.index') }}"><i class="fa fa-sitemap"></i> <span>Categories</span></a></li>
-      <li class="{!! setActiveClass('tags') !!}"><a href="{{ route('tags.index') }}"><i class="fa fa-tags"></i> <span>Tags</span></a></li>
-      <li class="{!! setActiveClass('posts') !!}"><a href="{{ route('posts.index') }}"><i class="fa fa-list"></i> <span>Posts</span></a></li>
+      <li class="{!! setActiveClass('users') !!}"><a href="{{ route('admin.users.index') }}"><i class="fa fa-users"></i> <span>Users</span></a></li>
+      <li class="{!! setActiveClass('categories') !!}"><a href="{{ route('admin.categories.index') }}"><i class="fa fa-sitemap"></i> <span>Categories</span></a></li>
+      <li class="{!! setActiveClass('tags') !!}"><a href="{{ route('admin.tags.index') }}"><i class="fa fa-tags"></i> <span>Tags</span></a></li>
+      <li class="{!! setActiveClass('posts') !!}"><a href="{{ route('admin.posts.index') }}"><i class="fa fa-list"></i> <span>Posts</span></a></li>
     </ul>
     <!-- /.sidebar-menu -->
   </section>

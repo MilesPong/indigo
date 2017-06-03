@@ -52,7 +52,7 @@ class TagController extends Controller
     {
         $this->tagRepo->createTag($request->all());
 
-        return redirect()->route('tags.index')->withSuccess('Create tag successfully!');
+        return redirect()->route('admin.tags.index')->withSuccess('Create tag successfully!');
     }
 
     /**
@@ -92,7 +92,7 @@ class TagController extends Controller
     {
         $this->tagRepo->updateTag($request->all(), $id);
 
-        return redirect()->route('tags.index')->withSuccess('Update tag successfully!');
+        return redirect()->route('admin.tags.index')->withSuccess('Update tag successfully!');
     }
 
     /**
@@ -105,6 +105,6 @@ class TagController extends Controller
     {
         $this->tagRepo->delete($id);
 
-        return redirect()->route('tags.index')->withSuccess('Delete tag successfully!');
+        return redirect()->route('admin.tags.index')->withSuccess('Delete tag successfully!');
     }
 }

@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
 @section('content')
-    <a href="{{ route('roles.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
+    <a href="{{ route('admin.roles.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
 
     <div class="row">
         <div class="col-xs-12">
@@ -27,9 +27,9 @@
                                 <td>{{ $role->display_name }}</td>
                                 <td>{{ str_limit($role->description, 20) }}</td>
                                 <td>
-                                    <a class="btn btn-success" href="{{ route('roles.show', $role->id) }}">View</a>
-                                    <a class="btn btn-primary" href="{{ route('roles.edit', $role->id) }}">Edit</a>
-                                    <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display: inline;">
+                                    <a class="btn btn-success" href="{{ route('admin.roles.show', $role->id) }}">View</a>
+                                    <a class="btn btn-primary" href="{{ route('admin.roles.edit', $role->id) }}">Edit</a>
+                                    <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" style="display: inline;">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
                                         <button type='submit' class="btn btn-danger">Delete</button>

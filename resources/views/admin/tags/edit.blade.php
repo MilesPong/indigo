@@ -12,7 +12,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
 
-                    <form role="form" action="{{ route('tags.update', $tag->id) }}" method="POST">
+                    <form role="form" action="{{ route('admin.tags.update', $tag->id) }}" method="POST">
                         {{ method_field('PATCH') }}
 
                         @include('admin.tags._form')

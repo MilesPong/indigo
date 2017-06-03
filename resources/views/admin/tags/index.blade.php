@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
 @section('content')
-    <a href="{{ route('tags.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
+    <a href="{{ route('admin.tags.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
 
     <div class="row">
         <div class="col-xs-12">
@@ -24,9 +24,9 @@
                                 <td>{{ $tag->description }}</td>
                                 <td>{{ $tag->slug }}</td>
                                 <td>
-                                    <a class="btn btn-success" href="{{ route('tags.show', $tag->id) }}">View</a>
-                                    <a class="btn btn-primary" href="{{ route('tags.edit', $tag->id) }}">Edit</a>
-                                    <form action="{{ route('tags.destroy', $tag->id) }}" method="POST" style="display: inline;">
+                                    <a class="btn btn-success" href="{{ route('admin.tags.show', $tag->id) }}">View</a>
+                                    <a class="btn btn-primary" href="{{ route('admin.tags.edit', $tag->id) }}">Edit</a>
+                                    <form action="{{ route('admin.tags.destroy', $tag->id) }}" method="POST" style="display: inline;">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
                                         <button type='submit' class="btn btn-danger">Delete</button>

@@ -9,7 +9,7 @@
                     <h3 class="box-title">Post Info</h3>
                 </div>
                 <!-- /.box-header -->
-                <form role="form" action="{{ route('posts.update', $post->id) }}" method="POST" class="form-horizontal">
+                <form role="form" action="{{ route('admin.posts.update', $post->id) }}" method="POST" class="form-horizontal">
                 <div class="box-body">
                     {{ method_field('PATCH') }}
                     @include('admin.posts._form')

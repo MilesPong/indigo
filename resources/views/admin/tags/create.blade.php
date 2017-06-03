@@ -14,7 +14,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
 
-                    <form role="form" action="{{ route('tags.store') }}" method="POST">
+                    <form role="form" action="{{ route('admin.tags.store') }}" method="POST">
 
                         @include('admin.tags._form')
 
