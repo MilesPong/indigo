@@ -26,16 +26,15 @@ class StoreUpdateUserRequest extends FormRequest
         $rules = [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|between:6,20|confirmed',
         ];
 
         switch ($this->method()) {
             case "PUT":
             case "PATCH":
-                // TODO password is not required while in update event
                 $rules = array_merge($rules, [
-                    'password' => 'sometimes|min:6|confirmed',
-                    // 'password_confirmation' => 'required_with:password|min:6',
+                    'password' => 'sometimes|required|between:6,20|confirmed',
+                    'password_confirmation' => 'sometimes|required|same:password',
                     'email' => 'required|email|max:255|unique:users,email,' . $this->route('user')
                 ]);
                 break;
@@ -44,5 +43,21 @@ class StoreUpdateUserRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $pwd = ['password', 'password_confirmation'];
+
+        collect($pwd)->each(function ($item) {
+            if (!$this->has($item)) {
+                $this->replace($this->except($item));
+            }
+        });
     }
 }
