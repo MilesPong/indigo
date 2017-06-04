@@ -54,7 +54,7 @@ class PostRepositoryEloquent extends Repository implements PostRepository
         // TODO use transaction
         $this->model = request()->user()->posts()->create($attributes);
 
-        return $this->syncTags(data_get($attributes, 'tag'));
+        return $this->syncTags(data_get($attributes, 'tag', []));
     }
 
     /**
@@ -113,11 +113,12 @@ class PostRepositoryEloquent extends Repository implements PostRepository
             throw new RepositoryException('Model is not exist');
         }
 
+        $ids = [];
+
         if (empty($tags)) {
-            return;
+            return $this->model->tags()->sync($ids);
         }
 
-        $ids = [];
         foreach ($tags as $tagName) {
             $tag = $this->tagRepo->firstOrCreate([
                 'name' => $tagName,
@@ -141,6 +142,6 @@ class PostRepositoryEloquent extends Repository implements PostRepository
         // TODO use transaction
         $this->model = $this->update($attributes, $id);
 
-        return $this->syncTags(data_get($attributes, 'tag'));
+        return $this->syncTags(data_get($attributes, 'tag', []));
     }
 }
