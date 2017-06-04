@@ -27,6 +27,10 @@ trait Slugable
             // TODO known bug
             // If update post with deleting original auto-generated slug, slug will generate again
             // and may 'duplicate' in DB. One solution is exclude current record(based on id) while doing update
+            // Solution 1: Add method 'prepareForValidation' in FormRequest, example below,
+            // $this->merge([
+            //     'slug' => str_slug($this->input('title'))
+            // ]);
             if ($this->slugExists($slug, $keySlug)) {
                 $slug = $this->unique($name);
             }
