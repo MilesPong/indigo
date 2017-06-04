@@ -27,6 +27,7 @@ class StoreUpdateUserRequest extends FormRequest
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|between:6,20|confirmed',
+            'role.*' => 'exists:roles,id'
         ];
 
         switch ($this->method()) {

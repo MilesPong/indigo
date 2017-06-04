@@ -26,7 +26,8 @@ class StoreUpdateRoleRequest extends FormRequest
         $rules = [
             'name' => 'required|unique:roles|max:20',
             'display_name' => 'max:50',
-            'description' => 'string'
+            'description' => 'string',
+            'permission.*' => 'exists:permissions,id'
         ];
 
         switch ($this->method()) {
