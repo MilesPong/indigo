@@ -55,11 +55,21 @@ abstract class Repository implements RepositoryInterface
     abstract public function model();
 
     /**
+     * The fake "booting" method of the model in calling scopes.
+     */
+    public function scopeBoot()
+    {
+
+    }
+
+    /**
      * @param array $columns
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function all($columns = ['*'])
     {
+        $this->scopeBoot();
+
         if ($this->model instanceof Builder) {
             $results = $this->model->get();
         } else {
@@ -76,6 +86,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function paginate($perPage = 10, $columns = ['*'])
     {
+        $this->scopeBoot();
+
         return $this->model->paginate($perPage, $columns);
     }
 
@@ -95,6 +107,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function update(array $attributes, $id)
     {
+        $this->scopeBoot();
+
         $model = $this->model->findOrFail($id);
         $model->fill($attributes);
         $model->save();
@@ -108,6 +122,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function delete($id)
     {
+        $this->scopeBoot();
+
         return $this->model->destroy($id);
     }
 
@@ -118,6 +134,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function find($id, $columns = ['*'])
     {
+        $this->scopeBoot();
+
         return $this->model->findOrFail($id, $columns);
     }
 
@@ -129,6 +147,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function findBy($field, $value, $columns = ['*'])
     {
+        $this->scopeBoot();
+
         return $this->model->where($field, '=', $value)->first($columns);
     }
 
@@ -140,6 +160,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function findAllBy($field, $value, $columns = ['*'])
     {
+        $this->scopeBoot();
+
         return $this->model->where($field, '=', $value)->get($columns);
     }
 
@@ -150,6 +172,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function findWhere(array $where, $columns = ['*'])
     {
+        $this->scopeBoot();
+
         $this->applyConditions($where);
 
         return $this->model->get($columns);
@@ -192,6 +216,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function firstOrCreate(array $attributes = [])
     {
+        $this->scopeBoot();
+
         return $this->model->firstOrCreate($attributes);
     }
 
@@ -201,6 +227,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function trashed($only = false)
     {
+        $this->scopeBoot();
+
         if ($only) {
             $this->model = $this->model->onlyTrashed();
         } else {
@@ -232,6 +260,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function restore($id)
     {
+        $this->scopeBoot();
+
         return $this->withTrashed()->find($id)->restore();
     }
 
@@ -241,6 +271,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function forceDelete($id)
     {
+        $this->scopeBoot();
+
         return $this->withTrashed()->find($id)->forceDelete();
     }
 }
