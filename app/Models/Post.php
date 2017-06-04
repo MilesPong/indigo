@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Presenters\PostPresenter;
+use App\Scopes\PublishedScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laracasts\Presenter\PresentableTrait;
@@ -47,6 +48,17 @@ class Post extends Model
      * @var array
      */
     protected $dates = ['published_at', 'deleted_at'];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new PublishedScope);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
