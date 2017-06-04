@@ -16,6 +16,16 @@ class Post extends Model
     use PresentableTrait, SoftDeletes;
 
     /**
+     * Is draft status
+     */
+    const IS_DRAFT = 1;
+
+    /**
+     * Is not draft status
+     */
+    const IS_NOT_DRAFT = 0;
+
+    /**
      * @var string
      */
     protected $presenter = PostPresenter::class;
@@ -60,5 +70,14 @@ class Post extends Model
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getConst($name)
+    {
+        return constant("self::{$name}");
     }
 }

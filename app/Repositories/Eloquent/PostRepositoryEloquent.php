@@ -97,10 +97,10 @@ class PostRepositoryEloquent extends Repository implements PostRepository
     protected function getIsDraft($value)
     {
         if (empty($value)) {
-            return 0;
+            return $this->model->getConst('IS_NOT_DRAFT');
         }
 
-        return 1;
+        return $this->model->getConst('IS_DRAFT');
     }
 
     /**
