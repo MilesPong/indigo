@@ -35,3 +35,39 @@ if (!function_exists('setActiveClass')) {
         return Request::is($adminPrefix . '/' . $route . '*') ? $class : '';
     }
 }
+
+if (!function_exists('hasChinese')) {
+    /**
+     * @param $text
+     * @return bool
+     */
+    function hasChinese($text)
+    {
+        if (preg_match("/\p{Han}+/u", $text)) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('str_slug_with_cn')) {
+
+    /**
+     * @param $text
+     * @param bool $forceTrans
+     * @return \Illuminate\Foundation\Application|\JellyBool\Translug\Translation|mixed|string|translug
+     */
+    function str_slug_with_cn($text, $forceTrans = false)
+    {
+        if (empty(trim($text))) {
+            return '';
+        }
+
+        if ($forceTrans || hasChinese($text)) {
+            return translug($text);
+        }
+
+        return str_slug($text);
+    }
+}

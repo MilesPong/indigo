@@ -23,7 +23,10 @@ trait Slugable
         if (array_get($attributes, $keySlug) == null) {
             $name = array_get($attributes, $keyName);
 
-            $slug = str_slug($name);
+            $slug = str_slug_with_cn($name);
+            // TODO known bug
+            // If update post with deleting original auto-generated slug, slug will generate again
+            // and may 'duplicate' in DB. One solution is exclude current record(based on id) while doing update
             if ($this->slugExists($slug, $keySlug)) {
                 $slug = $this->unique($name);
             }
@@ -50,6 +53,14 @@ trait Slugable
      */
     protected function unique($value)
     {
-        return str_slug($value) . '-' . Carbon::now()->toDateTimeString();
+        return str_slug_with_cn($value) . '-' . $this->uniqueChar();
+    }
+
+    /**
+     * @return string
+     */
+    protected function uniqueChar()
+    {
+        return Carbon::now()->timestamp;
     }
 }
