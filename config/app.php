@@ -179,7 +179,8 @@ return [
 
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-        Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider::class
+        Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider::class,
+        JellyBool\Translug\TranslugServiceProvider::class,
 
     ],
 
@@ -233,6 +234,7 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
         'Gravatar' => Thomaswelton\LaravelGravatar\Facades\Gravatar::class,
+        'Translug' => \JellyBool\Translug\TranslugFacade::class,
     ],
 
 ];
