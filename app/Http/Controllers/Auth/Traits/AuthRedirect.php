@@ -11,6 +11,6 @@ trait AuthRedirect
      */
     protected function redirectTo()
     {
-        return route('dashboard.index');
+        return route('admin.dashboard.index');
     }
 }
