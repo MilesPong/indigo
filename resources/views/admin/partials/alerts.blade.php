@@ -1,5 +1,5 @@
 @if(Session::has('success'))
-    @component('admin.components.dismissible', ['title' => 'success'])
+    @component('admin.components.alerts.dismissible', ['title' => 'success'])
         @slot('type')
             success
         @endslot
@@ -8,7 +8,7 @@
 @endif
 
 @if(Session::has('errors'))
-    @component('admin.components.dismissible', ['title' => 'error'])
+    @component('admin.components.alerts.dismissible', ['title' => 'error'])
         @slot('type')
             danger
         @endslot
