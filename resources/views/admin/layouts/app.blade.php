@@ -5,7 +5,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html lang="{{ config('app.locale') }}">
 
-@include('admin.partials.html-header')
+@include('admin.partials.head')
 
 <!--
 BODY TAG OPTIONS:
