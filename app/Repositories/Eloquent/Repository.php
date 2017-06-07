@@ -122,9 +122,7 @@ abstract class Repository implements RepositoryInterface
      */
     public function delete($id)
     {
-        $this->scopeBoot();
-
-        return $this->model->destroy($id);
+        return $this->find($id)->delete();
     }
 
     /**
