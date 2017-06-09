@@ -22,6 +22,11 @@ mix.copyDirectory('node_modules/admin-lte/plugins/', 'public/plugins/')
    .copy('node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js', 'public/js')
    .copy('node_modules/moment/min/moment.min.js', 'public/js');
 
+mix.js('resources/assets/js/app.js', 'public/js')
+   .sass('resources/assets/sass/app.scss', 'public/css');
+
+mix.copyDirectory('node_modules/materialize-css/fonts/', 'public/fonts/');
+
 if (!mix.config.inProduction) {
 	mix.sourceMaps();
 }
