@@ -11,7 +11,7 @@
   <!-- Bootstrap -->
   <!-- Font Awesome -->
   <!-- Ionicons -->
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+  <link rel="stylesheet" href="{{ mix('css/admin.css') }}">
   <!-- Theme style -->
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you

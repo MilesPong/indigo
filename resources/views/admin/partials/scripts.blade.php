@@ -3,7 +3,7 @@
 <!-- jQuery 2.2.3 -->
 <!-- Bootstrap 3.3.6 -->
 <!-- AdminLTE App -->
-<script src="{{ mix('js/app.js') }}"></script>
+<script src="{{ mix('js/admin.js') }}"></script>
 
 <!-- Custom JS -->
 @stack('js')
