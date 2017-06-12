@@ -17,6 +17,23 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
+    {{-- TODO sticky footer in app.css--}}
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+    </style>
+
+    {{-- TODO stack is not work before push, if not using extend view --}}
+    {{-- Solution 1: use section or yield instead, but still require to use extend view --}}
+    {{-- Solution 2: use stack is ok while in extend view --}}
+    {{--@yield('css')--}}
     @stack('css')
 
     <!-- Scripts -->
@@ -27,9 +44,19 @@
     </script>
 </head>
 <body>
-    <div id="app">
-        @yield('content')
-    </div>
+    {{--<div id="app">--}}
+        <header>
+            @include('partials.navbar')
+        </header>
+
+        <main>
+            <div class="container">
+                @yield('content')
+            </div>
+        </main>
+
+        @include('partials.footer')
+    {{--</div>--}}
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}"></script>

@@ -5,7 +5,7 @@
  */
 
 try {
-    window.$ = window.jQuery = require('jquery');
+    window.$ = window.jQuery = require('materialize-css/node_modules/jquery/dist/jquery.js');
 
     require('materialize-css');
 } catch (e) {}
