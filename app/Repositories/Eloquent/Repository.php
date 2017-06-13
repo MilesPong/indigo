@@ -71,9 +71,9 @@ abstract class Repository implements RepositoryInterface
         $this->scopeBoot();
 
         if ($this->model instanceof Builder) {
-            $results = $this->model->get();
+            $results = $this->model->get($columns);
         } else {
-            $results = $this->model->all();
+            $results = $this->model->all($columns);
         }
 
         return $results;
