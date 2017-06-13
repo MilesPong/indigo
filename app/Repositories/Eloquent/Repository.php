@@ -273,4 +273,15 @@ abstract class Repository implements RepositoryInterface
 
         return $this->withTrashed()->find($id)->forceDelete();
     }
+
+    /**
+     * @param mixed $relations
+     * @return $this
+     */
+    public function withCount($relations)
+    {
+        $this->model = $this->model->withCount($relations);
+
+        return $this;
+    }
 }
