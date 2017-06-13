@@ -71,3 +71,15 @@ if (!function_exists('str_slug_with_cn')) {
         return str_slug($text);
     }
 }
+
+if (!function_exists('isAdmin')) {
+    /**
+     * Determine if current user is login and is admin.
+     *
+     * @return bool
+     */
+    function isAdmin()
+    {
+        return auth()->check() && auth()->user()->isAdmin();
+    }
+}

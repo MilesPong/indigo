@@ -42,7 +42,7 @@ class PostRepositoryEloquent extends Repository implements PostRepository
 
         // TODO to be optimized
         // Session middleware is called after ServiceProvider binding, so can't set method boot in constructor
-        if (auth()->check() && auth()->user()->isAdmin()) {
+        if (isAdmin()) {
             return $this->model = $this->model->withoutGlobalScope(PublishedScope::class);
         }
     }
