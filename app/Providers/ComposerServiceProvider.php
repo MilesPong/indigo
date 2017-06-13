@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\ViewComposers\CategoriesComposer;
+use App\Http\ViewComposers\TagsComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +21,7 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('widgets.category', CategoriesComposer::class);
+        View::composer('widgets.tag', TagsComposer::class);
     }
 
     /**

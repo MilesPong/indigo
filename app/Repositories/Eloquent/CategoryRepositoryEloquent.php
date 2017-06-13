@@ -70,7 +70,7 @@ class CategoryRepositoryEloquent extends Repository implements CategoryRepositor
                 }
             }
         ])
-            ->all($columns)
+            ->all()
             ->reject(function ($category) {
                 return $category->posts_count == 0;
             });
