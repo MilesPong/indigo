@@ -58,6 +58,8 @@
         </main>
 
         @include('partials.footer')
+
+        @include('partials.fab')
     {{--</div>--}}
 
     <!-- Scripts -->
