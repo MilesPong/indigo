@@ -96,14 +96,10 @@
     {{--<div id="app">--}}
         <header>
             @include('partials.navbar')
-
-            @include('partials.header')
         </header>
 
         <main>
-            <div class="container">
-                @yield('content')
-            </div>
+            @yield('content')
         </main>
 
         @include('partials.footer')
