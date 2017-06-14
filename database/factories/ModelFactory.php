@@ -75,6 +75,7 @@ $factory->define(\App\Models\Post::class, function (\Faker\Generator $faker) {
         'description' => $faker->sentence(10),
         'slug' => str_slug($title),
         'excerpt' => $faker->sentences(3, true),
+        'feature_img' => $faker->imageUrl(),
         'content' => markdownContent($faker),
         'view_count' => mt_rand(0, 10000),
         'is_draft' => $faker->boolean,

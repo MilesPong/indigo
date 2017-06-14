@@ -23,6 +23,7 @@ class CreatePostsTable extends Migration
             $table->string('description')->nullable();
             $table->text('excerpt');
             $table->string('slug')->unique();
+            $table->string('feature_img')->nullable();
             $table->longText('content');
             $table->integer('view_count')->unsigned()->default(0);
             $table->timestamp('published_at');

@@ -42,7 +42,8 @@ class Post extends Model
         'content',
         'published_at',
         'is_draft',
-        'excerpt'
+        'excerpt',
+        'feature_img'
     ];
 
     /**

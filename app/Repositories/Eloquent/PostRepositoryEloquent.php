@@ -88,6 +88,8 @@ class PostRepositoryEloquent extends Repository implements PostRepository
 
         // TODO excerpt should be html purifier
 
+        // TODO condition while no feature_img
+
         return $attributes;
     }
 

@@ -48,6 +48,13 @@
 </div>
 
 <div class="form-group">
+    <label for="feature_img" class="col-sm-1 control-label">Feature image</label>
+    <div class="col-sm-11">
+        <input type="text" name="feature_img" id="feature_img" class="form-control" placeholder="Feature Image" value="{{ old('feature_img', $post->feature_img) }}">
+    </div>
+</div>
+
+<div class="form-group">
     <label for="excerpt" class="col-sm-1 control-label">Excerpt</label>
     <div class="col-sm-11">
         <textarea name="excerpt" id="excerpt" rows="3">{{ old('excerpt', $post->excerpt) }}</textarea>
