@@ -74,6 +74,7 @@ $factory->define(\App\Models\Post::class, function (\Faker\Generator $faker) {
         'category_id' => \App\Models\Category::pluck('id')->random(),
         'description' => $faker->sentence(10),
         'slug' => str_slug($title),
+        'excerpt' => $faker->sentences(3, true),
         'content' => markdownContent($faker)
     ];
 });

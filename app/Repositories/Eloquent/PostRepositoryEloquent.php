@@ -86,6 +86,8 @@ class PostRepositoryEloquent extends Repository implements PostRepository
             'is_draft' => $isDraft,
         ]);
 
+        // TODO excerpt should be html purifier
+
         return $attributes;
     }
 

@@ -28,7 +28,7 @@
 <div class="form-group">
     <label for="category_id" class="col-sm-1 control-label">Category</label>
     <div class="col-sm-11">
-        <select class="form-control select2 category-selected" name="category_id" style="width: 100%;">
+        <select id="category_id" class="form-control select2 category-selected" name="category_id">
             @foreach($categories as $category)
                 <option value="{{ $category->id }}">{{ $category->name }}</option>
             @endforeach
@@ -39,7 +39,7 @@
 <div class="form-group">
     <label for="tag" class="col-sm-1 control-label">Tags</label>
     <div class="col-sm-11">
-        <select name="tag[]" class="form-control select2 tags-selected" multiple="multiple" data-placeholder="Select Tag(s)" style="width: 100%;">
+        <select id="tag" name="tag[]" class="form-control select2 tags-selected" multiple="multiple" data-placeholder="Select Tag(s)">
             @foreach($tags as $tag)
                 <option value="{{ $tag->name }}">{{ $tag->name }}</option>
             @endforeach
@@ -48,7 +48,14 @@
 </div>
 
 <div class="form-group">
-    <label for="content" class="col-sm-1 control-label">Content</label>
+    <label for="excerpt" class="col-sm-1 control-label">Excerpt</label>
+    <div class="col-sm-11">
+        <textarea name="excerpt" id="excerpt" rows="3">{{ old('excerpt', $post->excerpt) }}</textarea>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="mdeditor" class="col-sm-1 control-label">Content</label>
 
     <div class="col-sm-11">
         <textarea id="mdeditor" name="content">{{ old('content') ?: $post->content }}</textarea>
@@ -68,7 +75,7 @@
 
     <div class="col-sm-11">
         <input type="checkbox" name="is_draft" id="is_draft" @if(old('is_draft', $post->is_draft))checked="checked"@endif>
-        <label>Is Draft</label>
+        <label for="is_draft">Is Draft</label>
     </div>
 </div>
 
@@ -90,6 +97,10 @@
     .CodeMirror-fullscreen,
     .editor-preview-side {
         z-index: 2000
+    }
+
+    textarea[name=excerpt] {
+        width: 100%;
     }
 </style>
 @endpush

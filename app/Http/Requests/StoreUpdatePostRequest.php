@@ -28,7 +28,8 @@ class StoreUpdatePostRequest extends FormRequest
             'description' => 'max:100',
             'category_id' => 'required|exists:categories,id',
             'slug' => 'unique:posts',
-            'content' => 'required'
+            'content' => 'required',
+            'excerpt' => 'required'
         ];
 
         switch ($this->method()) {
