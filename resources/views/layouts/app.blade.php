@@ -28,6 +28,55 @@
         main {
             flex: 1 0 auto;
         }
+
+        .post-card .card-content {
+            padding-bottom: 0
+        }
+
+        .post-card .post-meta {
+            margin-top: 0;
+        }
+
+        .post-card .post-meta ul li {
+            display: inline-block;
+            margin-right: 16px
+        }
+
+        .post-card .post-meta ul li i {
+            vertical-align: middle;
+            margin-right: 10px
+        }
+
+        .post-card .excerpt {
+            /*font-size: 1.22rem;*/
+        }
+
+        .post-card .post-tag {
+            padding: 12px 24px;
+        }
+
+        .post-card .post-tag i {
+            vertical-align: middle;
+            margin-right: 10px
+        }
+
+        .search-form .row {
+            margin-bottom: 0;
+        }
+
+        .search-form .input-field {
+            width: 100%;
+        }
+
+        .tag-list {
+            padding: 10px;
+        }
+        .badge-tag {
+            padding: 3px 7px;
+            font-size: 12px;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
     </style>
 
     {{-- TODO stack is not work before push, if not using extend view --}}
