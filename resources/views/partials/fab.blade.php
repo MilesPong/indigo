@@ -1,5 +1,5 @@
 <div class="fixed-action-btn" id="up-to-top">
-    <a href="#!" class="btn-floating btn-large waves-effect waves-light waves-circle red">
+    <a href="#!" class="btn-floating btn-large waves-effect waves-light waves-circle teal">
         <i class="material-icons large">expand_less</i>
     </a>
     {{--<ul>--}}
@@ -12,6 +12,7 @@
 
 @push('js')
 <script>
+    {{-- TODO move to app.js--}}
     {{-- https://getflywheel.com/layout/add-sticky-back-top-button-website/ --}}
     jQuery(document).ready(function () {
         var topButton = jQuery('#up-to-top');
@@ -20,6 +21,7 @@
 
         var offset = 250;
         var duration = 300;
+        var scrollDuration = 1000;
 
         jQuery(window).scroll(function () {
             if (jQuery(this).scrollTop() > offset) {
@@ -31,7 +33,7 @@
 
         topButton.click(function (event) {
             event.preventDefault();
-            jQuery('html, body').animate({scrollTop: 0}, duration);
+            jQuery('html, body').animate({scrollTop: 0}, scrollDuration);
             return false;
         })
     });
