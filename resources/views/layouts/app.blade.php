@@ -37,12 +37,12 @@
             margin-top: 0;
         }
 
-        .post-card .post-meta ul li {
+        .post-meta ul li {
             display: inline-block;
             margin-right: 16px
         }
 
-        .post-card .post-meta ul li i {
+        .post-meta ul li i {
             vertical-align: middle;
             margin-right: 10px
         }
