@@ -75,6 +75,10 @@ $factory->define(\App\Models\Post::class, function (\Faker\Generator $faker) {
         'description' => $faker->sentence(10),
         'slug' => str_slug($title),
         'excerpt' => $faker->sentences(3, true),
-        'content' => markdownContent($faker)
+        'content' => markdownContent($faker),
+        'view_count' => mt_rand(0, 10000),
+        'is_draft' => $faker->boolean,
+        'published_at' => $faker->dateTimeThisYear('2018-12-31 23:59:59'),
+        'deleted_at' => $faker->optional(0.3)->dateTime(),
     ];
 });

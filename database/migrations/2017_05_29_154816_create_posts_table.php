@@ -25,7 +25,7 @@ class CreatePostsTable extends Migration
             $table->string('slug')->unique();
             $table->longText('content');
             $table->integer('view_count')->unsigned()->default(0);
-            $table->timestamp('published_at')->nullable();
+            $table->timestamp('published_at');
             $table->boolean('is_draft')->default(false);
             $table->timestamps();
             $table->softDeletes();
