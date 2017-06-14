@@ -28,7 +28,9 @@ class StoreUpdatePostRequest extends FormRequest
             'description' => 'max:100',
             'category_id' => 'required|exists:categories,id',
             'slug' => 'unique:posts',
-            'content' => 'required'
+            'content' => 'required',
+            'excerpt' => 'required',
+            'feature_img' => 'sometimes|required|url'
         ];
 
         switch ($this->method()) {
@@ -43,5 +45,17 @@ class StoreUpdatePostRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if (!$this->has('feature_img')) {
+            $this->replace($this->except('feature_img'));
+        }
     }
 }

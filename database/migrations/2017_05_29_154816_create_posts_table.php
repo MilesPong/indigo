@@ -21,10 +21,12 @@ class CreatePostsTable extends Migration
             $table->foreign('category_id')->references('id')->on('categories');
             $table->string('title');
             $table->string('description')->nullable();
+            $table->text('excerpt');
             $table->string('slug')->unique();
+            $table->string('feature_img')->nullable();
             $table->longText('content');
             $table->integer('view_count')->unsigned()->default(0);
-            $table->timestamp('published_at')->nullable();
+            $table->timestamp('published_at');
             $table->boolean('is_draft')->default(false);
             $table->timestamps();
             $table->softDeletes();
