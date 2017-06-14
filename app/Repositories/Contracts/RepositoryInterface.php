@@ -77,6 +77,14 @@ interface RepositoryInterface
     public function with($relations);
 
     /**
+     * Add subselect queries to count the relations.
+     *
+     * @param  mixed $relations
+     * @return $this
+     */
+    public function withCount($relations);
+
+    /**
      * @param array $attributes
      * @return mixed
      */

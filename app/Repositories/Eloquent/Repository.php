@@ -71,9 +71,9 @@ abstract class Repository implements RepositoryInterface
         $this->scopeBoot();
 
         if ($this->model instanceof Builder) {
-            $results = $this->model->get();
+            $results = $this->model->get($columns);
         } else {
-            $results = $this->model->all();
+            $results = $this->model->all($columns);
         }
 
         return $results;
@@ -272,5 +272,16 @@ abstract class Repository implements RepositoryInterface
         $this->scopeBoot();
 
         return $this->withTrashed()->find($id)->forceDelete();
+    }
+
+    /**
+     * @param mixed $relations
+     * @return $this
+     */
+    public function withCount($relations)
+    {
+        $this->model = $this->model->withCount($relations);
+
+        return $this;
     }
 }

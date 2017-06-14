@@ -21,6 +21,7 @@
     "laravel-mix": "0.*",
     "lodash": "^4.17.4",
     "simplemde": "^1.11.2",
-    "vue": "^2.1.10"
+    "vue": "^2.1.10",
+    "materialize-css": "^0.98.2"
   }
 }

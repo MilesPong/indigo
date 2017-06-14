@@ -33,5 +33,5 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
 });
 
 Route::group(['namespace' => 'Frontend'], function () {
-
+    Route::resource('posts', 'PostController', ['only' => ['index', 'show']]);
 });

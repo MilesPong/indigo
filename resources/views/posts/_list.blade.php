@@ -1,0 +1,1 @@
+@each('posts._show', $posts, 'post')

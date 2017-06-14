@@ -20,4 +20,10 @@ interface CategoryRepository extends RepositoryInterface
      * @return mixed
      */
     public function updateCategory(array $attributes, $id);
+
+    /**
+     * @param array $columns
+     * @return mixed
+     */
+    public function allWithPostCount($columns = ['*']);
 }
