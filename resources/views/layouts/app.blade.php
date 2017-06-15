@@ -9,6 +9,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    @include('partials.favicon')
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     {{--<!--Import Google Icon Font-->--}}
