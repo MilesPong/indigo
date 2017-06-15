@@ -8,3 +8,16 @@
 @import "node_modules/materialize-css/sass/materialize.scss";
 
 @import "modules/prism.css";
+@import "modules/article.css";
+@import "modules/search.css";
+@import "modules/tag.css";
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}

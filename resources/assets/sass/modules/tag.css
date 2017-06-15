@@ -1,0 +1,9 @@
+.tag-list {
+    padding: 10px;
+}
+.badge-tag {
+    padding: 3px 7px;
+    font-size: 12px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
