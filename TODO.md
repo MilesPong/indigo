@@ -22,7 +22,7 @@
 
 ## Frontend
 
-- [ ] Materialize css
+- [x] Materialize css
 - [ ] Search
 - [ ] Websocket
 

@@ -6,14 +6,44 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Post publish and draft status
-- Soft delete support of models
 
 ### Changed
-- Dashboard panel text
 
 ### Fixed
-- Post editor full screen bug
+
+## 0.2.0 - 2017-06-15
+### Added
+- Backend
+    - Post publish status and draft status
+    - Soft delete support of models
+    - Active menu support
+    - Flash session in route redirection
+    - Function str_slug compitable with Chinese
+- Frontend
+    - Materialize css support
+    - materialize pagination blade
+    - Multi widgets
+    - Home page
+    - Article detail page
+
+### Changed
+- Backend
+    - Use dismissible alert component in alerts partial
+    - Route name with prefix
+    - Auto-generated slug could be repeated bug
+    - Repository concrete with adding method scopeBoot
+    - Default post scope with published status
+    - Rename multi views name
+    - Repository Contract&Concrete with adding withCount method
+    - Post table columns
+- Refactor assets folder structure 
+
+### Fixed
+- Backend
+    - Post editor full screen bug
+    - Post missing input fields
+    - Password is not required in user-update action
+    - Repository delete bug
 
 ## 0.1.0 - 2017-05-29
 ### Added
