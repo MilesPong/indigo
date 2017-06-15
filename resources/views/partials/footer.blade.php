@@ -2,15 +2,15 @@
     <div class="container">
         <div class="row">
             <div class="col s12 l6">
-                <h5 class="white-text">Footer content</h5>
-                <p class="grey-text text-lighten-4">This is the end of the page. Good day.</p>
+                <h5 class="white-text">About project</h5>
+                <p class="grey-text text-lighten-4">Indigo is a blog built with Laravel 5.x and with AdminLTE, Materialize CSS support.</p>
             </div>
             <div class="col s12 l4 offset-l2">
                 <h5 class="white-text">External links</h5>
                 <ul>
-                    <li><a href="#!" class="grey-text text-lighten-4">Resume</a></li>
-                    <li><a href="#!" class="grey-text text-lighten-4">Contact</a></li>
-                    <li><a href="#!" class="grey-text text-lighten-4">Github</a></li>
+                    <li><a href="#!" class="grey-text text-lighten-4">Links</a></li>
+                    <li><a href="#!" class="grey-text text-lighten-4">About</a></li>
+                    <li><a href="https://github.com/MilesPong" class="grey-text text-lighten-4">Github</a></li>
                 </ul>
             </div>
         </div>
