@@ -1,15 +1,23 @@
-
-// Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+// Material icons
+@import "material-icons.css";
 
 // Variables
 @import "variables";
 
 // Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "node_modules/materialize-css/sass/materialize.scss";
 
-// Ionicons
-@import "node_modules/ionicons/dist/scss/ionicons.scss";
+@import "modules/prism.css";
+@import "modules/article.css";
+@import "modules/search.css";
+@import "modules/tag.css";
 
-// Font awesome
-@import "node_modules/font-awesome/scss/font-awesome.scss";
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}

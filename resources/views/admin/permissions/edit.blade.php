@@ -1,4 +1,4 @@
-@extends('admin.layouts.admin')
+@extends('admin.layouts.app')
 
 @section('content')
     <div class="row">
@@ -12,7 +12,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
 
-                    <form role="form" action="{{ route('permissions.update', $permission->id) }}" method="POST">
+                    <form role="form" action="{{ route('admin.permissions.update', $permission->id) }}" method="POST">
                         {{ method_field('PATCH') }}
 
                         @include('admin.permissions._form')

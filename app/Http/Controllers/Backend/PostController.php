@@ -43,11 +43,15 @@ class PostController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('trash')) {
+            $this->postRepo = $this->postRepo->onlyTrashed();
+        }
+
         $posts = $this->postRepo->with(['category', 'author'])->paginate();
 
         return view('admin.posts.index', compact('posts'));
@@ -76,7 +80,7 @@ class PostController extends Controller
     {
         $this->postRepo->createPost($request->all());
 
-        return redirect()->route('posts.index');
+        return redirect()->route('admin.posts.index')->withSuccess('Create post successfully!');
     }
 
     /**
@@ -100,12 +104,10 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = $this->postRepo->find($id);
+        $post = $this->postRepo->with('tags')->find($id);
 
         $categories = $this->cateRepo->all();
         $tags = $this->tagRepo->all();
-
-        $selected_tags = $this->postRepo->getTags($post);
 
         return view('admin.posts.edit', compact('post', 'categories', 'tags', 'selected_tags'));
     }
@@ -121,7 +123,7 @@ class PostController extends Controller
     {
         $this->postRepo->updatePost($request->all(), $id);
 
-        return redirect()->route('posts.index');
+        return redirect()->route('admin.posts.index')->withSuccess('Update post successfully!');
     }
 
     /**
@@ -134,6 +136,28 @@ class PostController extends Controller
     {
         $this->postRepo->delete($id);
 
-        return redirect()->route('posts.index');
+        return redirect()->route('admin.posts.index')->withSuccess('Move post to trash successfully!');
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function restore($id)
+    {
+        $this->postRepo->restore($id);
+
+        return redirect()->route('admin.posts.index')->withSuccess('Restore post successfully!');
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function forceDelete($id)
+    {
+        $this->postRepo->forceDelete($id);
+
+        return redirect()->back()->withSuccess('Force delete post successfully!');
     }
 }

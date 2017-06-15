@@ -35,4 +35,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    /**
+     * TODO condition should be compared with role
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->id == 1;
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Eloquent\Traits;
 
+use Carbon\Carbon;
+
 /**
  * Trait Slugable
  * @package App\Repositories\Eloquent\Traits
@@ -20,9 +22,49 @@ trait Slugable
     {
         if (array_get($attributes, $keySlug) == null) {
             $name = array_get($attributes, $keyName);
-            array_set($attributes, $keySlug, str_slug($name));
+
+            $slug = str_slug_with_cn($name);
+            // TODO known bug
+            // If update post with deleting original auto-generated slug, slug will generate again
+            // and may 'duplicate' in DB. One solution is exclude current record(based on id) while doing update
+            // Solution 1: Add method 'prepareForValidation' in FormRequest, example below,
+            // $this->merge([
+            //     'slug' => str_slug($this->input('title'))
+            // ]);
+            if ($this->slugExists($slug, $keySlug)) {
+                $slug = $this->unique($name);
+            }
+
+            array_set($attributes, $keySlug, $slug);
         }
 
         return $attributes;
+    }
+
+    /**
+     * @param $slug
+     * @param string $column
+     * @return mixed
+     */
+    protected function slugExists($slug, $column = 'slug')
+    {
+        return $this->model->where($column, $slug)->exists();
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    protected function unique($value)
+    {
+        return str_slug_with_cn($value) . '-' . $this->uniqueChar();
+    }
+
+    /**
+     * @return string
+     */
+    protected function uniqueChar()
+    {
+        return Carbon::now()->timestamp;
     }
 }

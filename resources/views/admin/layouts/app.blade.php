@@ -5,7 +5,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html lang="{{ config('app.locale') }}">
 
-@include('admin.partials.html-header')
+@include('admin.partials.head')
 
 <!--
 BODY TAG OPTIONS:
@@ -43,7 +43,7 @@ desired effect
     <section class="content">
 
       <!-- Content Header (Page header) -->
-      @include('admin.partials.error')
+      @include('admin.partials.alerts')
 
       <!-- Your Page Content Here -->
       @yield('content')

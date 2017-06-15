@@ -52,7 +52,7 @@ class CategoryController extends Controller
     {
         $category = $this->cateRepo->createCategory($request->all());
 
-        return redirect()->route('categories.index');
+        return redirect()->route('admin.categories.index')->withSuccess('Create category successfully!');
     }
 
     /**
@@ -92,7 +92,7 @@ class CategoryController extends Controller
     {
         $category = $this->cateRepo->updateCategory($request->all(), $id);
 
-        return redirect()->route('categories.index');
+        return redirect()->route('admin.categories.index')->withSuccess('Update category successfully!');
     }
 
     /**
@@ -105,6 +105,6 @@ class CategoryController extends Controller
     {
         $this->cateRepo->delete($id);
 
-        return redirect()->route('categories.index');
+        return redirect()->route('admin.categories.index')->withSuccess('Delete category successfully!');
     }
 }

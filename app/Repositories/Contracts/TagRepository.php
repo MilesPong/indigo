@@ -20,4 +20,10 @@ interface TagRepository extends RepositoryInterface
      * @return mixed
      */
     public function updateTag(array $attributes, $id);
+
+    /**
+     * @param array $columns
+     * @return mixed
+     */
+    public function allWithPostCount($columns = ['*']);
 }

@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('html_header_title')
+@section('title')
     Register
 @endsection
 

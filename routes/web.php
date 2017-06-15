@@ -11,15 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Auth::routes();
 
-Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'dashboard'], function () {
+Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'dashboard', 'as' => 'admin.'], function () {
     Route::get('/', 'DashboardController@index')->name('dashboard.index');
 
     Route::resource('roles', 'RoleController');
@@ -27,9 +23,12 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::resource('users', 'UserController');
     Route::resource('categories', 'CategoryController');
     Route::resource('tags', 'TagController');
+    Route::post('posts/{id}/restore', 'PostController@restore')->name('posts.restore');
+    Route::post('posts/{id}/force-delete', 'PostController@forceDelete')->name('posts.force-delete');
     Route::resource('posts', 'PostController');
 });
 
 Route::group(['namespace' => 'Frontend'], function () {
-
+    Route::get('/', 'PostController@index')->name('home');
+    Route::resource('articles', 'PostController', ['only' => ['show']]);
 });

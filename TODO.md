@@ -13,10 +13,16 @@
 - [ ] Wechat related
 - [ ] Schedule(backup,stat,)
 - [ ] I18N
+- [ ] Highlight tab
+- [ ] Links
+- [ ] Settings
+- [ ] File management
+- [ ] Feature image
+- [ ] Flash session
 
 ## Frontend
 
-- [ ] Materialize css
+- [x] Materialize css
 - [ ] Search
 - [ ] Websocket
 
@@ -26,3 +32,4 @@
 - [ ] API
 - [ ] Package
 - [ ] Unit test
+- [ ] Pjax

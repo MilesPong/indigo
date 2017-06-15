@@ -1,4 +1,4 @@
-@extends('admin.layouts.admin')
+@extends('admin.layouts.app')
 
 @inject('permission', 'App\Models\Permission')
 
@@ -14,7 +14,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
 
-                    <form role="form" action="{{ route('permissions.store') }}" method="POST">
+                    <form role="form" action="{{ route('admin.permissions.store') }}" method="POST">
 
                         @include('admin.permissions._form')
 

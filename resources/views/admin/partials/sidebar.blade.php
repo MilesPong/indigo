@@ -32,22 +32,22 @@
     <ul class="sidebar-menu">
       <li class="header">HEADER</li>
       <!-- Optionally, you can add icons to the links -->
-      <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Home</span></a></li>
-      <li class="treeview">
-      <a href="#"><i class="fa fa-user-secret"></i> <span>RBAC</span>
-      <span class="pull-right-container">
-      <i class="fa fa-angle-left pull-right"></i>
-      </span>
-      </a>
-      <ul class="treeview-menu">
-        <li><a href="{{ route('roles.index') }}"><i class="fa fa-circle-o"></i>Roles</a></li>
-        <li><a href="{{ route('permissions.index') }}"><i class="fa fa-circle-o"></i>Permissions</a></li>
-      </ul>
+      <li><a href="#"><i class="fa fa-link"></i> <span>Home</span></a></li>
+      <li class="treeview {!! $roleActive = setActiveClass('roles') !!} {!! $permActive = setActiveClass('permissions') !!}">
+        <a href="#"><i class="fa fa-user-secret"></i> <span>RBAC</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+        </a>
+        <ul class="treeview-menu">
+          <li class="{!! $roleActive !!}"><a href="{{ route('admin.roles.index') }}"><i class="fa fa-circle-o"></i>Roles</a></li>
+          <li class="{!! $permActive !!}"><a href="{{ route('admin.permissions.index') }}"><i class="fa fa-circle-o"></i>Permissions</a></li>
+        </ul>
       </li>
-      <li><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>Users</span></a></li>
-      <li><a href="{{ route('categories.index') }}"><i class="fa fa-sitemap"></i> <span>Categories</span></a></li>
-      <li><a href="{{ route('tags.index') }}"><i class="fa fa-tags"></i> <span>Tags</span></a></li>
-      <li><a href="{{ route('posts.index') }}"><i class="fa fa-list"></i> <span>Posts</span></a></li>
+      <li class="{!! setActiveClass('users') !!}"><a href="{{ route('admin.users.index') }}"><i class="fa fa-users"></i> <span>Users</span></a></li>
+      <li class="{!! setActiveClass('categories') !!}"><a href="{{ route('admin.categories.index') }}"><i class="fa fa-sitemap"></i> <span>Categories</span></a></li>
+      <li class="{!! setActiveClass('tags') !!}"><a href="{{ route('admin.tags.index') }}"><i class="fa fa-tags"></i> <span>Tags</span></a></li>
+      <li class="{!! setActiveClass('posts') !!}"><a href="{{ route('admin.posts.index') }}"><i class="fa fa-list"></i> <span>Posts</span></a></li>
     </ul>
     <!-- /.sidebar-menu -->
   </section>

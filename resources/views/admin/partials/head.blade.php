@@ -1,7 +1,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>@yield('html_header_title', 'Dashboard') - {{ config('app.name', 'Laravel') }}</title>
+  <title>@yield('title', 'Dashboard') - {{ config('app.name', 'Laravel') }}</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -11,7 +11,7 @@
   <!-- Bootstrap -->
   <!-- Font Awesome -->
   <!-- Ionicons -->
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+  <link rel="stylesheet" href="{{ mix('css/admin.css') }}">
   <!-- Theme style -->
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
