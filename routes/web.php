@@ -11,10 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Auth::routes();
@@ -33,5 +29,6 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
 });
 
 Route::group(['namespace' => 'Frontend'], function () {
-    Route::resource('posts', 'PostController', ['only' => ['index', 'show']]);
+    Route::get('/', 'PostController@index')->name('home');
+    Route::resource('articles', 'PostController', ['only' => ['show']]);
 });

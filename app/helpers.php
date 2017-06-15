@@ -14,7 +14,7 @@ if (!function_exists('markdownContent')) {
         $content =
             "$faker->realText \n\r " .
             "## $faker->sentence \n\r " .
-            "![$faker->word]($faker->imageUrl) {.img-responsive} \n\r " .
+            "![$faker->word]($faker->imageUrl) \n\r " .
             "> $faker->sentence \n\r " .
             "### $faker->sentence \n\r " .
             "$faker->paragraph \n\r " .

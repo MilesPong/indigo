@@ -1,28 +1,54 @@
 <div class="navbar-fixed">
     <nav id="nav-bar" class="z-depth-0">
         <div class="nav-wrapper container">
-            <a href="/" class="brand-logo">Indigo</a>
+            <a href="/" class="brand-logo"><i class="material-icons">camera</i>Indigo</a>
             <a href="#" data-activates="mobile-nav" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a class="waves-effect waves-light" href="#!">Resume</a></li>
-                <li><a class="waves-effect waves-light" href="#!">Contact</a></li>
-                <li><a class="waves-effect waves-light" href="#!">Github</a></li>
+                <!-- Dropdown Trigger -->
+                <li>
+                    <a class="dropdown-button" href="#!" data-activates="cate-dropdown">
+                        Category
+                        <i class="material-icons right">arrow_drop_down</i>
+                    </a>
+                </li>
+                <li><a class="waves-effect waves-light" href="#!">About</a></li>
+                <li><a class="waves-effect waves-light" href="https://github.com/MilesPong">Github</a></li>
             </ul>
         </div>
     </nav>
 </div>
 <ul class="side-nav" id="mobile-nav">
-    <li><a class="waves-effect waves-light waves-teal" href="#!">Resume</a></li>
-    <li><a class="waves-effect waves-light waves-teal" href="#!">Contact</a></li>
-    <li><a class="waves-effect waves-light waves-teal" href="#!">Github</a></li>
+    <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+            <li>
+                <a class="collapsible-header">Category</a>
+                <div class="collapsible-body">
+                    <ul>
+                        @foreach($categories as $category)
+                            <li><a class="waves-effect waves-teal" href="#!">{{ $category->name }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </li>
+    <li><a class="waves-effect waves-teal" href="#!">About</a></li>
+    <li><a class="waves-effect waves-teal" href="https://github.com/MilesPong">Github</a></li>
+</ul>
+
+<!-- Dropdown Structure -->
+<ul id="cate-dropdown" class="dropdown-content">
+    @foreach($categories as $category)
+        <li><a class="waves-effect waves-teal" href="#!">{{ $category->name }}</a></li>
+    @endforeach
 </ul>
 
 @push('js')
 <script>
-    $(function(){
+    $(function () {
         $(".button-collapse").sideNav();
 
-        $(window).scroll(function() {
+        $(window).scroll(function () {
             var nav = $("#nav-bar");
             var scroll = $(window).scrollTop();
             if (scroll > 0) {

@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
+    /**
+     * @var PostRepository
+     */
     protected $postRepo;
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Presenters;
 
+use App\Services\MarkDownParser;
 use Laracasts\Presenter\Presenter;
 
 /**
@@ -42,5 +43,10 @@ class PostPresenter extends Presenter
         }
 
         return null;
+    }
+
+    public function htmlContent()
+    {
+        return app(MarkDownParser::class)->md2html($this->content);
     }
 }
