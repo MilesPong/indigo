@@ -25,7 +25,7 @@
                 <div class="collapsible-body">
                     <ul>
                         @foreach($categories as $category)
-                            <li><a class="waves-effect waves-teal" href="#!">{{ $category->name }}</a></li>
+                            <li><a class="waves-effect waves-teal" href="{{ route('categories.show', $category->id) }}">{{ $category->name }}</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -39,7 +39,7 @@
 <!-- Dropdown Structure -->
 <ul id="cate-dropdown" class="dropdown-content">
     @foreach($categories as $category)
-        <li><a class="waves-effect waves-teal" href="#!">{{ $category->name }}</a></li>
+        <li><a class="waves-effect waves-teal" href="{{ route('categories.show', $category->id) }}">{{ $category->name }}</a></li>
     @endforeach
 </ul>
 

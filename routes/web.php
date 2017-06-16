@@ -31,4 +31,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
 Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/', 'PostController@index')->name('home');
     Route::resource('articles', 'PostController', ['only' => ['show']]);
+
+    Route::resource('categories', 'CategoryController', ['only' => ['show']]);
+    Route::resource('tags', 'TagController', ['only' => ['show']]);
 });
