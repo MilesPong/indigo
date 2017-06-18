@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Events\PostViewEvent;
 use App\Repositories\Contracts\PostRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -48,6 +49,8 @@ class PostController extends Controller
         $post = $this->postRepo
             ->with(['category', 'tags', 'author'])
             ->find($id);
+
+        event(new PostViewEvent($id));
 
         return view('posts.show', compact('post'));
     }
