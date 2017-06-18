@@ -51,5 +51,7 @@
     <script src="{{ mix('js/app.js') }}"></script>
 
     @stack('js')
+
+    @include('partials.google_analytics')
 </body>
 </html>
