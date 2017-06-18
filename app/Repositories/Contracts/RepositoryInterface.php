@@ -117,4 +117,9 @@ interface RepositoryInterface
      * @return mixed
      */
     public function forceDelete($id);
+
+    /**
+     * @return mixed
+     */
+    public function getModel();
 }
