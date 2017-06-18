@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Post;
 use App\Repositories\Contracts\PostRepository;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
@@ -66,7 +67,7 @@ class SavePostViewCount extends Command
 
         $this->flushCache();
 
-        $this->info('Post view_count save successfully!');
+        $this->info("Post view_count save successfully at " . Carbon::now()->toDateTimeString());
         $this->table(['Post ID', 'Increase Count'], $data);
     }
 
