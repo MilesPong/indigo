@@ -55,6 +55,14 @@ abstract class Repository implements RepositoryInterface
     abstract public function model();
 
     /**
+     * @return Builder|Model
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * The fake "booting" method of the model in calling scopes.
      */
     public function scopeBoot()
