@@ -183,6 +183,7 @@ return [
         Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         JellyBool\Translug\TranslugServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
 
     ],
 
@@ -237,6 +238,7 @@ return [
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
         'Gravatar' => Thomaswelton\LaravelGravatar\Facades\Gravatar::class,
         'Translug' => \JellyBool\Translug\TranslugFacade::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
     ],
 
 ];
