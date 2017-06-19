@@ -14,7 +14,7 @@ class PostViewCounter
     /**
      * @var
      */
-    protected $timeout; // For session key and cache tag
+    protected $timeout; // For session
     /**
      * @var
      */
@@ -33,6 +33,11 @@ class PostViewCounter
     private $cacheKey; // Cache key
 
     /**
+     * @var
+     */
+    public $strict_mode;
+
+    /**
      * PostViewCounter constructor.
      * @param Request $request
      */
@@ -49,9 +54,11 @@ class PostViewCounter
     {
         // TODO what if config is hack?
         $config = $this->getDefaultConfig();
+
         $this->timeout = $config['timeout'];
         $this->key = $config['key'];
         $this->cacheKey = $config['cache_key'];
+        $this->strict_mode = $config['strict_mode'];
     }
 
     /**
@@ -75,6 +82,22 @@ class PostViewCounter
     }
 
     /**
+     * Determinate if enable strict mode
+     */
+    public function enableStrictMode()
+    {
+        $this->strict_mode = true;
+    }
+
+    /**
+     * Determinate if disable strict mode
+     */
+    public function disableStrictMode()
+    {
+        $this->strict_mode = false;
+    }
+
+    /**
      * Main
      *
      * @param $id
@@ -83,11 +106,13 @@ class PostViewCounter
     {
         $this->id = $id;
 
-        if (!$this->isPostViewed() || $this->isLastViewOutdated()) {
-            $this->saveVisitorLog();
+        if ($this->strict_mode) {
+            if (!$this->isPostViewed() || $this->isLastViewOutdated()) {
+                $this->createSession();
 
-            $this->createSession();
-
+                $this->increaseCacheRecord();
+            }
+        } else {
             $this->increaseCacheRecord();
         }
     }
@@ -135,14 +160,6 @@ class PostViewCounter
     }
 
     /**
-     *
-     */
-    protected function saveVisitorLog()
-    {
-        // TODO
-    }
-
-    /**
      * Create post viewed session
      */
     protected function createSession()
@@ -155,12 +172,7 @@ class PostViewCounter
      */
     protected function increaseCacheRecord()
     {
-        $cacheKey = $this->getPostCacheKey();
-        if (Cache::tags($this->key)->has($cacheKey)) {
-            Cache::tags($this->key)->increment($cacheKey);
-        } else {
-            Cache::tags($this->key)->forever($cacheKey, 1);
-        }
+        Cache::increment($this->getPostCacheKey());
     }
 
     /**
