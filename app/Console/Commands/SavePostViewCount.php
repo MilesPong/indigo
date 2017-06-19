@@ -28,11 +28,6 @@ class SavePostViewCount extends Command
     /**
      * @var mixed
      */
-    protected $cacheTag;
-
-    /**
-     * @var mixed
-     */
     protected $cacheKeyPrefix;
 
     /**
@@ -52,7 +47,6 @@ class SavePostViewCount extends Command
 
         $this->postRepo = $postRepo;
 
-        $this->cacheTag = config('blog.counter.key');
         $this->cacheKeyPrefix = config('blog.counter.cache_key');
     }
 
@@ -64,8 +58,6 @@ class SavePostViewCount extends Command
     public function handle()
     {
         $data = $this->savePostViewCount();
-
-        $this->flushCache();
 
         $this->info("Post view_count save successfully at " . Carbon::now()->toDateTimeString());
         $this->table(['Post ID', 'Increase Count'], $data);
@@ -88,7 +80,10 @@ class SavePostViewCount extends Command
                 foreach ($posts as $post) {
                     if ($count = $this->getCacheCount($post->id)) {
                         $post->increment('view_count', $count);
+
                         array_push($results, [$post->id, $count]);
+
+                        $this->flushCache($this->cacheKey($post->id));
                     }
                 }
             });
@@ -104,7 +99,7 @@ class SavePostViewCount extends Command
      */
     protected function getCacheCount($id)
     {
-        return Cache::tags($this->cacheTag)->get($this->cacheKey($id));
+        return Cache::get($this->cacheKey($id));
     }
 
     /**
@@ -119,10 +114,13 @@ class SavePostViewCount extends Command
     }
 
     /**
-     * Flush post view_count in cache by tag
+     * Flush post view_count in cache by key
+     *
+     * @param $key
+     * @return bool
      */
-    protected function flushCache()
+    protected function flushCache($key)
     {
-        Cache::tags($this->cacheTag)->flush();
+        return Cache::forget($key);
     }
 }
