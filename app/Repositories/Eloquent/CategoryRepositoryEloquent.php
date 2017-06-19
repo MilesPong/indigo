@@ -4,8 +4,8 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepository;
+use App\Repositories\Eloquent\Traits\Postable;
 use App\Repositories\Eloquent\Traits\Slugable;
-use App\Scopes\PublishedScope;
 
 /**
  * Class CategoryRepositoryEloquent
@@ -13,7 +13,7 @@ use App\Scopes\PublishedScope;
  */
 class CategoryRepositoryEloquent extends Repository implements CategoryRepository
 {
-    use Slugable;
+    use Slugable, Postable;
 
     /**
      * @return string
@@ -55,24 +55,5 @@ class CategoryRepositoryEloquent extends Repository implements CategoryRepositor
         $attributes = $this->preHandleData($attributes);
 
         return $this->update($attributes, $id);
-    }
-
-    /**
-     * @param array $columns
-     * @return mixed
-     */
-    public function allWithPostCount($columns = ['*'])
-    {
-        return $this->withCount([
-            'posts' => function ($query) {
-                if (isAdmin()) {
-                    $query->withoutGlobalScope(PublishedScope::class);
-                }
-            }
-        ])
-            ->all()
-            ->reject(function ($category) {
-                return $category->posts_count == 0;
-            });
     }
 }

@@ -6,7 +6,7 @@ namespace App\Repositories\Contracts;
  * Interface CategoryRepository
  * @package App\Repositories\Contracts
  */
-interface CategoryRepository extends RepositoryInterface
+interface CategoryRepository extends RepositoryInterface, PostRelated
 {
     /**
      * @param array $attributes
@@ -20,10 +20,4 @@ interface CategoryRepository extends RepositoryInterface
      * @return mixed
      */
     public function updateCategory(array $attributes, $id);
-
-    /**
-     * @param array $columns
-     * @return mixed
-     */
-    public function allWithPostCount($columns = ['*']);
 }

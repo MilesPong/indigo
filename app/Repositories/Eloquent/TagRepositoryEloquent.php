@@ -4,8 +4,8 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Tag;
 use App\Repositories\Contracts\TagRepository;
+use App\Repositories\Eloquent\Traits\Postable;
 use App\Repositories\Eloquent\Traits\Slugable;
-use App\Scopes\PublishedScope;
 
 /**
  * Class TagRepositoryEloquent
@@ -13,7 +13,7 @@ use App\Scopes\PublishedScope;
  */
 class TagRepositoryEloquent extends Repository implements TagRepository
 {
-    use Slugable;
+    use Slugable, Postable;
 
     /**
      * @return string
@@ -55,24 +55,5 @@ class TagRepositoryEloquent extends Repository implements TagRepository
         $attributes = $this->preHandleData($attributes);
 
         return $this->update($attributes, $id);
-    }
-
-    /**
-     * @param array $columns
-     * @return mixed
-     */
-    public function allWithPostCount($columns = ['*'])
-    {
-        return $this->withCount([
-            'posts' => function ($query) {
-                if (isAdmin()) {
-                    $query->withoutGlobalScope(PublishedScope::class);
-                }
-            }
-        ])
-            ->all()
-            ->reject(function ($tag) {
-                return $tag->posts_count == 0;
-            });
     }
 }
