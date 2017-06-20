@@ -12,7 +12,7 @@ use Jenssegers\Agent\Agent;
  * Class VisitorRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class VisitorRepositoryEloquent extends Repository implements VisitorRepository
+class VisitorRepositoryEloquent extends BaseRepository implements VisitorRepository
 {
     /**
      * @var Request

@@ -11,7 +11,7 @@ use App\Repositories\Eloquent\Traits\Slugable;
  * Class CategoryRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class CategoryRepositoryEloquent extends Repository implements CategoryRepository
+class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepository
 {
     use Slugable, Postable;
 

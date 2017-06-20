@@ -11,7 +11,7 @@ use App\Repositories\Eloquent\Traits\Slugable;
  * Class TagRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class TagRepositoryEloquent extends Repository implements TagRepository
+class TagRepositoryEloquent extends BaseRepository implements TagRepository
 {
     use Slugable, Postable;
 

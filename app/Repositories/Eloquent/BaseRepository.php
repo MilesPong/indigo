@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Repository
+ * Class BaseRepository
  * @package App\Repositories\Eloquent
  */
-abstract class Repository implements RepositoryInterface
+abstract class BaseRepository implements RepositoryInterface
 {
     /**
      * @var Container
@@ -25,7 +25,7 @@ abstract class Repository implements RepositoryInterface
     protected $model;
 
     /**
-     * Repository constructor.
+     * BaseRepository constructor.
      * @param Container $app
      */
     public function __construct(Container $app)
@@ -245,7 +245,7 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
-     * @return Repository
+     * @return BaseRepository
      */
     public function onlyTrashed()
     {
@@ -253,7 +253,7 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
-     * @return Repository
+     * @return BaseRepository
      */
     public function withTrashed()
     {

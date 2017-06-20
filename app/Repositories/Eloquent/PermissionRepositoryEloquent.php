@@ -9,7 +9,7 @@ use App\Repositories\Contracts\PermissionRepository;
  * Class PermissionRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class PermissionRepositoryEloquent extends Repository implements PermissionRepository
+class PermissionRepositoryEloquent extends BaseRepository implements PermissionRepository
 {
     /**
      * @return string

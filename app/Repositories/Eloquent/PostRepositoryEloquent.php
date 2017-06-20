@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class PostRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class PostRepositoryEloquent extends Repository implements PostRepository
+class PostRepositoryEloquent extends BaseRepository implements PostRepository
 {
     use Slugable;
 
