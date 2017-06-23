@@ -87,6 +87,14 @@ class Post extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function content()
+    {
+        return $this->belongsTo(Content::class);
+    }
+
+    /**
      * @param $name
      * @return mixed
      */
