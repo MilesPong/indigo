@@ -65,7 +65,7 @@
     <label for="mdeditor" class="col-sm-1 control-label">Content</label>
 
     <div class="col-sm-11">
-        <textarea id="mdeditor" name="content">{{ old('content') ?: $post->content }}</textarea>
+        <textarea id="mdeditor" name="body">{{ old('body') ?: (isset($post->id) ? $post->rawContent : null) }}</textarea>
     </div>
 </div>
 

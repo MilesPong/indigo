@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Models\Content;
 use App\Models\Post;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
@@ -26,6 +27,11 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     protected $tagRepo;
 
     /**
+     * @var mixed
+     */
+    protected $contentModel;
+
+    /**
      * PostRepositoryEloquent constructor.
      * @param Container $app
      * @param TagRepository $tagRepo
@@ -34,6 +40,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     {
         parent::__construct($app);
         $this->tagRepo = $tagRepo;
+        $this->contentModel = $this->app->make($this->contentModel());
     }
 
     public function scopeBoot()
@@ -56,6 +63,14 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
+     * @return string
+     */
+    public function contentModel()
+    {
+        return Content::class;
+    }
+
+    /**
      * @param array $attributes
      * @return Model
      */
@@ -64,7 +79,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
         $attributes = $this->preHandleData($attributes);
 
         // TODO use transaction
-        $this->model = request()->user()->posts()->create($attributes);
+        $this->model = request()->user()->posts()->create(array_merge($attributes, [
+            'content_id' => $this->contentModel->create($attributes)->id,
+        ]));
 
         return $this->syncTags(data_get($attributes, 'tag', []));
     }
@@ -157,6 +174,8 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         // TODO use transaction
         $this->model = $this->update($attributes, $id);
+
+        $this->model->content()->update($attributes);
 
         return $this->syncTags(data_get($attributes, 'tag', []));
     }

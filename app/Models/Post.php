@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Presenters\PostPresenter;
 use App\Scopes\PublishedScope;
+use App\Services\MarkDownParser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laracasts\Presenter\PresentableTrait;
@@ -39,7 +40,7 @@ class Post extends Model
         'title',
         'slug',
         'description',
-        'content',
+        'content_id',
         'published_at',
         'is_draft',
         'excerpt',
@@ -87,6 +88,23 @@ class Post extends Model
     }
 
     /**
+     * @param $name
+     * @return mixed
+     */
+    public function getConst($name)
+    {
+        return constant("self::{$name}");
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentAttribute()
+    {
+        return app(MarkDownParser::class)->md2html($this->content()->getResults()->body);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function content()
@@ -95,11 +113,10 @@ class Post extends Model
     }
 
     /**
-     * @param $name
      * @return mixed
      */
-    public function getConst($name)
+    public function getRawContentAttribute()
     {
-        return constant("self::{$name}");
+        return $this->content()->getResults()->body;
     }
 }

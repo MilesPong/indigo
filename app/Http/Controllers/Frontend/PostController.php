@@ -47,7 +47,7 @@ class PostController extends Controller
     public function show($id)
     {
         $post = $this->postRepo
-            ->with(['category', 'tags', 'author'])
+            ->with(['category', 'tags', 'author', 'content'])
             ->find($id);
 
         event(new PostViewEvent($id));

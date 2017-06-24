@@ -26,7 +26,7 @@
 
                     {{-- TODO when use api, content should be parse first, use transformer or parse markdown before store--}}
                     <div id="post-content" class="flow-text">
-                        {!! $post->present()->htmlContent !!}
+                        {!! $post->content !!}
                     </div>
 
                     <div class="card-panel post-meta grey lighten-3">

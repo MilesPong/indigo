@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Content extends Model
 {
     /**
+     * @var array
+     */
+    protected $fillable = ['body'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function post()
