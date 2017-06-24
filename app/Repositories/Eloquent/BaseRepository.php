@@ -24,6 +24,8 @@ abstract class BaseRepository implements RepositoryInterface
      */
     protected $model;
 
+    protected $perPage = 10;
+
     /**
      * BaseRepository constructor.
      * @param Container $app
@@ -92,11 +94,11 @@ abstract class BaseRepository implements RepositoryInterface
      * @param array $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = 10, $columns = ['*'])
+    public function paginate($perPage = null, $columns = ['*'])
     {
         $this->scopeBoot();
 
-        return $this->model->paginate($perPage, $columns);
+        return $this->model->paginate($perPage ?: $this->perPage, $columns);
     }
 
     /**
