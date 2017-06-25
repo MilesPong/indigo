@@ -20,4 +20,16 @@ interface PostRepository extends RepositoryInterface
      * @return mixed
      */
     public function updatePost(array $attributes, $id);
+
+    /**
+     * @param null $perPage
+     * @return mixed
+     */
+    public function lists($perPage = null);
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function retrieve($id);
 }

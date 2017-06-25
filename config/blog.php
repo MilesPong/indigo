@@ -12,6 +12,9 @@ return [
         'enable' => env('ENABLE_DATA_CACHE', true),
         'minutes' => 60,
     ],
+    'posts' => [
+        'per_page' => 5,
+    ],
     'analytics' => [
         'google_trace_id' => env('GOOGLE_ANALYTICS_ID'),
     ]

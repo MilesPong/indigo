@@ -4,10 +4,12 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Content;
 use App\Models\Post;
+use App\Repositories\Contracts\CacheableInterface;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
+use App\Repositories\Eloquent\Traits\Cacheable;
 use App\Scopes\PublishedScope;
 use Carbon\Carbon;
 use Illuminate\Container\Container;
@@ -17,9 +19,10 @@ use Illuminate\Database\Eloquent\Model;
  * Class PostRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class PostRepositoryEloquent extends BaseRepository implements PostRepository
+class PostRepositoryEloquent extends BaseRepository implements PostRepository, CacheableInterface
 {
     use Slugable;
+    use Cacheable;
 
     /**
      * @var TagRepository
@@ -43,6 +46,17 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
         $this->contentModel = $this->app->make($this->contentModel());
     }
 
+    /**
+     * @return string
+     */
+    public function contentModel()
+    {
+        return Content::class;
+    }
+
+    /**
+     * @return $this
+     */
     public function scopeBoot()
     {
         parent::scopeBoot();
@@ -60,14 +74,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     public function model()
     {
         return Post::class;
-    }
-
-    /**
-     * @return string
-     */
-    public function contentModel()
-    {
-        return Content::class;
     }
 
     /**
@@ -178,5 +184,51 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
         $this->model->content()->update($attributes);
 
         return $this->syncTags(data_get($attributes, 'tag', []));
+    }
+
+    /**
+     * Fetch posts data of home page with pagination.
+     *
+     * Alert: It's not optimized without cache support,
+     * so just only use this while with cache enabled.
+     *
+     * @param null $perPage
+     * @return mixed
+     */
+    public function lists($perPage = null)
+    {
+        $perPage = $perPage ?: $this->getDefaultPerPage();
+
+        // Second layer cache
+        $paginator = $this->paginate($perPage, ['id']);
+
+        $items = $paginator->getCollection()->map(function ($post) {
+            // First layer cache
+            return app(self::class)->retrieve($post->id);
+
+            // TODO method below won't work and why?
+            // return  $this->retrieve($post->id);
+        });
+
+        return $paginator->setCollection($items);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultPerPage()
+    {
+        return config('blog.posts.per_page', 10);
+    }
+
+    /**
+     * Get a single post.
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function retrieve($id)
+    {
+        return $this->with(['content', 'author', 'category', 'tags'])->find($id);
     }
 }

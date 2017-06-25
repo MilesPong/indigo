@@ -30,10 +30,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        // TODO paginate page should be dynamic set in config, e.g. config('app.post.perPage', 5)
-        $posts = $this->postRepo
-            ->with(['category', 'tags', 'author'])
-            ->paginate(5);
+        $posts = $this->postRepo->lists();
 
         return view('posts.index', compact('posts'));
     }
@@ -46,9 +43,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->postRepo
-            ->with(['category', 'tags', 'author', 'content'])
-            ->find($id);
+        $post = $this->postRepo->retrieve($id);
 
         event(new PostViewEvent($id));
 
