@@ -8,6 +8,10 @@ return [
         'timeout' => 3600, // 1h
         'key' => 'post_viewed',
     ],
+    'cache' => [
+        'enable' => env('ENABLE_DATA_CACHE', true),
+        'minutes' => 60,
+    ],
     'analytics' => [
         'google_trace_id' => env('GOOGLE_ANALYTICS_ID'),
     ]
