@@ -3,6 +3,9 @@
 namespace App\Repositories\Eloquent;
 
 use App\Repositories\Contracts\RepositoryInterface;
+use App\Repositories\Events\RepositoryEntityCreated;
+use App\Repositories\Events\RepositoryEntityDeleted;
+use App\Repositories\Events\RepositoryEntityUpdated;
 use App\Repositories\Exceptions\RepositoryException;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Builder;
@@ -105,7 +108,9 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function create(array $attributes)
     {
-        return $this->model->create($attributes);
+        return tap($this->model->create($attributes), function ($model) {
+            event(new RepositoryEntityCreated($this, $model));
+        });
     }
 
     /**
@@ -121,6 +126,8 @@ abstract class BaseRepository implements RepositoryInterface
         $model->fill($attributes);
         $model->save();
 
+        event(new RepositoryEntityUpdated($this, $model));
+
         return $model;
     }
 
@@ -132,7 +139,14 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->scopeBoot();
 
-        return $this->find($id)->delete();
+        $model = $this->find($id);
+        $originalModel = clone $model;
+
+        $deleted = $model->delete();
+
+        event(new RepositoryEntityDeleted($this, $originalModel));
+
+        return $deleted;
     }
 
     /**
