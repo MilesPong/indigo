@@ -130,6 +130,8 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function delete($id)
     {
+        $this->scopeBoot();
+
         return $this->find($id)->delete();
     }
 
