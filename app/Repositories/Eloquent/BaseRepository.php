@@ -24,7 +24,15 @@ abstract class BaseRepository implements RepositoryInterface
      */
     protected $model;
 
+    /**
+     * @var int
+     */
     protected $perPage = 10;
+
+    /**
+     * @var
+     */
+    protected $relations;
 
     /**
      * BaseRepository constructor.
@@ -98,7 +106,17 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->scopeBoot();
 
-        return $this->model->paginate($perPage ?: $this->perPage, $columns);
+        $perPage = $perPage ?: $this->getDefaultPerPage();
+
+        return $this->model->paginate($perPage ?: $perPage, $columns);
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultPerPage()
+    {
+        return $this->perPage;
     }
 
     /**
@@ -215,6 +233,9 @@ abstract class BaseRepository implements RepositoryInterface
     public function with($relations)
     {
         $this->model = $this->model->with($relations);
+
+        $this->relations = is_string($relations) ? func_get_args() : $relations;
+
         return $this;
     }
 
@@ -291,6 +312,8 @@ abstract class BaseRepository implements RepositoryInterface
     public function withCount($relations)
     {
         $this->model = $this->model->withCount($relations);
+
+        $this->relations = is_string($relations) ? func_get_args() : $relations;
 
         return $this;
     }
