@@ -229,6 +229,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
      */
     public function retrieve($id)
     {
-        return $this->with(['content', 'author', 'category', 'tags'])->find($id);
+        return $this->with(['author', 'category', 'tags'])->find($id);
     }
 }

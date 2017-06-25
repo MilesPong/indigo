@@ -7,6 +7,7 @@ use App\Scopes\PublishedScope;
 use App\Services\MarkDownParser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Laracasts\Presenter\PresentableTrait;
 
 /**
@@ -26,6 +27,11 @@ class Post extends Model
      * Is not draft status
      */
     const IS_NOT_DRAFT = 0;
+
+    /**
+     * Cache key prefix of post's content
+     */
+    const CONTENT_CACHE_KEY_PREFIX = 'contents:';
 
     /**
      * @var string
@@ -101,7 +107,10 @@ class Post extends Model
      */
     public function getContentAttribute()
     {
-        return app(MarkDownParser::class)->md2html($this->content()->getResults()->body);
+        // Use post-updated event to clear cache
+        return Cache::rememberForever(self::CONTENT_CACHE_KEY_PREFIX . $this->id, function () {
+            return app(MarkDownParser::class)->md2html($this->content()->getResults()->body);
+        });
     }
 
     /**
