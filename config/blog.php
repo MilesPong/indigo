@@ -11,6 +11,7 @@ return [
     'cache' => [
         'enable' => env('ENABLE_DATA_CACHE', true),
         'minutes' => 60,
+        'group_key' => 'repository-cache-keys'
     ],
     'posts' => [
         'per_page' => 5,
