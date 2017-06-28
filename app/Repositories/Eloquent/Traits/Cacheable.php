@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Eloquent\Traits;
 
-use App\Facades\CacheHelper;
 use Closure;
 use Illuminate\Cache\CacheManager;
 
@@ -71,12 +70,7 @@ trait Cacheable
             return call_user_func_array([$this, 'parent::' . $method], $args);
         }
 
-        $key = $this->getCacheKey($method, $args, $ignoreUriQuery);
-
-        return $this->remember($key, function () use ($method, $args, $key) {
-            // Save group keys to cache
-            CacheHelper::createOrUpdate(get_called_class(), $method, $key);
-
+        return $this->remember($this->getCacheKey($method, $args, $ignoreUriQuery), function () use ($method, $args) {
             return call_user_func_array([$this, 'parent::' . $method], $args);
         });
     }
@@ -148,9 +142,8 @@ trait Cacheable
 
         $query = $this->parseQuery($ignoreUriQuery);
 
-        $md5sum = md5(serialize($args) . serialize($relationsNameOnly) . $query);
-
-        $key = sprintf('%s@%s-%s', get_called_class(), $method, $md5sum);
+        $key = sprintf('%s@%s-%s', get_called_class(), $method,
+            md5(serialize($args) . serialize($relationsNameOnly) . $query));
 
         return $key;
     }
