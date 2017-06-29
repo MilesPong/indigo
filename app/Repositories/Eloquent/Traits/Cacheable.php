@@ -60,22 +60,27 @@ trait Cacheable
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
-        return $this->getIfCacheable(__FUNCTION__, func_get_args(), $ignoreUriQuery = false);
+        $key = sprintf("%s:%s-%s", $this->getModelTable(), 'paginate', request()->input('page', 1));
+
+        return $this->getIfCacheable(__FUNCTION__, func_get_args(), $key);
     }
 
     /**
      * @param $method
      * @param $args
+     * @param $key
      * @param boolean $ignoreUriQuery
      * @return mixed
      */
-    private function getIfCacheable($method, $args, $ignoreUriQuery = true)
+    private function getIfCacheable($method, $args, $key = null, $ignoreUriQuery = true)
     {
         if (!$this->isAllowedCache()) {
             return call_user_func_array([$this, 'parent::' . $method], $args);
         }
 
-        return $this->setTags($method)->remember($this->getCacheKey($method, $args, $ignoreUriQuery),
+        $key = $key ?: $this->getCacheKey($method, $args, $ignoreUriQuery);
+
+        return $this->setTags($method)->remember($key,
             function () use ($method, $args) {
                 return call_user_func_array([$this, 'parent::' . $method], $args);
             });
@@ -229,7 +234,10 @@ trait Cacheable
     public function find($id, $columns = ['*'])
     {
         $id = (int)$id;
-        return $this->getIfCacheable(__FUNCTION__, [$id, $columns]);
+
+        $key = sprintf("%s:%s", $this->getModelTable(), $id);
+
+        return $this->getIfCacheable(__FUNCTION__, [$id, $columns], $key);
     }
 
     /**
@@ -238,38 +246,40 @@ trait Cacheable
      */
     public function all($columns = ['*'])
     {
-        return $this->getIfCacheable(__FUNCTION__, func_get_args());
+        $key = sprintf("%s:%s", $this->getModelTable(), 'all');
+
+        return $this->getIfCacheable(__FUNCTION__, func_get_args(), $key);
     }
 
-    /**
-     * @param $field
-     * @param $value
-     * @param array $columns
-     * @return mixed
-     */
-    public function findBy($field, $value, $columns = ['*'])
-    {
-        return $this->getIfCacheable(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * @param $field
-     * @param $value
-     * @param array $columns
-     * @return mixed
-     */
-    public function findAllBy($field, $value, $columns = ['*'])
-    {
-        return $this->getIfCacheable(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * @param array $where
-     * @param array $columns
-     * @return mixed
-     */
-    public function findWhere(array $where, $columns = ['*'])
-    {
-        return $this->getIfCacheable(__FUNCTION__, func_get_args());
-    }
+    // /**
+    //  * @param $field
+    //  * @param $value
+    //  * @param array $columns
+    //  * @return mixed
+    //  */
+    // public function findBy($field, $value, $columns = ['*'])
+    // {
+    //     return $this->getIfCacheable(__FUNCTION__, func_get_args());
+    // }
+    //
+    // /**
+    //  * @param $field
+    //  * @param $value
+    //  * @param array $columns
+    //  * @return mixed
+    //  */
+    // public function findAllBy($field, $value, $columns = ['*'])
+    // {
+    //     return $this->getIfCacheable(__FUNCTION__, func_get_args());
+    // }
+    //
+    // /**
+    //  * @param array $where
+    //  * @param array $columns
+    //  * @return mixed
+    //  */
+    // public function findWhere(array $where, $columns = ['*'])
+    // {
+    //     return $this->getIfCacheable(__FUNCTION__, func_get_args());
+    // }
 }
