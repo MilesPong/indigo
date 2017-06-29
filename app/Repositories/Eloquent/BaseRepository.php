@@ -76,6 +76,18 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
+     * @return string
+     */
+    public function getModelTable()
+    {
+        if ($this->model instanceof Builder) {
+            return $this->model->getModel()->getTable();
+        } else {
+            return $this->model->getTable();
+        }
+    }
+
+    /**
      * The fake "booting" method of the model in calling scopes.
      */
     public function scopeBoot()

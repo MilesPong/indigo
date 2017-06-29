@@ -122,4 +122,9 @@ interface RepositoryInterface
      * @return mixed
      */
     public function getModel();
+
+    /**
+     * @return mixed
+     */
+    public function getModelTable();
 }

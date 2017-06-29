@@ -27,6 +27,11 @@ trait Cacheable
     protected $cache;
 
     /**
+     * @var array
+     */
+    protected $tags = [];
+
+    /**
      * @param CacheManager $cache
      * @return $this
      */
@@ -70,9 +75,10 @@ trait Cacheable
             return call_user_func_array([$this, 'parent::' . $method], $args);
         }
 
-        return $this->remember($this->getCacheKey($method, $args, $ignoreUriQuery), function () use ($method, $args) {
-            return call_user_func_array([$this, 'parent::' . $method], $args);
-        });
+        return $this->setTags($method)->remember($this->getCacheKey($method, $args, $ignoreUriQuery),
+            function () use ($method, $args) {
+                return call_user_func_array([$this, 'parent::' . $method], $args);
+            });
     }
 
     /**
@@ -100,7 +106,10 @@ trait Cacheable
     public function remember($key, Closure $callback, $minutes = null)
     {
         $minutes = $minutes ?: $this->getCacheMinutes();
-        return $this->getCacheRepository()->remember($key, $minutes, $callback);
+
+        $cache = $this->getCacheRepositoryWithTags();
+
+        return $cache->remember($key, $minutes, $callback);
     }
 
     /**
@@ -125,9 +134,36 @@ trait Cacheable
     /**
      * @return CacheManager|\Illuminate\Foundation\Application|mixed
      */
+    public function getCacheRepositoryWithTags()
+    {
+        $cache = $this->getCacheRepository();
+
+        try {
+            return $cache->tags($this->tags);
+        } catch (\BadMethodCallException $exception) {
+            // Not support tags
+            // throw $exception;
+            return $cache;
+        }
+    }
+
+    /**
+     * @return CacheManager|\Illuminate\Foundation\Application|mixed
+     */
     public function getCacheRepository()
     {
         return $this->cache ?: app('cache');
+    }
+
+    /**
+     * @param $method
+     * @return $this
+     */
+    protected function setTags($method)
+    {
+        $this->tags = [$this->getModelTable(), $method];
+
+        return $this;
     }
 
     /**
@@ -142,7 +178,9 @@ trait Cacheable
 
         $query = $this->parseQuery($ignoreUriQuery);
 
-        $key = sprintf('%s@%s-%s', get_called_class(), $method,
+        $table = $this->getModelTable();
+
+        $key = sprintf('%s:%s-%s', $table, $method,
             md5(serialize($args) . serialize($relationsNameOnly) . $query));
 
         return $key;
