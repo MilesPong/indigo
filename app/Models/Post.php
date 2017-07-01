@@ -107,10 +107,7 @@ class Post extends Model
      */
     public function getContentAttribute()
     {
-        // Use post-updated event to clear cache
-        return Cache::rememberForever(self::CONTENT_CACHE_KEY_PREFIX . $this->id, function () {
-            return app(MarkDownParser::class)->md2html($this->content()->getResults()->body);
-        });
+        return app(MarkDownParser::class)->md2html($this->rawContent);
     }
 
     /**

@@ -199,18 +199,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     {
         $perPage = $perPage ?: $this->getDefaultPerPage();
 
-        // Second layer cache
-        $paginator = $this->paginate($perPage, ['id']);
-
-        $items = $paginator->getCollection()->map(function ($post) {
-            // First layer cache
-            return app(self::class)->retrieve($post->id);
-
-            // TODO method below won't work and why?
-            // return  $this->retrieve($post->id);
-        });
-
-        return $paginator->setCollection($items);
+        return $this->with(['author', 'category', 'tags'])->paginate($perPage);
     }
 
     /**
