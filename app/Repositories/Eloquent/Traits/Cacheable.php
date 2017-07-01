@@ -61,9 +61,7 @@ trait Cacheable
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
-        $keyFormat = $this->getKeyFormat(__FUNCTION__);
-
-        $key = sprintf($keyFormat, $this->getModelTable(), 'paginate', request()->input('page', 1));
+        $key = CacheHelper::getKey($this->getModel(), __FUNCTION__);
 
         return $this->getIfCacheable(__FUNCTION__, func_get_args(), $key);
     }
@@ -169,12 +167,7 @@ trait Cacheable
      */
     protected function setTags($method)
     {
-        $table = $this->getModelTable();
-
-        // Use for flush cache, especially in flushing pagination cache
-        $methodTag = $table . '-' . array_get(CacheHelper::KEYS_MAP, $method . '.tag_name');
-
-        $this->tags = [$table, $methodTag];
+        $this->tags = CacheHelper::getTags($this->getModelTable(), $method);
 
         return $this;
     }
@@ -243,20 +236,9 @@ trait Cacheable
     {
         $id = (int)$id;
 
-        $keyFormat = $this->getKeyFormat(__FUNCTION__);
-
-        $key = sprintf($keyFormat, $this->getModelTable(), $id);
+        $key = CacheHelper::getKey($this->getModel(), __FUNCTION__, $id);
 
         return $this->getIfCacheable(__FUNCTION__, [$id, $columns], $key);
-    }
-
-    /**
-     * @param $method
-     * @return mixed
-     */
-    protected function getKeyFormat($method)
-    {
-        return array_get(CacheHelper::KEYS_MAP, $method . '.key_format');
     }
 
     /**
@@ -265,9 +247,7 @@ trait Cacheable
      */
     public function all($columns = ['*'])
     {
-        $keyFormat = $this->getKeyFormat(__FUNCTION__);
-
-        $key = sprintf($keyFormat, $this->getModelTable(), 'all');
+        $key = CacheHelper::getKey($this->getModel(), __FUNCTION__);
 
         return $this->getIfCacheable(__FUNCTION__, func_get_args(), $key);
     }

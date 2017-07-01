@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Post;
+use App\Observers\PostObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
         Relation::morphMap([
             'posts' => \App\Models\Post::class
         ]);
+
+        Post::observe(PostObserver::class);
     }
 
     /**
