@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent\Traits;
 
+use App\Services\CacheHelper;
 use Closure;
 use Illuminate\Cache\CacheManager;
 
@@ -60,7 +61,9 @@ trait Cacheable
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
-        $key = sprintf("%s:%s-%s", $this->getModelTable(), 'paginate', request()->input('page', 1));
+        $keyFormat = $this->getKeyFormat(__FUNCTION__);
+
+        $key = sprintf($keyFormat, $this->getModelTable(), 'paginate', request()->input('page', 1));
 
         return $this->getIfCacheable(__FUNCTION__, func_get_args(), $key);
     }
@@ -166,7 +169,7 @@ trait Cacheable
      */
     protected function setTags($method)
     {
-        $this->tags = [$this->getModelTable(), $method];
+        $this->tags = [$this->getModelTable(), array_get(CacheHelper::KEYS_MAP, $method . '.tag_name')];
 
         return $this;
     }
@@ -235,9 +238,20 @@ trait Cacheable
     {
         $id = (int)$id;
 
-        $key = sprintf("%s:%s", $this->getModelTable(), $id);
+        $keyFormat = $this->getKeyFormat(__FUNCTION__);
+
+        $key = sprintf($keyFormat, $this->getModelTable(), $id);
 
         return $this->getIfCacheable(__FUNCTION__, [$id, $columns], $key);
+    }
+
+    /**
+     * @param $method
+     * @return mixed
+     */
+    protected function getKeyFormat($method)
+    {
+        return array_get(CacheHelper::KEYS_MAP, $method . '.key_format');
     }
 
     /**
@@ -246,7 +260,9 @@ trait Cacheable
      */
     public function all($columns = ['*'])
     {
-        $key = sprintf("%s:%s", $this->getModelTable(), 'all');
+        $keyFormat = $this->getKeyFormat(__FUNCTION__);
+
+        $key = sprintf($keyFormat, $this->getModelTable(), 'all');
 
         return $this->getIfCacheable(__FUNCTION__, func_get_args(), $key);
     }
