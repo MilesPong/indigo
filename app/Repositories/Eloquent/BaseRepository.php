@@ -72,6 +72,10 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function getModel()
     {
+        if ($this->model instanceof Builder) {
+            return $this->model->getModel();
+        }
+
         return $this->model;
     }
 
