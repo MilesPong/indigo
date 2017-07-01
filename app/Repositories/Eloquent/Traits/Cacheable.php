@@ -169,7 +169,12 @@ trait Cacheable
      */
     protected function setTags($method)
     {
-        $this->tags = [$this->getModelTable(), array_get(CacheHelper::KEYS_MAP, $method . '.tag_name')];
+        $table = $this->getModelTable();
+
+        // Use for flush cache, especially in flushing pagination cache
+        $methodTag = $table . '-' . array_get(CacheHelper::KEYS_MAP, $method . '.tag_name');
+
+        $this->tags = [$table, $methodTag];
 
         return $this;
     }
