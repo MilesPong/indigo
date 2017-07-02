@@ -32,7 +32,7 @@ trait Postable
                     }
                 }
             ])
-            ->all();
+            ->all($columns);
     }
 
     /**
