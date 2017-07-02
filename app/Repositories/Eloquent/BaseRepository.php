@@ -29,11 +29,6 @@ abstract class BaseRepository implements RepositoryInterface
     protected $model;
 
     /**
-     * @var int
-     */
-    protected $perPage = 10;
-
-    /**
      * @var
      */
     protected $relations;
@@ -136,7 +131,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function getDefaultPerPage()
     {
-        return $this->perPage;
+        return config('blog.posts.per_page', 10);
     }
 
     /**

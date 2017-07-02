@@ -214,14 +214,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     }
 
     /**
-     * @return mixed
-     */
-    public function getDefaultPerPage()
-    {
-        return config('blog.posts.per_page', 10);
-    }
-
-    /**
      * Get a single post.
      *
      * @param $id
