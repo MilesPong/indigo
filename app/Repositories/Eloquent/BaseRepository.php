@@ -7,6 +7,7 @@ use App\Repositories\Events\RepositoryEntityCreated;
 use App\Repositories\Events\RepositoryEntityDeleted;
 use App\Repositories\Events\RepositoryEntityUpdated;
 use App\Repositories\Exceptions\RepositoryException;
+use Closure;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -346,6 +347,29 @@ abstract class BaseRepository implements RepositoryInterface
         $this->model = $this->model->withCount($relations);
 
         $this->relations = is_string($relations) ? func_get_args() : $relations;
+
+        return $this;
+    }
+
+    /**
+     * @param $relation
+     * @return $this
+     */
+    public function has($relation)
+    {
+        $this->model = $this->model->has($relation);
+
+        return $this;
+    }
+
+    /**
+     * @param $relation
+     * @param Closure|null $callback
+     * @return $this
+     */
+    public function whereHas($relation, Closure $callback = null)
+    {
+        $this->model = $this->model->whereHas($relation, $callback);
 
         return $this;
     }
