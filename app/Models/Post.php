@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Presenters\PostPresenter;
 use App\Scopes\PublishedScope;
+use App\Services\MarkDownParser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Laracasts\Presenter\PresentableTrait;
 
 /**
@@ -27,6 +29,11 @@ class Post extends Model
     const IS_NOT_DRAFT = 0;
 
     /**
+     * Cache key prefix of post's content
+     */
+    const CONTENT_CACHE_KEY_PREFIX = 'contents:';
+
+    /**
      * @var string
      */
     protected $presenter = PostPresenter::class;
@@ -39,7 +46,7 @@ class Post extends Model
         'title',
         'slug',
         'description',
-        'content',
+        'content_id',
         'published_at',
         'is_draft',
         'excerpt',
@@ -93,5 +100,29 @@ class Post extends Model
     public function getConst($name)
     {
         return constant("self::{$name}");
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentAttribute()
+    {
+        return app(MarkDownParser::class)->md2html($this->rawContent);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function content()
+    {
+        return $this->belongsTo(Content::class);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRawContentAttribute()
+    {
+        return $this->content()->getResults()->body;
     }
 }

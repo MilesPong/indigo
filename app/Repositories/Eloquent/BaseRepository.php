@@ -29,6 +29,11 @@ abstract class BaseRepository implements RepositoryInterface
     protected $model;
 
     /**
+     * @var
+     */
+    protected $relations;
+
+    /**
      * BaseRepository constructor.
      * @param Container $app
      */
@@ -63,7 +68,23 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function getModel()
     {
+        if ($this->model instanceof Builder) {
+            return $this->model->getModel();
+        }
+
         return $this->model;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModelTable()
+    {
+        if ($this->model instanceof Builder) {
+            return $this->model->getModel()->getTable();
+        } else {
+            return $this->model->getTable();
+        }
     }
 
     /**
@@ -96,11 +117,21 @@ abstract class BaseRepository implements RepositoryInterface
      * @param array $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage = 10, $columns = ['*'])
+    public function paginate($perPage = null, $columns = ['*'])
     {
         $this->scopeBoot();
 
-        return $this->model->paginate($perPage, $columns);
+        $perPage = $perPage ?: $this->getDefaultPerPage();
+
+        return $this->model->paginate($perPage ?: $perPage, $columns);
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultPerPage()
+    {
+        return config('blog.posts.per_page', 10);
     }
 
     /**
@@ -230,6 +261,9 @@ abstract class BaseRepository implements RepositoryInterface
     public function with($relations)
     {
         $this->model = $this->model->with($relations);
+
+        $this->relations = is_string($relations) ? func_get_args() : $relations;
+
         return $this;
     }
 
@@ -306,6 +340,8 @@ abstract class BaseRepository implements RepositoryInterface
     public function withCount($relations)
     {
         $this->model = $this->model->withCount($relations);
+
+        $this->relations = is_string($relations) ? func_get_args() : $relations;
 
         return $this;
     }

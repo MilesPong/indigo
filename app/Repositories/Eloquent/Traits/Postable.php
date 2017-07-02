@@ -2,27 +2,37 @@
 
 namespace App\Repositories\Eloquent\Traits;
 
+use App\Repositories\Contracts\PostRepository;
 use App\Scopes\PublishedScope;
 
+/**
+ * Trait Postable
+ * @package App\Repositories\Eloquent\Traits
+ */
 trait Postable
 {
+    use Cacheable;
+
+    /**
+     * @var PostRepository
+     */
+    protected $postRepo;
+
     /**
      * @param array $columns
      * @return mixed
      */
     public function allWithPostCount($columns = ['*'])
     {
-        return $this->withCount([
-            'posts' => function ($query) {
-                if (isAdmin()) {
-                    $query->withoutGlobalScope(PublishedScope::class);
+        return $this->whereHas('posts')
+            ->withCount([
+                'posts' => function ($query) {
+                    if (isAdmin()) {
+                        $query->withoutGlobalScope(PublishedScope::class);
+                    }
                 }
-            }
-        ])
-            ->all()
-            ->reject(function ($category) {
-                return $category->posts_count == 0;
-            });
+            ])
+            ->all($columns);
     }
 
     /**
@@ -40,8 +50,25 @@ trait Postable
             $relation->withoutGlobalScope(PublishedScope::class);
         }
 
-        $posts = $relation->with(['tags', 'category', 'author'])->paginate(5);
+        // Relationship default set to no cache
+        $postsPagination = $relation->paginate($this->getDefaultPerPage(), ['id']);
 
-        return [$model, $posts];
+        $items = $postsPagination->getCollection()->map(function ($post) {
+            return $this->getPostRepo()->retrieve($post->id);
+        });
+
+        return [$model, $postsPagination->setCollection($items)];
+    }
+
+    /**
+     * @return PostRepository|\Illuminate\Foundation\Application|mixed
+     */
+    protected function getPostRepo()
+    {
+        if (is_null($this->postRepo)) {
+            $this->postRepo = app(PostRepository::class);
+        }
+
+        return $this->postRepo;
     }
 }

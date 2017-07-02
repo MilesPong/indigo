@@ -2,11 +2,14 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Models\Content;
 use App\Models\Post;
+use App\Repositories\Contracts\CacheableInterface;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
+use App\Repositories\Eloquent\Traits\Cacheable;
 use App\Scopes\PublishedScope;
 use Carbon\Carbon;
 use Illuminate\Container\Container;
@@ -16,14 +19,20 @@ use Illuminate\Database\Eloquent\Model;
  * Class PostRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class PostRepositoryEloquent extends BaseRepository implements PostRepository
+class PostRepositoryEloquent extends BaseRepository implements PostRepository, CacheableInterface
 {
     use Slugable;
+    use Cacheable;
 
     /**
      * @var TagRepository
      */
     protected $tagRepo;
+
+    /**
+     * @var mixed
+     */
+    protected $contentModel;
 
     /**
      * PostRepositoryEloquent constructor.
@@ -34,8 +43,20 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     {
         parent::__construct($app);
         $this->tagRepo = $tagRepo;
+        $this->contentModel = $this->app->make($this->contentModel());
     }
 
+    /**
+     * @return string
+     */
+    public function contentModel()
+    {
+        return Content::class;
+    }
+
+    /**
+     * @return $this
+     */
     public function scopeBoot()
     {
         parent::scopeBoot();
@@ -64,7 +85,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
         $attributes = $this->preHandleData($attributes);
 
         // TODO use transaction
-        $this->model = request()->user()->posts()->create($attributes);
+        $this->model = request()->user()->posts()->create(array_merge($attributes, [
+            'content_id' => $this->contentModel->create($attributes)->id,
+        ]));
 
         return $this->syncTags(data_get($attributes, 'tag', []));
     }
@@ -158,6 +181,46 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
         // TODO use transaction
         $this->model = $this->update($attributes, $id);
 
+        $this->model->content()->update($attributes);
+
         return $this->syncTags(data_get($attributes, 'tag', []));
+    }
+
+    /**
+     * Fetch posts data of home page with pagination.
+     *
+     * Alert: It's not optimized without cache support,
+     * so just only use this while with cache enabled.
+     *
+     * @param null $perPage
+     * @return mixed
+     */
+    public function lists($perPage = null)
+    {
+        $perPage = $perPage ?: $this->getDefaultPerPage();
+
+        // Second layer cache
+        $pagination = $this->paginate($perPage, ['id']);
+
+        $items = $pagination->getCollection()->map(function ($post) {
+            // First layer cache
+            return app(self::class)->retrieve($post->id);
+
+            // TODO method below won't work and why?
+            // return  $this->retrieve($post->id);
+        });
+
+        return $pagination->setCollection($items);
+    }
+
+    /**
+     * Get a single post.
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function retrieve($id)
+    {
+        return $this->with(['author', 'category', 'tags'])->find($id);
     }
 }

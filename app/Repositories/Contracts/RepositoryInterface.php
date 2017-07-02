@@ -21,7 +21,7 @@ interface RepositoryInterface
      * @param array $columns
      * @return mixed
      */
-    public function paginate($perPage = 10, $columns = ['*']);
+    public function paginate($perPage = null, $columns = ['*']);
 
     /**
      * @param array $attributes
@@ -137,4 +137,9 @@ interface RepositoryInterface
      * @return mixed
      */
     public function getModel();
+
+    /**
+     * @return mixed
+     */
+    public function getModelTable();
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\Listeners\RepositoryEventSubscriber;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -19,6 +20,13 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\PostViewEvent' => [
             'App\Listeners\PostViewEventListener',
         ],
+    ];
+
+    /**
+     * @var array
+     */
+    protected $subscribe = [
+        // RepositoryEventSubscriber::class
     ];
 
     /**
