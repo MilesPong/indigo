@@ -17,5 +17,8 @@ return [
     ],
     'analytics' => [
         'google_trace_id' => env('GOOGLE_ANALYTICS_ID'),
+    ],
+    'log' => [
+        'visitor' => env('ENABLE_VISITOR_LOG', false),
     ]
 ];

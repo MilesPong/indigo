@@ -5,6 +5,10 @@ namespace App\Http\Middleware;
 use App\Repositories\Contracts\VisitorRepository;
 use Closure;
 
+/**
+ * Class VisitorMiddleware
+ * @package App\Http\Middleware
+ */
 class VisitorMiddleware
 {
     /**
@@ -30,8 +34,18 @@ class VisitorMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $this->visitorRepo->createLog();
+        if ($this->allowLog()) {
+            $this->visitorRepo->createLog();
+        }
 
         return $next($request);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function allowLog()
+    {
+        return config('blog.log.visitor', false);
     }
 }
