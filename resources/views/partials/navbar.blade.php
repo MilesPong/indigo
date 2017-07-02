@@ -2,7 +2,7 @@
     <nav id="nav-bar" class="z-depth-0">
         <div class="nav-wrapper container">
             <a href="/" class="brand-logo"><i class="material-icons">camera</i>Indigo</a>
-            <a href="#" data-activates="mobile-nav" class="button-collapse"><i class="material-icons">menu</i></a>
+            <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
                 <!-- Dropdown Trigger -->
                 <li>
@@ -17,7 +17,26 @@
         </div>
     </nav>
 </div>
-<ul class="side-nav" id="mobile-nav">
+
+<!-- Dropdown Structure -->
+<ul id="cate-dropdown" class="dropdown-content">
+    @foreach($categories as $category)
+        <li><a class="waves-effect waves-teal" href="{{ route('categories.show', $category->id) }}">{{ $category->name }}</a></li>
+    @endforeach
+</ul>
+
+<ul id="slide-out" class="side-nav">
+    <li><div class="user-view">
+            <div class="background">
+                <img src="{{ asset('images/office.jpg') }}">
+            </div>
+            <a href="#!user"><img class="circle" src="{{ asset('images/avatar.jpg') }}"></a>
+            <a href="#!name"><span class="white-text name">Miles Peng</span></a>
+            <a href="#!email"><span class="white-text email">mingpeng16@gmail.com</span></a>
+        </div></li>
+    <li><a href="#!" class="waves-effect waves-teal"><i class="material-icons">cloud</i>Blog Introduce</a></li>
+    <li><div class="divider"></div></li>
+    {{--<li><a class="subheader">Subheader</a></li>--}}
     <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
             <li>
@@ -34,13 +53,6 @@
     </li>
     <li><a class="waves-effect waves-teal" href="#!">About</a></li>
     <li><a class="waves-effect waves-teal" href="https://github.com/MilesPong">Github</a></li>
-</ul>
-
-<!-- Dropdown Structure -->
-<ul id="cate-dropdown" class="dropdown-content">
-    @foreach($categories as $category)
-        <li><a class="waves-effect waves-teal" href="{{ route('categories.show', $category->id) }}">{{ $category->name }}</a></li>
-    @endforeach
 </ul>
 
 @push('js')
