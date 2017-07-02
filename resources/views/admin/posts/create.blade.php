@@ -12,10 +12,10 @@
                 </div>
                 <!-- /.box-header -->
                 <form role="form" action="{{ route('admin.posts.store') }}" method="POST" class="form-horizontal">
-                <div class="box-body">
-                    @include('admin.posts._form')
-                </div>
-                <!-- /.box-body -->
+                    <div class="box-body">
+                        @include('admin.posts._form')
+                    </div>
+                    <!-- /.box-body -->
                 @stack('box-footer')
                 <!-- /.box-footer -->
                 </form>

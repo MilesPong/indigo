@@ -5,7 +5,7 @@
     <label for="title" class="col-sm-1 control-label">Title</label>
 
     <div class="col-sm-11">
-        <input type="text" class="form-control" name="title" id="title" placeholder="Title" value="{{ old('title', $post->title) }}">
+        <input type="text" class="form-control to-be-slug" name="title" id="title" placeholder="Title" value="{{ old('title', $post->title) }}">
     </div>
 </div>
 
@@ -21,7 +21,7 @@
     <label for="slug" class="col-sm-1 control-label">Slug</label>
 
     <div class="col-sm-11">
-        <input type="text" class="form-control" name="slug" id="slug" placeholder="Slug" value="{{ old('slug', $post->slug) }}">
+        <input type="text" class="form-control" name="slug" id="slug" placeholder="Slug" value="{{ old('slug', $post->slug) }}" @if(isset($post->id))disabled="disabled"@endif>
     </div>
 </div>
 

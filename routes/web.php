@@ -26,6 +26,8 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::post('posts/{id}/restore', 'PostController@restore')->name('posts.restore');
     Route::post('posts/{id}/force-delete', 'PostController@forceDelete')->name('posts.force-delete');
     Route::resource('posts', 'PostController');
+
+    Route::post('auto-slug', 'DashboardController@autoSlug')->name('auto-slug');
 });
 
 Route::group(['namespace' => 'Frontend'], function () {

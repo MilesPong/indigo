@@ -3,7 +3,7 @@
 <!-- text input -->
 <div class="form-group">
     <label>Name</label>
-    <input type="text" class="form-control" placeholder="Category Name" name="name" value="{{ old('name', $category->name) }}">
+    <input type="text" class="form-control to-be-slug" placeholder="Category Name" name="name" value="{{ old('name', $category->name) }}">
 </div>
 
 <div class="form-group">
@@ -13,7 +13,7 @@
 
 <div class="form-group">
     <label>Slug</label>
-    <input type="text" class="form-control" placeholder="Slug" name="slug" value="{{ old('slug', $category->slug) }}">
+    <input type="text" class="form-control" placeholder="Slug" name="slug" id="slug" value="{{ old('slug', $category->slug) }}">
 </div>
 
 <div class="form-group">

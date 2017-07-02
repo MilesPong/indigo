@@ -179,7 +179,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
         $attributes = $this->preHandleData($attributes);
 
         // TODO use transaction
-        $this->model = $this->update($attributes, $id);
+        $this->model = $this->update(array_except($attributes, 'slug'), $id);
 
         $this->model->content()->update($attributes);
 
