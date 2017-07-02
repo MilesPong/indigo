@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Category;
+use App\Repositories\Contracts\CacheableInterface;
 use App\Repositories\Contracts\CategoryRepository;
 use App\Repositories\Eloquent\Traits\Postable;
 use App\Repositories\Eloquent\Traits\Slugable;
@@ -11,7 +12,7 @@ use App\Repositories\Eloquent\Traits\Slugable;
  * Class CategoryRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepository
+class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepository, CacheableInterface
 {
     use Slugable, Postable;
 
