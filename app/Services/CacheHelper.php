@@ -63,6 +63,21 @@ class CacheHelper
     }
 
     /**
+     * @param Model $model
+     */
+    public function flushList(Model $model)
+    {
+        if (!$this->isAllowCache()) {
+            return;
+        }
+
+        $table = $model->getTable();
+        $key = $this->keyAll($table);
+
+        Cache::tags($table)->forget($key);
+    }
+
+    /**
      * @param $table
      * @param $id
      * @return string

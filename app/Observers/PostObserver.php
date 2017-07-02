@@ -2,9 +2,10 @@
 
 namespace App\Observers;
 
+use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Services\CacheHelper;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * Class PostObserver
@@ -42,6 +43,7 @@ class PostObserver
     {
         // Flush single post key
         $this->cacheHelper->flushEntity($post);
+        $this->flushRelatedData();
     }
 
     /**
@@ -50,6 +52,16 @@ class PostObserver
     public function deleted(Post $post)
     {
         $this->cacheHelper->flushEntity($post);
+        $this->flushRelatedData();
         $this->cacheHelper->flushPagination($post);
+    }
+
+    protected function flushRelatedData()
+    {
+        // Flush categoriy 'all' cache
+        $this->cacheHelper->flushList(new Category);
+
+        // Flush tag 'all' cache
+        $this->cacheHelper->flushList(new Tag);
     }
 }
