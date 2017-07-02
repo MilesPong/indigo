@@ -33,12 +33,28 @@ trait Cacheable
     protected $tags = [];
 
     /**
+     * @var bool
+     */
+    protected $forever = false;
+
+    /**
      * @param CacheManager $cache
      * @return $this
      */
     public function setCacheRepository(CacheManager $cache)
     {
         $this->cache = $cache;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $status
+     * @return $this
+     */
+    public function setForever($status = true)
+    {
+        $this->forever = $status;
 
         return $this;
     }
@@ -127,6 +143,9 @@ trait Cacheable
 
         $cache = $this->getCacheRepositoryWithTags();
 
+        if ($this->forever) {
+            return $cache->rememberForever($key, $callback);
+        }
         return $cache->remember($key, $minutes, $callback);
     }
 
@@ -239,7 +258,7 @@ trait Cacheable
 
         $key = $this->getCacheHelper()->keyFind($this->getModelTable(), $id);
 
-        return $this->getIfCacheable(__FUNCTION__, [$id, $columns], $key);
+        return $this->setForever()->getIfCacheable(__FUNCTION__, [$id, $columns], $key);
     }
 
     /**

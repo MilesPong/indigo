@@ -62,4 +62,10 @@ interface CacheableInterface
      * @return mixed
      */
     public function isSkippedCache();
+
+    /**
+     * @param bool $status
+     * @return mixed
+     */
+    public function setForever($status = true);
 }
