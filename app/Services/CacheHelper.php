@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
@@ -13,33 +12,20 @@ use Illuminate\Support\Facades\Cache;
 class CacheHelper
 {
     /**
-     * Cache keys map
+     * Key's format
      */
-    const KEYS_MAP = [
-        'paginate' => [
-            'tag_name' => 'paginate',
-            'key_format' => '%s:%s'
-        ],
-        'find' => [
-            'tag_name' => 'find',
-            'key_format' => '%s:%s'
-        ],
-        'all' => [
-            'tag_name' => 'all',
-            'key_format' => '%s:%s'
-        ],
-    ];
+    const KEY_FORMAT = '%s:%s';
 
     /**
      * @param Model $model
      */
-    public static function flushPagination(Model $model)
+    public function flushPagination(Model $model)
     {
-        if (!self::isAllowCache()) {
+        if (!$this->isAllowCache()) {
             return;
         }
 
-        $tags = self::getMethodTag($model->getTable(), 'paginate');
+        $tags = $this->tagPaginate($model->getTable());
 
         Cache::tags($tags)->flush();
     }
@@ -47,87 +33,60 @@ class CacheHelper
     /**
      * @return mixed
      */
-    public static function isAllowCache()
+    public function isAllowCache()
     {
         return config('blog.cache.enable');
     }
 
     /**
      * @param $table
-     * @param $method
      * @return string
      */
-    protected static function getMethodTag($table, $method)
+    public function tagPaginate($table)
     {
-        return $table . '-' . array_get(self::KEYS_MAP, $method . '.tag_name');
+        return $table . '-paginate';
     }
 
     /**
      * @param Model $model
      */
-    public static function flushEntity(Model $model)
+    public function flushEntity(Model $model)
     {
-        if (!self::isAllowCache()) {
+        if (!$this->isAllowCache()) {
             return;
         }
 
-        list($key, $tags) = self::getKeyAndTags($model, 'find');
-
-        Cache::tags($tags)->forget($key);
-    }
-
-    /**
-     * @param $model
-     * @param $method
-     * @return array
-     */
-    protected static function getKeyAndTags($model, $method)
-    {
-        return [
-            self::getKey($model, $method, $model->id),
-            self::getTags($model->getTable(), $method)
-        ];
-    }
-
-    /**
-     * @param $model
-     * @param $method
-     * @param null $id
-     * @return string
-     */
-    public static function getKey($model, $method, $id = null)
-    {
-        $format = array_get(self::KEYS_MAP, $method . '.key_format');
-
         $table = $model->getTable();
+        $key = $this->keyFind($table, $model->id);
 
-        switch ($method) {
-            case 'all':
-                $key = sprintf($format, $table, 'all');
-                break;
-            case 'find':
-                $key = sprintf($format, $table, $id);
-                break;
-            case 'paginate':
-                $key = sprintf($format, $table, 'paginate-' . request()->input('page', 1));
-                break;
-            default:
-                throw new InvalidArgumentException();
-        }
-
-        return $key;
+        Cache::tags($table)->forget($key);
     }
 
     /**
      * @param $table
-     * @param $method
-     * @return array
+     * @param $id
+     * @return string
      */
-    public static function getTags($table, $method)
+    public function keyFind($table, $id)
     {
-        return [
-            $table,
-            self::getMethodTag($table, $method)
-        ];
+        return sprintf(self::KEY_FORMAT, $table, $id);
+    }
+
+    /**
+     * @param $table
+     * @return string
+     */
+    public function keyPaginate($table)
+    {
+        return sprintf(self::KEY_FORMAT, $table, 'paginate-' . request()->input('page', 1));
+    }
+
+    /**
+     * @param $table
+     * @return string
+     */
+    public function keyAll($table)
+    {
+        return sprintf(self::KEY_FORMAT, $table, 'all');
     }
 }

@@ -44,6 +44,14 @@ trait Cacheable
     }
 
     /**
+     * @return CacheHelper
+     */
+    protected function getCacheHelper()
+    {
+        return new CacheHelper();
+    }
+
+    /**
      * @param bool $status
      * @return $this
      */
@@ -61,7 +69,11 @@ trait Cacheable
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
-        $key = CacheHelper::getKey($this->getModel(), __FUNCTION__);
+        $table = $this->getModelTable();
+
+        $key = $this->getCacheHelper()->keyPaginate($table);
+
+        array_push($this->tags, $this->getCacheHelper()->tagPaginate($table));
 
         return $this->getIfCacheable(__FUNCTION__, func_get_args(), $key);
     }
@@ -81,7 +93,7 @@ trait Cacheable
 
         $key = $key ?: $this->getCacheKey($method, $args, $ignoreUriQuery);
 
-        return $this->setTags($method)->remember($key,
+        return $this->remember($key,
             function () use ($method, $args) {
                 return call_user_func_array([$this, 'parent::' . $method], $args);
             });
@@ -145,7 +157,9 @@ trait Cacheable
         $cache = $this->getCacheRepository();
 
         try {
-            return $cache->tags($this->tags);
+            $tags = array_merge($this->tags, [$this->getModelTable()]);
+
+            return $cache->tags($tags);
         } catch (\BadMethodCallException $exception) {
             // Not support tags
             // throw $exception;
@@ -163,17 +177,6 @@ trait Cacheable
 
     /**
      * @param $method
-     * @return $this
-     */
-    protected function setTags($method)
-    {
-        $this->tags = CacheHelper::getTags($this->getModelTable(), $method);
-
-        return $this;
-    }
-
-    /**
-     * @param $method
      * @param null $args
      * @param boolean $ignoreUriQuery
      * @return string
@@ -184,9 +187,7 @@ trait Cacheable
 
         $query = $this->parseQuery($ignoreUriQuery);
 
-        $table = $this->getModelTable();
-
-        $key = sprintf('%s:%s-%s', $table, $method,
+        $key = sprintf('%s:%s-%s', $this->getModelTable(), $method,
             md5(serialize($args) . serialize($relationsNameOnly) . $query));
 
         return $key;
@@ -236,7 +237,7 @@ trait Cacheable
     {
         $id = (int)$id;
 
-        $key = CacheHelper::getKey($this->getModel(), __FUNCTION__, $id);
+        $key = $this->getCacheHelper()->keyFind($this->getModelTable(), $id);
 
         return $this->getIfCacheable(__FUNCTION__, [$id, $columns], $key);
     }
@@ -247,7 +248,7 @@ trait Cacheable
      */
     public function all($columns = ['*'])
     {
-        $key = CacheHelper::getKey($this->getModel(), __FUNCTION__);
+        $key = $this->getCacheHelper()->keyAll($this->getModelTable());
 
         return $this->getIfCacheable(__FUNCTION__, func_get_args(), $key);
     }
