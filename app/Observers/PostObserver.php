@@ -5,28 +5,13 @@ namespace App\Observers;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
-use App\Services\CacheHelper;
 
 /**
  * Class PostObserver
  * @package App\Observers
  */
-class PostObserver
+class PostObserver extends BaseObserver
 {
-    /**
-     * @var CacheHelper
-     */
-    protected $cacheHelper;
-
-    /**
-     * PostObserver constructor.
-     * @param CacheHelper $cacheHelper
-     */
-    public function __construct(CacheHelper $cacheHelper)
-    {
-        $this->cacheHelper = $cacheHelper;
-    }
-
     /**
      * @param Post $post
      */
@@ -58,7 +43,7 @@ class PostObserver
 
     protected function flushRelatedData()
     {
-        // Flush categoriy 'all' cache
+        // Flush category 'all' cache
         $this->cacheHelper->flushList(new Category);
 
         // Flush tag 'all' cache
