@@ -11,8 +11,8 @@ interface PostRelated
     public function allWithPostCount($columns = ['*']);
 
     /**
-     * @param $id
+     * @param $slug
      * @return mixed
      */
-    public function getWithPosts($id);
+    public function getWithPosts($slug);
 }

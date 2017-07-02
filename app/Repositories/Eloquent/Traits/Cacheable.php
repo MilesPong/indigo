@@ -272,16 +272,18 @@ trait Cacheable
         return $this->getIfCacheable(__FUNCTION__, func_get_args(), $key);
     }
 
-    // /**
-    //  * @param $field
-    //  * @param $value
-    //  * @param array $columns
-    //  * @return mixed
-    //  */
-    // public function findBy($field, $value, $columns = ['*'])
-    // {
-    //     return $this->getIfCacheable(__FUNCTION__, func_get_args());
-    // }
+    /**
+     * @param $field
+     * @param $value
+     * @param array $columns
+     * @return mixed
+     */
+    public function findBy($field, $value, $columns = ['*'])
+    {
+        $key = $this->getCacheHelper()->keySlug($this->getModelTable(), $value);
+
+        return $this->setForever()->getIfCacheable(__FUNCTION__, func_get_args(), $key);
+    }
     //
     // /**
     //  * @param $field

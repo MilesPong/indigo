@@ -57,7 +57,7 @@ class CacheHelper
         }
 
         $table = $model->getTable();
-        $key = $this->keyFind($table, $model->id);
+        $key = $this->keySlug($table, $model->slug);
 
         Cache::tags($table)->forget($key);
     }
@@ -85,6 +85,16 @@ class CacheHelper
     public function keyFind($table, $id)
     {
         return sprintf(self::KEY_FORMAT, $table, $id);
+    }
+
+    /**
+     * @param $table
+     * @param $slug
+     * @return string
+     */
+    public function keySlug($table, $slug)
+    {
+        return sprintf(self::KEY_FORMAT, $table, md5($table . ':' . $slug));
     }
 
     /**

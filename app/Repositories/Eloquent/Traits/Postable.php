@@ -36,12 +36,12 @@ trait Postable
     }
 
     /**
-     * @param $id
+     * @param $slug
      * @return array
      */
-    public function getWithPosts($id)
+    public function getWithPosts($slug)
     {
-        $model = $this->find($id);
+        $model = $this->findBy('slug', $slug);
 
         // Call relationship $category->posts()
         $relation = call_user_func([$model, 'posts']);
@@ -51,10 +51,10 @@ trait Postable
         }
 
         // Relationship default set to no cache
-        $postsPagination = $relation->paginate($this->getDefaultPerPage(), ['id']);
+        $postsPagination = $relation->paginate($this->getDefaultPerPage(), ['slug']);
 
         $items = $postsPagination->getCollection()->map(function ($post) {
-            return $this->newPostRepo()->retrieve($post->id);
+            return $this->newPostRepo()->getBySlug($post->slug);
         });
 
         return [$model, $postsPagination->setCollection($items)];

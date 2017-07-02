@@ -19,6 +19,7 @@ class PostObserver extends BaseObserver
     {
         // Flush post pagination cached
         $this->cacheHelper->flushPagination($post);
+        $this->flushRelatedData();
     }
 
     /**

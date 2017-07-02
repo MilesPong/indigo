@@ -38,14 +38,14 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  string $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $post = $this->postRepo->retrieve($id);
+        $post = $this->postRepo->getBySlug($slug);
 
-        event(new PostViewEvent($id));
+        event(new PostViewEvent($post->id));
 
         return view('posts.show', compact('post'));
     }

@@ -2,7 +2,7 @@
     <div class="collection-header"><h5>Tags</h5></div>
     <div class="tag-list">
         @foreach($tags as $tag)
-            <a class="chip waves-effect waves-teal" href="{{ route('tags.show', $tag->id) }}">
+            <a class="chip waves-effect waves-teal" href="{{ route('tags.show', $tag->slug) }}">
                 {{ $tag->name }}
                 <span class="badge-tag teal white-text circle">{{ $tag->posts_count }}</span>
             </a>

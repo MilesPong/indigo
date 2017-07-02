@@ -200,11 +200,11 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
         $perPage = $perPage ?: $this->getDefaultPerPage();
 
         // Second layer cache
-        $pagination = $this->paginate($perPage, ['id']);
+        $pagination = $this->paginate($perPage, ['slug']);
 
         $items = $pagination->getCollection()->map(function ($post) {
             // First layer cache
-            return app(self::class)->retrieve($post->id);
+            return app(self::class)->getBySlug($post->slug);
 
             // TODO method below won't work and why?
             // return  $this->retrieve($post->id);
@@ -222,5 +222,14 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     public function retrieve($id)
     {
         return $this->with(['author', 'category', 'tags'])->find($id);
+    }
+
+    /**
+     * @param $slug
+     * @return mixed
+     */
+    public function getBySlug($slug)
+    {
+        return $this->with(['author', 'category', 'tags'])->findBy('slug', $slug);
     }
 }
