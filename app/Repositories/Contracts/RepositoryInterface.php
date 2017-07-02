@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Contracts;
 
+use Closure;
+
 /**
  * Interface RepositoryInterface
  * @package App\Repositories\Contracts
@@ -83,6 +85,19 @@ interface RepositoryInterface
      * @return $this
      */
     public function withCount($relations);
+
+    /**
+     * @param $relation
+     * @return mixed
+     */
+    public function has($relation);
+
+    /**
+     * @param $relation
+     * @param Closure|null $callback
+     * @return mixed
+     */
+    public function whereHas($relation, Closure $callback = null);
 
     /**
      * @param array $attributes
