@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\ContentableInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
@@ -63,6 +64,16 @@ class CacheHelper
     }
 
     /**
+     * @param $table
+     * @param $slug
+     * @return string
+     */
+    public function keySlug($table, $slug)
+    {
+        return sprintf(self::KEY_FORMAT, $table, md5($table . ':' . $slug));
+    }
+
+    /**
      * @param Model $model
      */
     public function flushList(Model $model)
@@ -79,6 +90,50 @@ class CacheHelper
 
     /**
      * @param $table
+     * @return string
+     */
+    public function keyAll($table)
+    {
+        return sprintf(self::KEY_FORMAT, $table, 'all');
+    }
+
+    /**
+     * Set forever cache of content.
+     *
+     * @param ContentableInterface $contentable
+     * @return mixed
+     */
+    public function cacheContent(ContentableInterface $contentable)
+    {
+        return Cache::rememberForever($this->getContentCacheKey($contentable),
+            function () use ($contentable) {
+                return app(MarkDownParser::class)->md2html($contentable->getRawContent());
+            });
+    }
+
+    /**
+     * Get content cache key.
+     *
+     * @param ContentableInterface $contentable
+     * @return string
+     */
+    protected function getContentCacheKey(ContentableInterface $contentable)
+    {
+        return sprintf('contents:%s', $contentable->getContentId());
+    }
+
+    /**
+     * Forget cache key of content.
+     *
+     * @param ContentableInterface $contentable
+     */
+    public function flushContent(ContentableInterface $contentable)
+    {
+        Cache::forget($this->getContentCacheKey($contentable));
+    }
+
+    /**
+     * @param $table
      * @param $id
      * @return string
      */
@@ -89,29 +144,10 @@ class CacheHelper
 
     /**
      * @param $table
-     * @param $slug
-     * @return string
-     */
-    public function keySlug($table, $slug)
-    {
-        return sprintf(self::KEY_FORMAT, $table, md5($table . ':' . $slug));
-    }
-
-    /**
-     * @param $table
      * @return string
      */
     public function keyPaginate($table)
     {
         return sprintf(self::KEY_FORMAT, $table, 'paginate-' . request()->input('page', 1));
-    }
-
-    /**
-     * @param $table
-     * @return string
-     */
-    public function keyAll($table)
-    {
-        return sprintf(self::KEY_FORMAT, $table, 'all');
     }
 }

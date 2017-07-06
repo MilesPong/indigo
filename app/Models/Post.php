@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
+use App\Contracts\ContentableInterface;
 use App\Presenters\PostPresenter;
 use App\Scopes\PublishedScope;
-use App\Services\MarkDownParser;
+use App\Services\CacheHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Laracasts\Presenter\PresentableTrait;
 
 /**
  * Class Post
  * @package App\Models
  */
-class Post extends Model
+class Post extends Model implements ContentableInterface
 {
     use PresentableTrait, SoftDeletes;
 
@@ -107,7 +107,8 @@ class Post extends Model
      */
     public function getContentAttribute()
     {
-        return app(MarkDownParser::class)->md2html($this->rawContent);
+        // Always use cache
+        return (new CacheHelper)->cacheContent($this);
     }
 
     /**
@@ -124,5 +125,25 @@ class Post extends Model
     public function getRawContentAttribute()
     {
         return $this->content()->getResults()->body;
+    }
+
+    /**
+     * Get raw content in markdown syntax.
+     *
+     * @return string
+     */
+    public function getRawContent()
+    {
+        return $this->getRawContentAttribute();
+    }
+
+    /**
+     * Get primary key in 'contents' table.
+     *
+     * @return int
+     */
+    public function getContentId()
+    {
+        return $this->content_id;
     }
 }

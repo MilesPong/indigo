@@ -28,7 +28,7 @@ class PostObserver extends BaseObserver
     public function updated(Post $post)
     {
         // Flush single post key
-        $this->cacheHelper->flushEntity($post);
+        $this->flushPost($post);
         $this->flushRelatedData();
     }
 
@@ -37,11 +37,25 @@ class PostObserver extends BaseObserver
      */
     public function deleted(Post $post)
     {
-        $this->cacheHelper->flushEntity($post);
+        $this->flushPost($post);
         $this->flushRelatedData();
         $this->cacheHelper->flushPagination($post);
     }
 
+    /**
+     * Flush a single post's data.
+     *
+     * @param Post $post
+     */
+    protected function flushPost(Post $post)
+    {
+        $this->cacheHelper->flushEntity($post);
+        $this->cacheHelper->flushContent($post);
+    }
+
+    /**
+     * Flush category and tag data.
+     */
     protected function flushRelatedData()
     {
         // Flush category 'all' cache
