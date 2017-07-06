@@ -4,7 +4,7 @@ namespace App\Repositories\Eloquent\Traits;
 
 use App\Services\CacheHelper;
 use Closure;
-use Illuminate\Cache\CacheManager;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 /**
  * Trait Cacheable
@@ -23,7 +23,7 @@ trait Cacheable
     protected $skipCache = false;
 
     /**
-     * @var CacheManager
+     * @var CacheRepository
      */
     protected $cache;
 
@@ -38,10 +38,10 @@ trait Cacheable
     protected $forever = false;
 
     /**
-     * @param CacheManager $cache
+     * @param CacheRepository $cache
      * @return $this
      */
-    public function setCacheRepository(CacheManager $cache)
+    public function setCacheRepository(CacheRepository $cache)
     {
         $this->cache = $cache;
 
@@ -169,7 +169,7 @@ trait Cacheable
     }
 
     /**
-     * @return CacheManager|\Illuminate\Foundation\Application|mixed
+     * @return CacheRepository|\Illuminate\Foundation\Application|mixed
      */
     public function getCacheRepositoryWithTags()
     {
@@ -187,11 +187,11 @@ trait Cacheable
     }
 
     /**
-     * @return CacheManager|\Illuminate\Foundation\Application|mixed
+     * @return CacheRepository|\Illuminate\Foundation\Application|mixed
      */
     public function getCacheRepository()
     {
-        return $this->cache ?: app('cache');
+        return $this->cache ?: app('cache.store');
     }
 
     /**

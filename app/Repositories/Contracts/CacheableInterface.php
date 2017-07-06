@@ -3,7 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use Closure;
-use Illuminate\Cache\CacheManager;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 /**
  * Interface CacheableInterface
@@ -36,10 +36,10 @@ interface CacheableInterface
     public function getCacheRepository();
 
     /**
-     * @param CacheManager $cache
+     * @param CacheRepository $cache
      * @return mixed
      */
-    public function setCacheRepository(CacheManager $cache);
+    public function setCacheRepository(CacheRepository $cache);
 
     /**
      * @param $minutes
