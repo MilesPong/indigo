@@ -40,6 +40,11 @@
                 </div>
 
             </div>
+
+            <div class="col s12">
+                @include('partials.comment')
+            </div>
+
         </div>
     </div>
 @endsection
