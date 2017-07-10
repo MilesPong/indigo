@@ -368,4 +368,16 @@ abstract class BaseRepository implements RepositoryInterface
 
         return $this;
     }
+
+    /**
+     * @param $column
+     * @param string $direction
+     * @return $this
+     */
+    public function orderBy($column, $direction = 'asc')
+    {
+        $this->model = $this->model->orderBy($column, $direction);
+
+        return $this;
+    }
 }

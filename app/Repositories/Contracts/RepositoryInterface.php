@@ -142,4 +142,11 @@ interface RepositoryInterface
      * @return mixed
      */
     public function getModelTable();
+
+    /**
+     * @param $column
+     * @param string $direction
+     * @return mixed
+     */
+    public function orderBy($column, $direction = 'asc');
 }
