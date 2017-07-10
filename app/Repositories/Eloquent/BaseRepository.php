@@ -443,4 +443,17 @@ abstract class BaseRepository implements RepositoryInterface
 
         return $this;
     }
+
+    /**
+     * @param array $columns
+     * @return mixed
+     */
+    public function first($columns = ['*'])
+    {
+        $this->scopeBoot();
+
+        $this->applyScope();
+
+        return $this->model->first($columns);
+    }
 }

@@ -160,4 +160,10 @@ interface RepositoryInterface
      * @return mixed
      */
     public function resetScope();
+
+    /**
+     * @param array $columns
+     * @return mixed
+     */
+    public function first($columns = ['*']);
 }
