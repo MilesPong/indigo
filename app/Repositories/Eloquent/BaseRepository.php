@@ -64,6 +64,14 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
+     * Reset the model after query
+     */
+    protected function resetModel()
+    {
+        $this->makeModel();
+    }
+
+    /**
      * @return mixed
      */
     abstract public function model();
@@ -116,6 +124,9 @@ abstract class BaseRepository implements RepositoryInterface
             $results = $this->model->all($columns);
         }
 
+        $this->resetModel();
+        $this->resetScope();
+
         return $results;
     }
 
@@ -132,7 +143,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $perPage = $perPage ?: $this->getDefaultPerPage();
 
-        return $this->model->paginate($perPage ?: $perPage, $columns);
+        $results = $this->model->paginate($perPage ?: $perPage, $columns);
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $results;
     }
 
     /**
@@ -171,6 +187,9 @@ abstract class BaseRepository implements RepositoryInterface
 
         event(new RepositoryEntityUpdated($this, $model));
 
+        $this->resetModel();
+        $this->resetScope();
+
         return $model;
     }
 
@@ -191,6 +210,9 @@ abstract class BaseRepository implements RepositoryInterface
 
         event(new RepositoryEntityDeleted($this, $originalModel));
 
+        $this->resetModel();
+        $this->resetScope();
+
         return $deleted;
     }
 
@@ -205,7 +227,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyScope();
 
-        return $this->model->findOrFail($id, $columns);
+        $result = $this->model->findOrFail($id, $columns);
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $result;
     }
 
     /**
@@ -220,7 +247,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyScope();
 
-        return $this->model->where($field, '=', $value)->first($columns);
+        $result = $this->model->where($field, '=', $value)->first($columns);
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $result;
     }
 
     /**
@@ -235,7 +267,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyScope();
 
-        return $this->model->where($field, '=', $value)->get($columns);
+        $results = $this->model->where($field, '=', $value)->get($columns);
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $results;
     }
 
     /**
@@ -251,7 +288,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyConditions($where);
 
-        return $this->model->get($columns);
+        $results = $this->model->get($columns);
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $results;
     }
 
     /**
@@ -298,7 +340,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyScope();
 
-        return $this->model->firstOrCreate($attributes);
+        $result = $this->model->firstOrCreate($attributes);
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $result;
     }
 
     /**
@@ -307,10 +354,6 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function trashed($only = false)
     {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
         if ($only) {
             $this->model = $this->model->onlyTrashed();
         } else {
@@ -346,7 +389,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyScope();
 
-        return $this->withTrashed()->find($id)->restore();
+        $result = $this->withTrashed()->find($id)->restore();
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $result;
     }
 
     /**
@@ -359,7 +407,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyScope();
 
-        return $this->withTrashed()->find($id)->forceDelete();
+        $result = $this->withTrashed()->find($id)->forceDelete();
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $result;
     }
 
     /**
@@ -454,6 +507,11 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyScope();
 
-        return $this->model->first($columns);
+        $result = $this->model->first($columns);
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $result;
     }
 }
