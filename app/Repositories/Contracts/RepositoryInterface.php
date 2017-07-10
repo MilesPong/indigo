@@ -149,4 +149,15 @@ interface RepositoryInterface
      * @return mixed
      */
     public function orderBy($column, $direction = 'asc');
+
+    /**
+     * @param Closure $callback
+     * @return mixed
+     */
+    public function scopeQuery(Closure $callback);
+
+    /**
+     * @return mixed
+     */
+    public function resetScope();
 }

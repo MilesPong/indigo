@@ -34,6 +34,11 @@ abstract class BaseRepository implements RepositoryInterface
     protected $relations;
 
     /**
+     * @var Closure
+     */
+    protected $scopeQuery;
+
+    /**
      * BaseRepository constructor.
      * @param Container $app
      */
@@ -103,6 +108,8 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->scopeBoot();
 
+        $this->applyScope();
+
         if ($this->model instanceof Builder) {
             $results = $this->model->get($columns);
         } else {
@@ -120,6 +127,8 @@ abstract class BaseRepository implements RepositoryInterface
     public function paginate($perPage = null, $columns = ['*'])
     {
         $this->scopeBoot();
+
+        $this->applyScope();
 
         $perPage = $perPage ?: $this->getDefaultPerPage();
 
@@ -154,6 +163,8 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->scopeBoot();
 
+        $this->applyScope();
+
         $model = $this->model->findOrFail($id);
         $model->fill($attributes);
         $model->save();
@@ -170,6 +181,8 @@ abstract class BaseRepository implements RepositoryInterface
     public function delete($id)
     {
         $this->scopeBoot();
+
+        $this->applyScope();
 
         $model = $this->find($id);
         $originalModel = clone $model;
@@ -190,6 +203,8 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->scopeBoot();
 
+        $this->applyScope();
+
         return $this->model->findOrFail($id, $columns);
     }
 
@@ -202,6 +217,8 @@ abstract class BaseRepository implements RepositoryInterface
     public function findBy($field, $value, $columns = ['*'])
     {
         $this->scopeBoot();
+
+        $this->applyScope();
 
         return $this->model->where($field, '=', $value)->first($columns);
     }
@@ -216,6 +233,8 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->scopeBoot();
 
+        $this->applyScope();
+
         return $this->model->where($field, '=', $value)->get($columns);
     }
 
@@ -227,6 +246,8 @@ abstract class BaseRepository implements RepositoryInterface
     public function findWhere(array $where, $columns = ['*'])
     {
         $this->scopeBoot();
+
+        $this->applyScope();
 
         $this->applyConditions($where);
 
@@ -275,6 +296,8 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->scopeBoot();
 
+        $this->applyScope();
+
         return $this->model->firstOrCreate($attributes);
     }
 
@@ -285,6 +308,8 @@ abstract class BaseRepository implements RepositoryInterface
     public function trashed($only = false)
     {
         $this->scopeBoot();
+
+        $this->applyScope();
 
         if ($only) {
             $this->model = $this->model->onlyTrashed();
@@ -319,6 +344,8 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->scopeBoot();
 
+        $this->applyScope();
+
         return $this->withTrashed()->find($id)->restore();
     }
 
@@ -329,6 +356,8 @@ abstract class BaseRepository implements RepositoryInterface
     public function forceDelete($id)
     {
         $this->scopeBoot();
+
+        $this->applyScope();
 
         return $this->withTrashed()->find($id)->forceDelete();
     }
@@ -377,6 +406,40 @@ abstract class BaseRepository implements RepositoryInterface
     public function orderBy($column, $direction = 'asc')
     {
         $this->model = $this->model->orderBy($column, $direction);
+
+        return $this;
+    }
+
+    /**
+     * @param Closure $callback
+     * @return $this
+     */
+    public function scopeQuery(Closure $callback)
+    {
+        $this->scopeQuery = $callback;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function applyScope()
+    {
+        if (!is_null($this->scopeQuery) && is_callable($this->scopeQuery)) {
+            $callback = $this->scopeQuery;
+            $this->model = $callback($this->model);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function resetScope()
+    {
+        $this->scopeQuery = null;
 
         return $this;
     }
