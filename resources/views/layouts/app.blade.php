@@ -27,6 +27,13 @@
     {{--@yield('css')--}}
     @stack('css')
 
+    <style>
+        .btn-profile {
+            position: absolute;
+            left: -20%;
+        }
+    </style>
+
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([

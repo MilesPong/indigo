@@ -1,6 +1,7 @@
 <div class="navbar-fixed">
     <nav id="nav-bar" class="z-depth-0">
         <div class="nav-wrapper container">
+            <a href="#" data-activates="slide-out" class="btn-profile hide-on-med-and-down"><i class="material-icons">menu</i></a>
             <a href="/" class="brand-logo"><i class="material-icons">camera</i>Indigo</a>
             <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
@@ -59,6 +60,12 @@
 <script>
     $(function () {
         $(".button-collapse").sideNav();
+
+        // TODO Can't set sideNav() at the same time?, hack
+        if ($(window).width() > 992) {
+            // Initialize collapse button
+            $(".btn-profile").sideNav();
+        }
 
         $(window).scroll(function () {
             var nav = $("#nav-bar");
