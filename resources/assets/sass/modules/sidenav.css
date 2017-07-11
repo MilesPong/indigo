@@ -53,10 +53,11 @@
     }
 }
 
-.side-nav .collapsible-header {
-    padding: 0 32px;
+.side-nav .collapsible .collapsible-header {
+    padding-left: 30px;
+    font-weight: 500;
 }
 
-.side-nav .collapsible-body li a, .side-nav.fixed .collapsible-body li a {
-    padding-left: 45px;
+.side-nav .collapsible .collapsible-header .material-icons {
+    margin-right: 28px;
 }
