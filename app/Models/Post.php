@@ -146,4 +146,26 @@ class Post extends Model implements ContentableInterface
     {
         return $this->content_id;
     }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $id
+     * @param array $columns
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopePrevious($query, $id, $columns = ['*'])
+    {
+        return $query->select($columns)->where('id', '<', $id)->latest('published_at');
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $id
+     * @param array $columns
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeNext($query, $id, $columns = ['*'])
+    {
+        return $query->select($columns)->where('id', '>', $id)->oldest('published_at');
+    }
 }
