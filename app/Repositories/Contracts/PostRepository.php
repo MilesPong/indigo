@@ -38,4 +38,16 @@ interface PostRepository extends RepositoryInterface
      * @return mixed
      */
     public function getBySlug($slug);
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    public function previous($model);
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    public function next($model);
 }

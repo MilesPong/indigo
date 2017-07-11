@@ -232,4 +232,27 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     {
         return $this->with(['author', 'category', 'tags'])->findBy('slug', $slug);
     }
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    public function previous($model)
+    {
+        return $this->scopeQuery(function ($query) use ($model) {
+            return $query->previous($model->id, ['title', 'slug']);
+        })->first();
+    }
+
+    /**
+     * @param $model
+     * @return mixed
+     */
+    public function next($model)
+    {
+        return $this->scopeQuery(function ($query) use ($model) {
+            return $query->next($model->id, ['title', 'slug']);
+        })->first();
+    }
+
 }

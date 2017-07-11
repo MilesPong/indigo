@@ -53,6 +53,29 @@
                 </div>
             </div>
 
+            <div class="col s12">
+                <div class="row">
+                    <div class="col s6 m4">
+                        @if($previous)
+                            <a href="{{ route('articles.show', $previous->slug) }}" class="waves-effect waves-light btn-large left full-width"><i class="material-icons left">keyboard_arrow_left</i>{{ $previous->title }}</a>
+                        @endif
+                    </div>
+                    <div class="col s6 m4 offset-m4">
+                        @if($next)
+                            <a href="{{ route('articles.show', $next->slug) }}" class="waves-effect waves-light btn-large right full-width"><i class="material-icons right">keyboard_arrow_right</i>{{ $next->title }}</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection
+
+@push('css')
+<style>
+    .full-width {
+        width: 100%;
+    }
+</style>
+@endpush

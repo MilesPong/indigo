@@ -45,8 +45,11 @@ class PostController extends Controller
     {
         $post = $this->postRepo->getBySlug($slug);
 
+        $previous = $this->postRepo->previous($post);
+        $next = $this->postRepo->next($post);
+
         event(new PostViewEvent($post->id));
 
-        return view('posts.show', compact('post'));
+        return view('posts.show', compact('post', 'previous', 'next'));
     }
 }
