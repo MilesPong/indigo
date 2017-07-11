@@ -20,5 +20,11 @@ return [
     ],
     'log' => [
         'visitor' => env('ENABLE_VISITOR_LOG', false),
+    ],
+    'comment' => [
+        'driver' => env('COMMENT_DRIVER', 'null'), // Supported: "null", "disqus"
+        'disqus' => [
+            'short_name' => env('DISQUS_SHORT_NAME'),
+        ]
     ]
 ];

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\ViewComposers\CategoriesComposer;
+use App\Http\ViewComposers\CommentComposer;
 use App\Http\ViewComposers\TagsComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +23,7 @@ class ComposerServiceProvider extends ServiceProvider
     {
         View::composer(['widgets.category', 'partials.navbar'], CategoriesComposer::class);
         View::composer('widgets.tag', TagsComposer::class);
+        View::composer('partials.comment', CommentComposer::class);
     }
 
     /**
