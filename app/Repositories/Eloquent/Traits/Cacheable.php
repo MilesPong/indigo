@@ -109,10 +109,15 @@ trait Cacheable
 
         $key = $key ?: $this->getCacheKey($method, $args, $ignoreUriQuery);
 
-        return $this->remember($key,
+        $result = $this->remember($key,
             function () use ($method, $args) {
                 return call_user_func_array([$this, 'parent::' . $method], $args);
             });
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $result;
     }
 
     /**
