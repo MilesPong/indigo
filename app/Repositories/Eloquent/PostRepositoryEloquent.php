@@ -204,10 +204,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
 
         $items = $pagination->getCollection()->map(function ($post) {
             // First layer cache
-            return app(self::class)->getBySlug($post->slug);
-
-            // TODO method below won't work and why?
-            // return  $this->retrieve($post->id);
+            return $this->getBySlug($post->slug);
         });
 
         return $pagination->setCollection($items);

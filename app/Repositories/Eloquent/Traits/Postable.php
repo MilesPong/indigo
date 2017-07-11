@@ -54,7 +54,7 @@ trait Postable
         $postsPagination = $relation->paginate($this->getDefaultPerPage(), ['slug']);
 
         $items = $postsPagination->getCollection()->map(function ($post) {
-            return $this->newPostRepo()->getBySlug($post->slug);
+            return $this->getPostRepo()->getBySlug($post->slug);
         });
 
         return [$model, $postsPagination->setCollection($items)];
@@ -70,13 +70,5 @@ trait Postable
         }
 
         return $this->postRepo;
-    }
-
-    /**
-     * @return PostRepository|\Illuminate\Foundation\Application|mixed
-     */
-    protected function newPostRepo()
-    {
-        return app(PostRepository::class);
     }
 }
