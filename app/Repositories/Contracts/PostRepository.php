@@ -50,4 +50,10 @@ interface PostRepository extends RepositoryInterface
      * @return mixed
      */
     public function next($model);
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    public function hot($limit = 5);
 }

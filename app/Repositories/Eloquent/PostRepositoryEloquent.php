@@ -252,4 +252,16 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
         })->first();
     }
 
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    public function hot($limit = 5)
+    {
+        // TODO cache support
+        return $this->skipCache()->scopeQuery(function ($query) use ($limit) {
+            return $query->hot($limit, ['slug', 'title', 'view_count']);
+        })->all();
+    }
+
 }

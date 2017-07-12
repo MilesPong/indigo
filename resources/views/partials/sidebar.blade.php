@@ -5,6 +5,12 @@
 <div class="divider"></div>
 
 <div class="section">
+    @include('widgets.hot')
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
     @include('widgets.category')
 </div>
 

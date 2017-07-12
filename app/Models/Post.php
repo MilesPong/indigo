@@ -168,4 +168,15 @@ class Post extends Model implements ContentableInterface
     {
         return $query->select($columns)->where('id', '>', $id)->oldest('published_at');
     }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $limit
+     * @param array $columns
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHot($query, $limit = 5, $columns = ['*'])
+    {
+        return $query->select($columns)->orderBy('view_count', 'desc')->take($limit);
+    }
 }
