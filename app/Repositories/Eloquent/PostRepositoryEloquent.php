@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Repositories\Contracts\CacheableInterface;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
+use App\Repositories\Eloquent\Traits\FieldsHandler;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
 use App\Repositories\Eloquent\Traits\Cacheable;
@@ -23,6 +24,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
 {
     use Slugable;
     use Cacheable;
+    use FieldsHandler;
 
     /**
      * @var TagRepository
@@ -100,46 +102,17 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     {
         $attributes = $this->autoSlug($attributes, 'title');
 
-        $publishedAt = $this->getPublishedAt(array_get($attributes, 'published_at'));
+        foreach ($attributes as $field => $value) {
+            if (method_exists($this, $method = 'handle' . ucfirst(camel_case($field)))) {
+                array_set($attributes, $field, call_user_func_array([$this, $method], [$value]));
+            }
+        }
 
-        $isDraft = $this->getIsDraft(array_get($attributes, 'is_draft'));
-
-        $attributes = array_merge($attributes, [
-            'published_at' => $publishedAt,
-            'is_draft' => $isDraft,
-        ]);
+        $attributes = $this->handleImg($attributes);
 
         // TODO excerpt should be html purifier
 
-        // TODO condition while no feature_img
-
         return $attributes;
-    }
-
-    /**
-     * @param $value
-     * @return Carbon
-     */
-    protected function getPublishedAt($value)
-    {
-        if (empty($value)) {
-            return Carbon::now();
-        }
-
-        return Carbon::createFromTimestamp(strtotime($value));
-    }
-
-    /**
-     * @param $value
-     * @return int
-     */
-    protected function getIsDraft($value)
-    {
-        if (empty($value)) {
-            return $this->model->getConst('IS_NOT_DRAFT');
-        }
-
-        return $this->model->getConst('IS_DRAFT');
     }
 
     /**

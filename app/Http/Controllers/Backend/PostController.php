@@ -78,7 +78,7 @@ class PostController extends Controller
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $this->postRepo->createPost($request->all());
+        $this->postRepo->createPost($request->except('_token'));
 
         return redirect()->route('admin.posts.index')->withSuccess('Create post successfully!');
     }

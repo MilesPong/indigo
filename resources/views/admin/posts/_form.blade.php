@@ -49,8 +49,11 @@
 
 <div class="form-group">
     <label for="feature_img" class="col-sm-2 control-label">Feature image</label>
-    <div class="col-sm-10">
-        <input type="text" name="feature_img" id="feature_img" class="form-control" placeholder="Feature Image" value="{{ old('feature_img', $post->feature_img) }}">
+    <div class="col-sm-5">
+        <input type="text" name="feature_img" id="feature_img" class="form-control" placeholder="e.g. http://example.org/one.jpg" value="{{ old('feature_img', $post->feature_img) }}">
+    </div>
+    <div class="col-sm-5">
+        <input type="file" name="feature_img_file" accept="image/*" class="btn btn-success">
     </div>
 </div>
 
