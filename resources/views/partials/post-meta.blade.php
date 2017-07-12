@@ -6,7 +6,7 @@
         <i class="material-icons">person_pin</i>{{ $post->author->name }}
     </li>
     <li>
-        <i class="material-icons">folder_open</i><a class="white-text" href="{{ route('categories.show', $post->category->slug) }}">{{ $post->category->name }}</a>
+        <i class="material-icons">folder_open</i><a href="{{ route('categories.show', $post->category->slug) }}">{{ $post->category->name }}</a>
     </li>
     <li>
         <i class="material-icons">remove_red_eye</i>{{ $post->view_count }}

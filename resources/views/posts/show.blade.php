@@ -6,7 +6,7 @@
             <div class="row">
                 <h2>{{ $post->title }}</h2>
             </div>
-            <div class="row post-meta">
+            <div class="row post-meta fix-post-meta">
                 @include('partials.post-meta')
             </div>
         </div>

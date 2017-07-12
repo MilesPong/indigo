@@ -32,6 +32,14 @@
             position: absolute;
             left: -20%;
         }
+
+        .post-meta ul li a {
+            color: #616161 !important;
+        }
+
+        .fix-post-meta ul li a {
+            color: #FFFFFF !important;
+        }
     </style>
 
     <!-- Scripts -->
