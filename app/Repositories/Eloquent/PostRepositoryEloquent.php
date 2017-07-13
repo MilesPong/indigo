@@ -57,7 +57,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     }
 
     /**
-     * @return $this
+     *
      */
     public function scopeBoot()
     {
@@ -66,7 +66,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
         // TODO to be optimized
         // Session middleware is called after ServiceProvider binding, so can't set method boot in constructor
         if (isAdmin()) {
-            return $this->model = $this->model->withoutGlobalScope(PublishedScope::class);
+            $this->model = $this->model->withoutGlobalScope(PublishedScope::class);
         }
     }
 

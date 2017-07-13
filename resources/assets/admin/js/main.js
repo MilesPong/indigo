@@ -6,6 +6,12 @@ jQuery(document).ready(function () {
     });
 
     $(".to-be-slug").blur(function () {
+
+        // TODO Leave if update
+        if ($("input[name='_method']").val() == 'PATCH' ) {
+            return;
+        }
+
         var value = $(this).val();
         if (value) {
             $.post("/dashboard/auto-slug", {text: value})
