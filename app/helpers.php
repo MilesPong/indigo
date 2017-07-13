@@ -83,3 +83,13 @@ if (!function_exists('isAdmin')) {
         return auth()->check() && auth()->user()->isAdmin();
     }
 }
+
+if (!function_exists('setting')) {
+    /**
+     * @param $key
+     * @return mixed
+     */
+    function setting($key) {
+        return array_get(app('settings'), $key);
+    }
+}

@@ -4,8 +4,8 @@
     {{ $tag->name }} | @parent
 @endsection
 
-@section('keywords'){!! $tag->name !!}@endsection
-@section('description'){!! $tag->description !!}@endsection
+@section('keywords'){{ $tag->name }}@endsection
+@section('description'){{ $tag->description }}@endsection
 
 @section('content')
     @component('components.header')

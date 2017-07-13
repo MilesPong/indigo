@@ -150,4 +150,12 @@ class CacheHelper
     {
         return sprintf(self::KEY_FORMAT, $table, 'paginate-' . request()->input('page', 1));
     }
+
+    /**
+     * @return string
+     */
+    public static function keySiteSettings()
+    {
+        return 'site.settings';
+    }
 }

@@ -4,8 +4,8 @@
 {{ $post->title }} | @parent
 @endsection
 
-@section('keywords'){!! $post->tags->implode('name', ',') !!}@endsection
-@section('description'){!! $post->description !!}@endsection
+@section('keywords'){{ $post->tags->implode('name', ',') }}@endsection
+@section('description'){{ $post->description }}@endsection
 
 @section('content')
     @component('components.header')
