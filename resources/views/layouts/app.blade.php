@@ -13,7 +13,7 @@
 
     @include('partials.favicon')
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@section('title'){{ config('app.name', 'Laravel') }}@show</title>
 
     {{--<!--Import Google Icon Font-->--}}
     {{--<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">--}}

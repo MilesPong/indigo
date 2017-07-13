@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    {{ $post->title }} | @parent
+@endsection
+
 @section('content')
     @component('components.header')
         <div class="center white-text">
