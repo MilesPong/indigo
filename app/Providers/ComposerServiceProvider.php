@@ -26,6 +26,12 @@ class ComposerServiceProvider extends ServiceProvider
         View::composer('widgets.tag', TagsComposer::class);
         View::composer('widgets.hot', HotPostsComposer::class);
         View::composer('partials.comment', CommentComposer::class);
+        View::composer('layouts.app', function (\Illuminate\View\View $view) {
+            $view->with([
+                'keywords' => '',
+                'description' => ''
+            ]);
+        });
     }
 
     /**

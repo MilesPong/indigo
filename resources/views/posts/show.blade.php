@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
 @section('title')
-    {{ $post->title }} | @parent
+{{ $post->title }} | @parent
 @endsection
+
+@section('keywords'){!! $post->tags->implode('name', ',') !!}@endsection
+@section('description'){!! $post->description !!}@endsection
 
 @section('content')
     @component('components.header')

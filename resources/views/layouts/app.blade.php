@@ -15,6 +15,9 @@
 
     <title>@section('title'){{ config('app.name', 'Laravel') }}@show</title>
 
+    <meta name="keywords" content="@section('keywords'){{ $keywords or '' }}@show">
+    <meta name="description" content="@section('description'){{ $description or '' }}@show">
+
     {{--<!--Import Google Icon Font-->--}}
     {{--<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">--}}
 
