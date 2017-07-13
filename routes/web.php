@@ -28,6 +28,8 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::resource('posts', 'PostController');
 
     Route::post('auto-slug', 'DashboardController@autoSlug')->name('auto-slug');
+
+    Route::resource('settings', 'SettingController', ['except' => ['show']]);
 });
 
 Route::group(['namespace' => 'Frontend'], function () {
