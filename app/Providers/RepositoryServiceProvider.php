@@ -37,5 +37,7 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Eloquent\PostRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\Contracts\VisitorRepository::class,
             \App\Repositories\Eloquent\VisitorRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\Contracts\SettingRepository::class,
+            \App\Repositories\Eloquent\SettingRepositoryEloquent::class);
     }
 }

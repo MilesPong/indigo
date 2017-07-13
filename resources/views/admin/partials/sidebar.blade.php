@@ -48,6 +48,7 @@
       <li class="{!! setActiveClass('categories') !!}"><a href="{{ route('admin.categories.index') }}"><i class="fa fa-sitemap"></i> <span>Categories</span></a></li>
       <li class="{!! setActiveClass('tags') !!}"><a href="{{ route('admin.tags.index') }}"><i class="fa fa-tags"></i> <span>Tags</span></a></li>
       <li class="{!! setActiveClass('posts') !!}"><a href="{{ route('admin.posts.index') }}"><i class="fa fa-list"></i> <span>Posts</span></a></li>
+      <li class="{!! setActiveClass('settings') !!}"><a href="{{ route('admin.settings.index') }}"><i class="fa fa-cog"></i> <span>Settings</span></a></li>
     </ul>
     <!-- /.sidebar-menu -->
   </section>
