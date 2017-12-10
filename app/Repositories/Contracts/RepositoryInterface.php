@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Contracts;
 
+use Closure;
+
 /**
  * Interface RepositoryInterface
  * @package App\Repositories\Contracts
@@ -19,7 +21,7 @@ interface RepositoryInterface
      * @param array $columns
      * @return mixed
      */
-    public function paginate($perPage = 10, $columns = ['*']);
+    public function paginate($perPage = null, $columns = ['*']);
 
     /**
      * @param array $attributes
@@ -85,6 +87,19 @@ interface RepositoryInterface
     public function withCount($relations);
 
     /**
+     * @param $relation
+     * @return mixed
+     */
+    public function has($relation);
+
+    /**
+     * @param $relation
+     * @param Closure|null $callback
+     * @return mixed
+     */
+    public function whereHas($relation, Closure $callback = null);
+
+    /**
      * @param array $attributes
      * @return mixed
      */
@@ -117,4 +132,38 @@ interface RepositoryInterface
      * @return mixed
      */
     public function forceDelete($id);
+
+    /**
+     * @return mixed
+     */
+    public function getModel();
+
+    /**
+     * @return mixed
+     */
+    public function getModelTable();
+
+    /**
+     * @param $column
+     * @param string $direction
+     * @return mixed
+     */
+    public function orderBy($column, $direction = 'asc');
+
+    /**
+     * @param Closure $callback
+     * @return mixed
+     */
+    public function scopeQuery(Closure $callback);
+
+    /**
+     * @return mixed
+     */
+    public function resetScope();
+
+    /**
+     * @param array $columns
+     * @return mixed
+     */
+    public function first($columns = ['*']);
 }

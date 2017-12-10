@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Events\PostViewEvent;
 use App\Repositories\Contracts\PostRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -29,10 +30,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        // TODO paginate page should be dynamic set in config, e.g. config('app.post.perPage', 5)
-        $posts = $this->postRepo
-            ->with(['category', 'tags', 'author'])
-            ->paginate(5);
+        $posts = $this->postRepo->lists();
 
         return view('posts.index', compact('posts'));
     }
@@ -40,15 +38,18 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  string $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $post = $this->postRepo
-            ->with(['category', 'tags', 'author'])
-            ->find($id);
+        $post = $this->postRepo->getBySlug($slug);
 
-        return view('posts.show', compact('post'));
+        $previous = $this->postRepo->previous($post);
+        $next = $this->postRepo->next($post);
+
+        event(new PostViewEvent($post->id));
+
+        return view('posts.show', compact('post', 'previous', 'next'));
     }
 }

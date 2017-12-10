@@ -6,7 +6,7 @@ namespace App\Repositories\Contracts;
  * Interface TagRepository
  * @package App\Repositories\Contracts
  */
-interface TagRepository extends RepositoryInterface
+interface TagRepository extends RepositoryInterface, PostRelated
 {
     /**
      * @param array $attributes
@@ -20,10 +20,4 @@ interface TagRepository extends RepositoryInterface
      * @return mixed
      */
     public function updateTag(array $attributes, $id);
-
-    /**
-     * @param array $columns
-     * @return mixed
-     */
-    public function allWithPostCount($columns = ['*']);
 }

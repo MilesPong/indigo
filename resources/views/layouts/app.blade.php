@@ -9,9 +9,14 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta name="theme-color" content="#ee6e73" />
+
     @include('partials.favicon')
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@section('title'){{ config('app.name', 'Laravel') }}@show</title>
+
+    <meta name="keywords" content="@section('keywords'){{ setting('keywords') }}@show">
+    <meta name="description" content="@section('description'){{ setting('description') }}@show">
 
     {{--<!--Import Google Icon Font-->--}}
     {{--<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">--}}
@@ -24,6 +29,21 @@
     {{-- Solution 2: use stack is ok while in extend view --}}
     {{--@yield('css')--}}
     @stack('css')
+
+    <style>
+        .btn-profile {
+            position: absolute;
+            left: -20%;
+        }
+
+        .post-meta ul li a {
+            color: #616161 !important;
+        }
+
+        .fix-post-meta ul li a {
+            color: #FFFFFF !important;
+        }
+    </style>
 
     <!-- Scripts -->
     <script>
@@ -51,5 +71,7 @@
     <script src="{{ mix('js/app.js') }}"></script>
 
     @stack('js')
+
+    @include('partials.google_analytics')
 </body>
 </html>

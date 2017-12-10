@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Contracts\ContentableInterface;
 use App\Presenters\PostPresenter;
 use App\Scopes\PublishedScope;
+use App\Services\CacheHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laracasts\Presenter\PresentableTrait;
@@ -12,7 +14,7 @@ use Laracasts\Presenter\PresentableTrait;
  * Class Post
  * @package App\Models
  */
-class Post extends Model
+class Post extends Model implements ContentableInterface
 {
     use PresentableTrait, SoftDeletes;
 
@@ -27,6 +29,11 @@ class Post extends Model
     const IS_NOT_DRAFT = 0;
 
     /**
+     * Cache key prefix of post's content
+     */
+    const CONTENT_CACHE_KEY_PREFIX = 'contents:';
+
+    /**
      * @var string
      */
     protected $presenter = PostPresenter::class;
@@ -39,7 +46,7 @@ class Post extends Model
         'title',
         'slug',
         'description',
-        'content',
+        'content_id',
         'published_at',
         'is_draft',
         'excerpt',
@@ -93,5 +100,83 @@ class Post extends Model
     public function getConst($name)
     {
         return constant("self::{$name}");
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentAttribute()
+    {
+        // Always use cache
+        return (new CacheHelper)->cacheContent($this);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function content()
+    {
+        return $this->belongsTo(Content::class);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRawContentAttribute()
+    {
+        return $this->content()->getResults()->body;
+    }
+
+    /**
+     * Get raw content in markdown syntax.
+     *
+     * @return string
+     */
+    public function getRawContent()
+    {
+        return $this->getRawContentAttribute();
+    }
+
+    /**
+     * Get primary key in 'contents' table.
+     *
+     * @return int
+     */
+    public function getContentId()
+    {
+        return $this->content_id;
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $id
+     * @param array $columns
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopePrevious($query, $id, $columns = ['*'])
+    {
+        return $query->select($columns)->where('id', '<', $id)->latest('published_at');
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $id
+     * @param array $columns
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeNext($query, $id, $columns = ['*'])
+    {
+        return $query->select($columns)->where('id', '>', $id)->oldest('published_at');
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $limit
+     * @param array $columns
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHot($query, $limit = 5, $columns = ['*'])
+    {
+        return $query->select($columns)->orderBy('view_count', 'desc')->take($limit);
     }
 }
