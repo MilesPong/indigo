@@ -26,7 +26,7 @@ class CreatePostsTable extends Migration
             $table->string('feature_img')->nullable();
             $table->longText('content');
             $table->integer('view_count')->unsigned()->default(0);
-            $table->timestamp('published_at');
+            $table->timestamp('published_at')->nullable()->index();
             $table->boolean('is_draft')->default(false);
             $table->timestamps();
             $table->softDeletes();

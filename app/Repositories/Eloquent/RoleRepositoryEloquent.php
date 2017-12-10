@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class RoleRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class RoleRepositoryEloquent extends Repository implements RoleRepository
+class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
 {
     /**
      * @return string

@@ -2,32 +2,32 @@
 
 <!-- text input -->
 <div class="form-group">
-    <label for="title" class="col-sm-1 control-label">Title</label>
+    <label for="title" class="col-sm-2 control-label">Title</label>
 
-    <div class="col-sm-11">
-        <input type="text" class="form-control" name="title" id="title" placeholder="Title" value="{{ old('title', $post->title) }}">
+    <div class="col-sm-10">
+        <input type="text" class="form-control to-be-slug" name="title" id="title" placeholder="Title" value="{{ old('title', $post->title) }}">
     </div>
 </div>
 
 <div class="form-group">
-    <label for="description" class="col-sm-1 control-label">Description</label>
+    <label for="description" class="col-sm-2 control-label">Description</label>
 
-    <div class="col-sm-11">
+    <div class="col-sm-10">
         <input type="text" class="form-control" name="description" id="description" placeholder="Description" value="{{ old('description', $post->description) }}">
     </div>
 </div>
 
 <div class="form-group">
-    <label for="slug" class="col-sm-1 control-label">Slug</label>
+    <label for="slug" class="col-sm-2 control-label">Slug</label>
 
-    <div class="col-sm-11">
-        <input type="text" class="form-control" name="slug" id="slug" placeholder="Slug" value="{{ old('slug', $post->slug) }}">
+    <div class="col-sm-10">
+        <input type="text" class="form-control" name="slug" id="slug" placeholder="Slug" value="{{ old('slug', $post->slug) }}" @if(isset($post->id))disabled="disabled"@endif>
     </div>
 </div>
 
 <div class="form-group">
-    <label for="category_id" class="col-sm-1 control-label">Category</label>
-    <div class="col-sm-11">
+    <label for="category_id" class="col-sm-2 control-label">Category</label>
+    <div class="col-sm-10">
         <select id="category_id" class="form-control select2 category-selected" name="category_id">
             @foreach($categories as $category)
                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -37,8 +37,8 @@
 </div>
 
 <div class="form-group">
-    <label for="tag" class="col-sm-1 control-label">Tags</label>
-    <div class="col-sm-11">
+    <label for="tag" class="col-sm-2 control-label">Tags</label>
+    <div class="col-sm-10">
         <select id="tag" name="tag[]" class="form-control select2 tags-selected" multiple="multiple" data-placeholder="Select Tag(s)">
             @foreach($tags as $tag)
                 <option value="{{ $tag->name }}">{{ $tag->name }}</option>
@@ -48,39 +48,42 @@
 </div>
 
 <div class="form-group">
-    <label for="feature_img" class="col-sm-1 control-label">Feature image</label>
-    <div class="col-sm-11">
-        <input type="text" name="feature_img" id="feature_img" class="form-control" placeholder="Feature Image" value="{{ old('feature_img', $post->feature_img) }}">
+    <label for="feature_img" class="col-sm-2 control-label">Feature image</label>
+    <div class="col-sm-5">
+        <input type="text" name="feature_img" id="feature_img" class="form-control" placeholder="e.g. http://example.org/one.jpg" value="{{ old('feature_img', $post->feature_img) }}">
+    </div>
+    <div class="col-sm-5">
+        <input type="file" name="feature_img_file" accept="image/*" class="btn btn-success">
     </div>
 </div>
 
 <div class="form-group">
-    <label for="excerpt" class="col-sm-1 control-label">Excerpt</label>
-    <div class="col-sm-11">
+    <label for="excerpt" class="col-sm-2 control-label">Excerpt</label>
+    <div class="col-sm-10">
         <textarea name="excerpt" id="excerpt" rows="3">{{ old('excerpt', $post->excerpt) }}</textarea>
     </div>
 </div>
 
 <div class="form-group">
-    <label for="mdeditor" class="col-sm-1 control-label">Content</label>
+    <label for="mdeditor" class="col-sm-2 control-label">Content</label>
 
-    <div class="col-sm-11">
-        <textarea id="mdeditor" name="content">{{ old('content') ?: $post->content }}</textarea>
+    <div class="col-sm-10">
+        <textarea id="mdeditor" name="body">{{ old('body') ?: (isset($post->id) ? $post->rawContent : null) }}</textarea>
     </div>
 </div>
 
 <div class="form-group">
-    <label for="published_at" class="col-sm-1 control-label">Published At</label>
+    <label for="published_at" class="col-sm-2 control-label">Published At</label>
 
-    <div class='col-sm-11'>
+    <div class='col-sm-10'>
         <input type='text' class="form-control" name="published_at" id="published_at" placeholder="Published At" value="{{ $post->present()->publishedTime }}"/>
     </div>
 </div>
 
 <div class="form-group">
-    <div class="col-sm-1 control-label">Draft</div>
+    <div class="col-sm-2 control-label">Draft</div>
 
-    <div class="col-sm-11">
+    <div class="col-sm-10">
         <input type="checkbox" name="is_draft" id="is_draft" @if(old('is_draft', $post->is_draft))checked="checked"@endif>
         <label for="is_draft">Is Draft</label>
     </div>

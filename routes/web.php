@@ -26,9 +26,16 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::post('posts/{id}/restore', 'PostController@restore')->name('posts.restore');
     Route::post('posts/{id}/force-delete', 'PostController@forceDelete')->name('posts.force-delete');
     Route::resource('posts', 'PostController');
+
+    Route::post('auto-slug', 'DashboardController@autoSlug')->name('auto-slug');
+
+    Route::resource('settings', 'SettingController', ['except' => ['show']]);
 });
 
 Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/', 'PostController@index')->name('home');
-    Route::resource('articles', 'PostController', ['only' => ['show']]);
+
+    Route::resource('articles', 'PostController', ['only' => ['show'], 'middleware' => 'visitor']);
+    Route::resource('categories', 'CategoryController', ['only' => ['show']]);
+    Route::resource('tags', 'TagController', ['only' => ['show']]);
 });

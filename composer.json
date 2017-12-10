@@ -8,6 +8,7 @@
         "php": ">=5.6.4",
         "erusev/parsedown": "^1.6",
         "jellybool/translug": "^2.0",
+        "jenssegers/agent": "^2.5",
         "laracasts/presenter": "^0.2.1",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",

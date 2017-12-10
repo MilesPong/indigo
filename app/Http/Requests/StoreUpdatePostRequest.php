@@ -28,9 +28,10 @@ class StoreUpdatePostRequest extends FormRequest
             'description' => 'max:100',
             'category_id' => 'required|exists:categories,id',
             'slug' => 'unique:posts',
-            'content' => 'required',
+            'body' => 'required',
             'excerpt' => 'required',
-            'feature_img' => 'sometimes|required|url'
+            'feature_img' => 'required_without:feature_img_file|url',
+            'feature_img_file' => 'required_without:feature_img|image|max:2048'
         ];
 
         switch ($this->method()) {
@@ -54,8 +55,12 @@ class StoreUpdatePostRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        if (!$this->has('feature_img')) {
-            $this->replace($this->except('feature_img'));
+        $fields = ['feature_img', 'feature_img_file'];
+
+        foreach ($fields as $field) {
+            if (!$this->has($field)) {
+                $this->replace($this->except($field));
+            }
         }
     }
 }
