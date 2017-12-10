@@ -166,7 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Laravel\Tinker\TinkerServiceProvider::class,
+        // Laravel\Tinker\TinkerServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -178,12 +178,12 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
 
-        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
-        Zizaco\Entrust\EntrustServiceProvider::class,
-        Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider::class,
+        // Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+        // Zizaco\Entrust\EntrustServiceProvider::class,
+        // Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
-        JellyBool\Translug\TranslugServiceProvider::class,
-        Jenssegers\Agent\AgentServiceProvider::class,
+        // JellyBool\Translug\TranslugServiceProvider::class,
+        // Jenssegers\Agent\AgentServiceProvider::class,
 
     ],
 
@@ -234,11 +234,11 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'Entrust' => Zizaco\Entrust\EntrustFacade::class,
-        'Gravatar' => Thomaswelton\LaravelGravatar\Facades\Gravatar::class,
-        'Translug' => \JellyBool\Translug\TranslugFacade::class,
-        'Agent' => Jenssegers\Agent\Facades\Agent::class,
+        // 'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        // 'Entrust' => Zizaco\Entrust\EntrustFacade::class,
+        // 'Gravatar' => Thomaswelton\LaravelGravatar\Facades\Gravatar::class,
+        // 'Translug' => \JellyBool\Translug\TranslugFacade::class,
+        // 'Agent' => Jenssegers\Agent\Facades\Agent::class,
     ],
 
 ];
