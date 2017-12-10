@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## 0.3.0 - 2017-12-10
+### Added
+- Visitor history and base counter. See branch `counter` and `visitor`
+- Cache support. See branch `cacheable`
+- Auto slug in ajax and Chinese support
+- Base implement of disqus. See branch `comment`
+- Hot posts widget
+- Base feature image support
+- Model `Setting` and base SEO support 
+
+### Changed
+- Various CSS styles changes
+- BaseRepository
+- Side navigation bar style
+
+### Fixed
+- Fix Postable retrieve data bug (`890c082`)
+
 ## 0.2.0 - 2017-06-15
 ### Added
 - Backend
