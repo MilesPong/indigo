@@ -4,9 +4,9 @@
 
 - [x] Category
 - [x] Tag
-- [ ] Comment
-- [ ] Visitor & view count(use Middleware)
-- [ ] Cache
+- [x] Comment
+- [x] Visitor & view count(use Middleware)
+- [x] Cache
 - [ ] Email
 - [ ] Notification
 - [ ] Socialite
@@ -15,9 +15,9 @@
 - [ ] I18N
 - [ ] Highlight tab
 - [ ] Links
-- [ ] Settings
+- [x] Settings
 - [ ] File management
-- [ ] Feature image
+- [x] Feature image
 - [ ] Flash session
 
 ## Frontend
@@ -33,3 +33,4 @@
 - [ ] Package
 - [ ] Unit test
 - [ ] Pjax
+- [ ] Upgrade to Laravel 5.5
