@@ -22,7 +22,7 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer(['widgets.category', 'partials.navbar'], CategoriesComposer::class);
+        View::composer(['widgets.category', 'partials.navbar', 'partials.sidenav'], CategoriesComposer::class);
         View::composer('widgets.tag', TagsComposer::class);
         View::composer('widgets.hot', HotPostsComposer::class);
         View::composer('partials.comment', CommentComposer::class);

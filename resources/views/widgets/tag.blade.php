@@ -1,11 +1,13 @@
-<div class="collection with-header z-depth-1">
-    <div class="collection-header grey lighten-4"><h5>Tags</h5></div>
-    <div class="tag-list white">
-        @foreach($tags as $tag)
-            <a class="chip waves-effect waves-teal" href="{{ route('tags.show', $tag->slug) }}">
-                {{ $tag->name }}
-                <span class="badge-tag teal white-text circle">{{ $tag->posts_count }}</span>
-            </a>
-        @endforeach
+<div class="widget-sidebar widget-tag">
+    <div class="collection with-header z-depth-1">
+        <div class="collection-header grey lighten-4"><h5>Tags</h5></div>
+        <div class="tag-content white">
+            @foreach($tags as $tag)
+                <a class="chip waves-effect waves-teal" href="{{ route('tags.show', $tag->slug) }}">
+                    {{ $tag->name }}
+                    <span class="tag-badge teal white-text circle">{{ $tag->posts_count }}</span>
+                </a>
+            @endforeach
+        </div>
     </div>
 </div>

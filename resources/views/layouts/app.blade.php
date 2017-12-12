@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -18,9 +20,6 @@
     <meta name="keywords" content="@section('keywords'){{ setting('keywords') }}@show">
     <meta name="description" content="@section('description'){{ setting('description') }}@show">
 
-    {{--<!--Import Google Icon Font-->--}}
-    {{--<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">--}}
-
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
@@ -30,32 +29,13 @@
     {{--@yield('css')--}}
     @stack('css')
 
-    <style>
-        .btn-profile {
-            position: absolute;
-            left: -20%;
-        }
-
-        .post-meta ul li a {
-            color: #616161 !important;
-        }
-
-        .fix-post-meta ul li a {
-            color: #FFFFFF !important;
-        }
-    </style>
-
-    <!-- Scripts -->
-    <script>
-        window.Laravel = {!! json_encode([
-            'csrfToken' => csrf_token(),
-        ]) !!};
-    </script>
 </head>
 <body>
     {{--<div id="app">--}}
         <header>
             @include('partials.navbar')
+
+            @include('partials.sidenav')
         </header>
 
         <main class="grey lighten-4">
