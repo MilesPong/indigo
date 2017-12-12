@@ -3,18 +3,17 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Category;
-use App\Repositories\Contracts\CacheableInterface;
 use App\Repositories\Contracts\CategoryRepository;
-use App\Repositories\Eloquent\Traits\Postable;
+use App\Repositories\Eloquent\Traits\HasPost;
 use App\Repositories\Eloquent\Traits\Slugable;
 
 /**
  * Class CategoryRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepository, CacheableInterface
+class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepository
 {
-    use Slugable, Postable;
+    use Slugable, HasPost;
 
     /**
      * @return string

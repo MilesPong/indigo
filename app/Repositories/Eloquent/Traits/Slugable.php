@@ -67,4 +67,13 @@ trait Slugable
     {
         return Carbon::now()->timestamp;
     }
+
+    /**
+     * @param $slug
+     * @return mixed
+     */
+    public function getBySlug($slug)
+    {
+        return $this->findBy('slug', $slug);
+    }
 }

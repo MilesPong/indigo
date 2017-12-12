@@ -29,9 +29,9 @@ abstract class BaseRepository implements RepositoryInterface
     protected $model;
 
     /**
-     * @var
+     * @var array
      */
-    protected $relations;
+    protected $relations = [];
 
     /**
      * @var Closure
@@ -41,6 +41,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * BaseRepository constructor.
      * @param Container $app
+     * @throws RepositoryException
      */
     public function __construct(Container $app)
     {
@@ -61,14 +62,6 @@ abstract class BaseRepository implements RepositoryInterface
         }
 
         return $this->model = $model;
-    }
-
-    /**
-     * Reset the model after query
-     */
-    protected function resetModel()
-    {
-        $this->makeModel();
     }
 
     /**
@@ -101,14 +94,6 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * The fake "booting" method of the model in calling scopes.
-     */
-    public function scopeBoot()
-    {
-
-    }
-
-    /**
      * @param array $columns
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
@@ -128,6 +113,51 @@ abstract class BaseRepository implements RepositoryInterface
         $this->resetScope();
 
         return $results;
+    }
+
+    /**
+     * The fake "booting" method of the model in calling scopes.
+     */
+    public function scopeBoot()
+    {
+
+    }
+
+    /**
+     * @return $this
+     */
+    protected function applyScope()
+    {
+        if (!is_null($this->scopeQuery) && is_callable($this->scopeQuery)) {
+            $callback = $this->scopeQuery;
+            $this->model = $callback($this->model);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Reset the model after query
+     */
+    protected function resetModel()
+    {
+        try {
+            $this->makeModel();
+        } catch (RepositoryException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return $this
+     */
+    public function resetScope()
+    {
+        $this->scopeQuery = null;
+
+        return $this;
     }
 
     /**
@@ -156,7 +186,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function getDefaultPerPage()
     {
-        return config('blog.posts.per_page', 10);
+        return config('blog.repository.pagination.per_page');
     }
 
     /**
@@ -196,6 +226,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * @param $id
      * @return int
+     * @throws \Exception
      */
     public function delete($id)
     {
@@ -349,6 +380,14 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
+     * @return BaseRepository
+     */
+    public function onlyTrashed()
+    {
+        return $this->trashed(true);
+    }
+
+    /**
      * @param bool $only
      * @return $this
      */
@@ -361,22 +400,6 @@ abstract class BaseRepository implements RepositoryInterface
         }
 
         return $this;
-    }
-
-    /**
-     * @return BaseRepository
-     */
-    public function onlyTrashed()
-    {
-        return $this->trashed(true);
-    }
-
-    /**
-     * @return BaseRepository
-     */
-    public function withTrashed()
-    {
-        return $this->trashed();
     }
 
     /**
@@ -395,6 +418,14 @@ abstract class BaseRepository implements RepositoryInterface
         $this->resetScope();
 
         return $result;
+    }
+
+    /**
+     * @return BaseRepository
+     */
+    public function withTrashed()
+    {
+        return $this->trashed();
     }
 
     /**
@@ -470,29 +501,6 @@ abstract class BaseRepository implements RepositoryInterface
     public function scopeQuery(Closure $callback)
     {
         $this->scopeQuery = $callback;
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    protected function applyScope()
-    {
-        if (!is_null($this->scopeQuery) && is_callable($this->scopeQuery)) {
-            $callback = $this->scopeQuery;
-            $this->model = $callback($this->model);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function resetScope()
-    {
-        $this->scopeQuery = null;
 
         return $this;
     }

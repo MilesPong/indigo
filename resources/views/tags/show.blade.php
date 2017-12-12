@@ -11,7 +11,7 @@
     @component('components.header')
         <div class="center white-text">
             <div class="row">
-                <h2>{{ $tag->name }}</h2>
+                <h2>Tag: {{ $tag->name }}</h2>
                 <p class="flow-text">{{ $tag->description }}</p>
             </div>
         </div>

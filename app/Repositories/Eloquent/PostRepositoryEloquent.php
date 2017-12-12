@@ -2,17 +2,16 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Models\Category;
 use App\Models\Content;
 use App\Models\Post;
-use App\Repositories\Contracts\CacheableInterface;
+use App\Models\Tag;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\FieldsHandler;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
-use App\Repositories\Eloquent\Traits\Cacheable;
 use App\Scopes\PublishedScope;
-use Carbon\Carbon;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,10 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * Class PostRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class PostRepositoryEloquent extends BaseRepository implements PostRepository, CacheableInterface
+class PostRepositoryEloquent extends BaseRepository implements PostRepository
 {
     use Slugable;
-    use Cacheable;
     use FieldsHandler;
 
     /**
@@ -40,10 +38,12 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
      * PostRepositoryEloquent constructor.
      * @param Container $app
      * @param TagRepository $tagRepo
+     * @throws RepositoryException
      */
     public function __construct(Container $app, TagRepository $tagRepo)
     {
         parent::__construct($app);
+
         $this->tagRepo = $tagRepo;
         $this->contentModel = $this->app->make($this->contentModel());
     }
@@ -81,6 +81,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     /**
      * @param array $attributes
      * @return Model
+     * @throws RepositoryException
      */
     public function createPost(array $attributes)
     {
@@ -117,6 +118,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
 
     /**
      * @param array $tags
+     * @return mixed
      * @throws RepositoryException
      */
     protected function syncTags(array $tags)
@@ -143,9 +145,70 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     }
 
     /**
+     * @param null $perPage
+     * @param array $columns
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|mixed
+     */
+    public function paginate($perPage = null, $columns = ['*'])
+    {
+        $this->withRelationships();
+
+        return parent::paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+    }
+
+    /**
+     * @return $this
+     */
+    protected function withRelationships()
+    {
+        return $this->with($this->relationships());
+    }
+
+    /**
+     * @return array
+     */
+    protected function relationships()
+    {
+        return ['author', 'category', 'tags'];
+    }
+
+    // /**
+    //  * Fetch posts data of home page with pagination.
+    //  *
+    //  * Alert: It's not optimized without cache support,
+    //  * so just only use this while with cache enabled.
+    //  *
+    //  * @param null $perPage
+    //  * @return mixed
+    //  */
+    // public function lists($perPage = null)
+    // {
+    //     $perPage = $perPage ?: $this->getDefaultPerPage();
+    //
+    //     // Second layer cache
+    //     $pagination = $this->paginate($perPage, ['slug']);
+    //
+    //     $items = $pagination->getCollection()->map(function ($post) {
+    //         // First layer cache
+    //         return $this->getBySlug($post->slug);
+    //     });
+    //
+    //     return $pagination->setCollection($items);
+    // }
+
+    /**
+     * @return int
+     */
+    public function getDefaultPerPage()
+    {
+        return config('blog.posts.per_page');
+    }
+
+    /**
      * @param array $attributes
      * @param $id
      * @return \Illuminate\Database\Eloquent\Collection|Model
+     * @throws RepositoryException
      */
     public function updatePost(array $attributes, $id)
     {
@@ -160,30 +223,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     }
 
     /**
-     * Fetch posts data of home page with pagination.
-     *
-     * Alert: It's not optimized without cache support,
-     * so just only use this while with cache enabled.
-     *
-     * @param null $perPage
-     * @return mixed
-     */
-    public function lists($perPage = null)
-    {
-        $perPage = $perPage ?: $this->getDefaultPerPage();
-
-        // Second layer cache
-        $pagination = $this->paginate($perPage, ['slug']);
-
-        $items = $pagination->getCollection()->map(function ($post) {
-            // First layer cache
-            return $this->getBySlug($post->slug);
-        });
-
-        return $pagination->setCollection($items);
-    }
-
-    /**
      * Get a single post.
      *
      * @param $id
@@ -191,7 +230,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
      */
     public function retrieve($id)
     {
-        return $this->with(['author', 'category', 'tags'])->find($id);
+        return $this->withRelationships()->find($id);
     }
 
     /**
@@ -200,14 +239,14 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
      */
     public function getBySlug($slug)
     {
-        return $this->with(['author', 'category', 'tags'])->findBy('slug', $slug);
+        return $this->withRelationships()->findBy('slug', $slug);
     }
 
     /**
-     * @param $model
+     * @param Post $model
      * @return mixed
      */
-    public function previous($model)
+    public function previous(Post $model)
     {
         return $this->scopeQuery(function ($query) use ($model) {
             return $query->previous($model->id, ['title', 'slug']);
@@ -215,10 +254,10 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     }
 
     /**
-     * @param $model
+     * @param Post $model
      * @return mixed
      */
-    public function next($model)
+    public function next(Post $model)
     {
         return $this->scopeQuery(function ($query) use ($model) {
             return $query->next($model->id, ['title', 'slug']);
@@ -232,9 +271,42 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     public function hot($limit = 5)
     {
         // TODO cache support
-        return $this->skipCache()->scopeQuery(function ($query) use ($limit) {
+        return $this->scopeQuery(function ($query) use ($limit) {
             return $query->hot($limit, ['slug', 'title', 'view_count']);
         })->all();
     }
 
+    /**
+     * @param Category $category
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @throws RepositoryException
+     */
+    public function paginateOfCategory(Category $category)
+    {
+        return $this->paginateOfPostRelated($category);
+    }
+
+    /**
+     * @param Model $model
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @throws RepositoryException
+     */
+    protected function paginateOfPostRelated(Model $model)
+    {
+        if (method_exists($model, $relation = 'posts')) {
+            return $model->$relation()->with($this->relationships())->paginate($this->getDefaultPerPage());
+        }
+
+        throw new RepositoryException("Current model " . get_class($model) . " doesn't have relationship of '{$relation}'.");
+    }
+
+    /**
+     * @param Tag $tag
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @throws RepositoryException
+     */
+    public function paginateOfTag(Tag $tag)
+    {
+        return $this->paginateOfPostRelated($tag);
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Presenters;
 
-use App\Services\MarkDownParser;
 use Laracasts\Presenter\Presenter;
 
 /**

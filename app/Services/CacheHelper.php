@@ -105,10 +105,10 @@ class CacheHelper
      */
     public function cacheContent(ContentableInterface $contentable)
     {
-        return Cache::rememberForever($this->getContentCacheKey($contentable),
-            function () use ($contentable) {
-                return app(MarkDownParser::class)->md2html($contentable->getRawContent());
-            });
+        // return Cache::rememberForever($this->getContentCacheKey($contentable),
+        //     function () use ($contentable) {
+        //         return MarkDownParser::md2html($contentable->getRawContent());
+        //     });
     }
 
     /**
@@ -119,7 +119,7 @@ class CacheHelper
      */
     protected function getContentCacheKey(ContentableInterface $contentable)
     {
-        return sprintf('contents:%s', $contentable->getContentId());
+        // return sprintf('contents:%s', $contentable->getContentId());
     }
 
     /**

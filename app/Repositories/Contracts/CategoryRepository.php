@@ -6,7 +6,7 @@ namespace App\Repositories\Contracts;
  * Interface CategoryRepository
  * @package App\Repositories\Contracts
  */
-interface CategoryRepository extends RepositoryInterface, PostRelated
+interface CategoryRepository extends RepositoryInterface, SlugInterface, HasPostInterface
 {
     /**
      * @param array $attributes

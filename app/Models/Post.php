@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use App\Contracts\ContentableInterface;
 use App\Presenters\PostPresenter;
 use App\Scopes\PublishedScope;
-use App\Services\CacheHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Indigo\Contracts\Markdownable;
+use Indigo\Tools\MarkDownParser;
 use Laracasts\Presenter\PresentableTrait;
 
 /**
  * Class Post
  * @package App\Models
  */
-class Post extends Model implements ContentableInterface
+class Post extends Model implements Markdownable
 {
     use PresentableTrait, SoftDeletes;
 
@@ -107,44 +107,8 @@ class Post extends Model implements ContentableInterface
      */
     public function getContentAttribute()
     {
-        // Always use cache
-        return (new CacheHelper)->cacheContent($this);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function content()
-    {
-        return $this->belongsTo(Content::class);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRawContentAttribute()
-    {
-        return $this->content()->getResults()->body;
-    }
-
-    /**
-     * Get raw content in markdown syntax.
-     *
-     * @return string
-     */
-    public function getRawContent()
-    {
-        return $this->getRawContentAttribute();
-    }
-
-    /**
-     * Get primary key in 'contents' table.
-     *
-     * @return int
-     */
-    public function getContentId()
-    {
-        return $this->content_id;
+        // TODO cache
+        return MarkDownParser::md2html($this);
     }
 
     /**
@@ -179,4 +143,29 @@ class Post extends Model implements ContentableInterface
     {
         return $query->select($columns)->orderBy('view_count', 'desc')->take($limit);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMarkdownContent()
+    {
+        return $this->getRawContentAttribute();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRawContentAttribute()
+    {
+        return $this->content()->getResults()->body;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function content()
+    {
+        return $this->belongsTo(Content::class);
+    }
+
 }

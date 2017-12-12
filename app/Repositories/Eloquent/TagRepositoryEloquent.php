@@ -3,18 +3,17 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Tag;
-use App\Repositories\Contracts\CacheableInterface;
 use App\Repositories\Contracts\TagRepository;
-use App\Repositories\Eloquent\Traits\Postable;
+use App\Repositories\Eloquent\Traits\HasPost;
 use App\Repositories\Eloquent\Traits\Slugable;
 
 /**
  * Class TagRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class TagRepositoryEloquent extends BaseRepository implements TagRepository, CacheableInterface
+class TagRepositoryEloquent extends BaseRepository implements TagRepository
 {
-    use Slugable, Postable;
+    use Slugable, HasPost;
 
     /**
      * @return string

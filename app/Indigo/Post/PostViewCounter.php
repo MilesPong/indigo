@@ -1,20 +1,26 @@
 <?php
 
-namespace App\Services;
+namespace Indigo\Post;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 /**
  * Class PostViewCounter
- * @package App\Services
+ * @package Indigo\Post
  */
 class PostViewCounter
 {
     /**
+     * For session
+     *
      * @var
      */
-    protected $timeout; // For session
+    public $strict_mode;
+    /**
+     * @var
+     */
+    protected $timeout;
     /**
      * @var
      */
@@ -24,18 +30,15 @@ class PostViewCounter
      */
     protected $request;
     /**
+     * Cache key
+     *
      * @var
      */
     private $key;
     /**
      * @var
      */
-    private $cacheKey; // Cache key
-
-    /**
-     * @var
-     */
-    public $strict_mode;
+    private $cacheKey;
 
     /**
      * PostViewCounter constructor.

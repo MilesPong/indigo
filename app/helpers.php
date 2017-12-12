@@ -11,10 +11,11 @@ if (!function_exists('markdownContent')) {
      */
     function markdownContent(Faker\Generator $faker)
     {
+        $imgUrl = random_img_url();
         $content =
             "$faker->realText \n\r " .
             "## $faker->sentence \n\r " .
-            "![$faker->word]($faker->imageUrl) \n\r " .
+            "![$faker->word]($imgUrl) \n\r " .
             "> $faker->sentence \n\r " .
             "### $faker->sentence \n\r " .
             "$faker->paragraph \n\r " .
@@ -89,7 +90,20 @@ if (!function_exists('setting')) {
      * @param $key
      * @return mixed
      */
-    function setting($key) {
+    function setting($key)
+    {
         return array_get(app('settings'), $key);
+    }
+}
+
+if (!function_exists('random_img_url')) {
+    /**
+     * @param int $width
+     * @param int $height
+     * @return string
+     */
+    function random_img_url($width = 640, $height = 480)
+    {
+        return "https://temp.im/{$width}x{$height}/" . strtoupper(dechex(rand(0x000000, 0xFFFFFF)));
     }
 }

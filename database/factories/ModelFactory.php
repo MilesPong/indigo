@@ -81,7 +81,7 @@ $factory->define(\App\Models\Post::class, function (\Faker\Generator $faker) {
         'description' => $faker->sentence(10),
         'slug' => str_slug($title),
         'excerpt' => $faker->sentences(3, true),
-        'feature_img' => $faker->imageUrl(),
+        'feature_img' => random_img_url(),
         'content_id' => function () {
             return factory(\App\Models\Content::class)->create()->id;
         },

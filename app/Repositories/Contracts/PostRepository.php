@@ -2,11 +2,15 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\Tag;
+
 /**
  * Interface PostRepository
  * @package App\Repositories\Contracts
  */
-interface PostRepository extends RepositoryInterface
+interface PostRepository extends RepositoryInterface, SlugInterface
 {
     /**
      * @param array $attributes
@@ -21,11 +25,11 @@ interface PostRepository extends RepositoryInterface
      */
     public function updatePost(array $attributes, $id);
 
-    /**
-     * @param null $perPage
-     * @return mixed
-     */
-    public function lists($perPage = null);
+    // /**
+    //  * @param null $perPage
+    //  * @return mixed
+    //  */
+    // public function lists($perPage = null);
 
     /**
      * @param $id
@@ -34,26 +38,32 @@ interface PostRepository extends RepositoryInterface
     public function retrieve($id);
 
     /**
-     * @param $slug
+     * @param Post $model
      * @return mixed
      */
-    public function getBySlug($slug);
+    public function previous(Post $model);
 
     /**
-     * @param $model
+     * @param Post $model
      * @return mixed
      */
-    public function previous($model);
-
-    /**
-     * @param $model
-     * @return mixed
-     */
-    public function next($model);
+    public function next(Post $model);
 
     /**
      * @param int $limit
      * @return mixed
      */
     public function hot($limit = 5);
+
+    /**
+     * @param Category $category
+     * @return mixed
+     */
+    public function paginateOfCategory(Category $category);
+
+    /**
+     * @param Tag $tag
+     * @return mixed
+     */
+    public function paginateOfTag(Tag $tag);
 }
