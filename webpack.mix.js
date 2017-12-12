@@ -11,6 +11,7 @@ const { mix } = require('laravel-mix');
  |
  */
 
+// Backend
 mix.js('resources/assets/admin/js/admin.js', 'public/js')
    .sass('resources/assets/admin/sass/admin.scss', 'public/css')
    .less('resources/assets/admin/less/adminlte.less', 'public/css');
@@ -22,15 +23,16 @@ mix.copyDirectory('node_modules/admin-lte/plugins/', 'public/plugins/')
    .copy('node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js', 'public/js')
    .copy('node_modules/moment/min/moment.min.js', 'public/js');
 
+// Frontend
 mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
 
-mix.copyDirectory('node_modules/materialize-css/fonts/', 'public/fonts/');
+// Vendor extraction, TODO to separate into multiple manifest files.
+// See: https://stackoverflow.com/questions/45046696/laravel-mix-multiple-entry-points-generates-one-manifest-js
+// mix.extract(['vue', 'jquery']);
 
-if (!mix.config.inProduction) {
+if (!mix.inProduction()) {
 	mix.sourceMaps();
-}
-
-if (mix.config.inProduction) {
- 	mix.version();
+} else {
+    mix.version();
 }

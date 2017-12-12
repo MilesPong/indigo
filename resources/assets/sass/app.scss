@@ -1,20 +1,19 @@
-// Material icons
-@import "material-icons.css";
-
 // Variables
 @import "variables";
 
 // Bootstrap
-@import "node_modules/materialize-css/sass/materialize.scss";
+@import "~materialize-css/sass/materialize.scss";
 
 @import "modules/prism.css";
-@import "modules/article.css";
-@import "modules/search.css";
-@import "modules/tag.css";
-@import "modules/sidenav.css";
+@import "modules/article.scss";
+@import "modules/search.scss";
+@import "modules/tag.scss";
+@import "modules/sidenav.scss";
 
+// Sticky Footer
 body {
   display: flex;
+  display: -webkit-flex;
   min-height: 100vh;
   flex-direction: column;
 }
