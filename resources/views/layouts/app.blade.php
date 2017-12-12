@@ -29,15 +29,6 @@
     {{--@yield('css')--}}
     @stack('css')
 
-    <style>
-        .post-meta ul li a {
-            color: #616161 !important;
-        }
-
-        .fix-post-meta ul li a {
-            color: #FFFFFF !important;
-        }
-    </style>
 </head>
 <body>
     {{--<div id="app">--}}
@@ -57,7 +48,6 @@
     {{--</div>--}}
 
     <!-- Scripts -->
-
     <script src="{{ mix('js/app.js') }}"></script>
 
     @stack('js')

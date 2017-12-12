@@ -42,11 +42,3 @@
     <li><a class="waves-effect waves-teal" href="https://github.com/MilesPong"><i class="material-icons">code</i>Github</a></li>
 
 </ul>
-
-@push('js')
-    <script>
-        var sidenavInstance = new M.Sidenav(document.querySelector('.sidenav'));
-
-        var collapsibleInstance = new M.Collapsible(document.querySelector('.collapsible'));
-    </script>
-@endpush

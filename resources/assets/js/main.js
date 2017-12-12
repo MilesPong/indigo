@@ -1,5 +1,6 @@
 // https://getflywheel.com/layout/add-sticky-back-top-button-website/
 jQuery(document).ready(function () {
+    // Back to top
     let topButton = jQuery('#up-to-top');
 
     topButton.hide();
@@ -20,5 +21,28 @@ jQuery(document).ready(function () {
         event.preventDefault();
         jQuery('html, body').animate({scrollTop: 0}, scrollDuration);
         return false;
-    })
+    });
+
+    // Navigation bar's dropdown
+    $(".dropdown-trigger").dropdown();
+
+    // Navigation bar's shadow control
+    $(window).scroll(function () {
+        let nav = $("#nav-bar");
+        let scroll = $(window).scrollTop();
+        if (scroll > 0) {
+            nav.removeClass("z-depth-0");
+            nav.addClass("z-depth-2");
+        }
+        else {
+            nav.removeClass("z-depth-2");
+            nav.addClass("z-depth-0");
+        }
+    });
 });
+
+// Side navigation bar
+let sidenavInstance = new M.Sidenav(document.querySelector('.sidenav'));
+
+// Collapsible in side navigation bar
+let collapsibleInstance = new M.Collapsible(document.querySelector('.collapsible'));

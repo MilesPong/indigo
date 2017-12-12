@@ -1,55 +1,105 @@
-/* Home page*/
-.post-card .card-content {
-    padding-bottom: 0
+.meta-list {
+    ul {
+        display: flex;
+        display: -webkit-flex;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        li {
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            margin-left: 8px;
+            margin-right: 8px;
+
+            a {
+                color: inherit;
+            }
+
+            i {
+                vertical-align: middle;
+                margin-right: 10px
+            }
+        }
+    }
 }
 
-.post-card .post-meta {
-    margin-top: 0;
-}
-
-.post-meta ul li {
-    display: inline-block;
-    margin-right: 16px
-}
-
-.post-meta ul li i {
-    vertical-align: middle;
-    margin-right: 10px
-}
-
-.post-card .excerpt {
-    /*font-size: 1.22rem;*/
-}
-
-.post-card .post-tag {
+.tag-list {
     padding: 12px 24px;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    a.chip {
+        margin-top: 3px;
+        margin-bottom: 3px;
+    }
+
+    i {
+        margin-right: 10px
+    }
 }
 
-.post-card .post-tag i {
-    vertical-align: middle;
-    margin-right: 10px
-}
+// Post related
+.post-main {
+    .post-desc {
 
-/* Detail page*/
-.article .post-meta {
-    padding-left: 24px;
-    margin-left: -24px;
-    margin-right: -24px;
-    margin-bottom: -24px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    box-shadow: none
-}
+    }
 
-.article .post-meta i {
-    vertical-align: middle;
-    margin-right: 10px
-}
+    .post-body {
+        .card-panel {
+            padding-bottom: 0;
 
-.article .post-meta .chip {
-    border: solid 1px rgba(0, 0, 0, 0.6);
-}
+            .post-content {
+                img {
+                    max-width: 100%;
+                }
+            }
 
-.article img {
-    max-width: 100%;
+            .post-content-tag {
+                margin-left: -24px;
+                margin-right: -24px;
+            }
+        }
+
+        .post-tag {
+            padding-left: 24px;
+            margin-left: -24px;
+            margin-right: -24px;
+            margin-bottom: -24px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            box-shadow: none;
+
+            i {
+                vertical-align: middle;
+                margin-right: 10px
+            }
+
+            a.chip {
+                border: solid 1px rgba(0, 0, 0, 0.6);
+            }
+        }
+    }
+
+    .post-copyright {
+
+    }
+
+    .post-pre-next {
+        .post-pre {
+            text-align: left;
+            width: 100%;
+        }
+
+        .post-next {
+            text-align: right;
+            width: 100%;
+        }
+    }
+
+    .post-comment {
+
+    }
 }

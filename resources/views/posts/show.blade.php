@@ -13,42 +13,40 @@
             <div class="row">
                 <h2>{{ $post->title }}</h2>
             </div>
-            <div class="row post-meta fix-post-meta">
+            <div class="row">
                 @include('partials.post-meta')
             </div>
         </div>
     @endcomponent
 
-    <div class="container">
+    <div class="container post-main">
         <div class="row">
-            <div class="col s12">
+            <div class="col s12 post-desc">
                 <div class="card-panel teal">
                     <blockquote class="white-text flow-text">
                         {{ $post->excerpt }}
                     </blockquote>
                 </div>
             </div>
-            <div class="col s12">
-                <div class="card-panel article">
+            <div class="col s12 post-body">
+                <div class="card-panel">
 
                     {{-- TODO when use api, content should be parse first, use transformer or parse markdown before store--}}
-                    <div id="post-content" class="flow-text">
+                    <div id="post-content" class="flow-text post-content">
                         {!! $post->content !!}
                     </div>
 
-                    <div class="card-panel post-meta grey lighten-3">
-                        <i class="material-icons grey-text text-darken-2">loyalty</i>
-                        @foreach($post->tags as $tag)
-                            <a class="chip waves-effect waves-teal grey lighten-3 text text-darken-2"
-                               href="{{ route('tags.show', $tag->slug) }}">{{ $tag->name }}</a>
-                        @endforeach
+                    <div class="post-content-tag">
+                        <div class="divider"></div>
+
+                        @include('partials.post-tag')
                     </div>
 
                 </div>
 
             </div>
 
-            <div class="col s12">
+            <div class="col s12 post-copyright">
                 <div class="card-panel grey lighten-3">
                     <blockquote class="">
                         <p><strong>版权声明：</strong>由 <strong>{{ $post->author->name }}</strong> 创作，使用
@@ -60,33 +58,25 @@
                 </div>
             </div>
 
-            <div class="col s12">
+            <div class="col s12 post-pre-next">
                 <div class="row">
                     <div class="col s6 m4">
                         @if($previous)
-                            <a href="{{ route('articles.show', $previous->slug) }}" class="waves-effect waves-teal btn-large btn-flat left full-width"><i class="material-icons left">keyboard_arrow_left</i>{{ $previous->title }}</a>
+                            <a href="{{ route('articles.show', $previous->slug) }}" class="waves-effect waves-teal btn-large btn-flat left post-pre"><i class="material-icons left">keyboard_arrow_left</i>{{ $previous->title }}</a>
                         @endif
                     </div>
                     <div class="col s6 m4 offset-m4">
                         @if($next)
-                            <a href="{{ route('articles.show', $next->slug) }}" class="waves-effect waves-teal btn-large btn-flat right full-width"><i class="material-icons right">keyboard_arrow_right</i>{{ $next->title }}</a>
+                            <a href="{{ route('articles.show', $next->slug) }}" class="waves-effect waves-teal btn-large btn-flat right post-next"><i class="material-icons right">keyboard_arrow_right</i>{{ $next->title }}</a>
                         @endif
                     </div>
                 </div>
             </div>
 
-            <div class="col s12">
+            <div class="col s12 post-comment">
                 @include('partials.comment')
             </div>
 
         </div>
     </div>
 @endsection
-
-@push('css')
-<style>
-    .full-width {
-        width: 100%;
-    }
-</style>
-@endpush

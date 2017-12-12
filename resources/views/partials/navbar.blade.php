@@ -32,24 +32,3 @@
         <li><a class="waves-effect waves-teal" href="{{ route('categories.show', $category->slug) }}">{{ $category->name }}</a></li>
     @endforeach
 </ul>
-
-@push('js')
-<script>
-    $(function () {
-        $(".dropdown-trigger").dropdown();
-
-        $(window).scroll(function () {
-            var nav = $("#nav-bar");
-            var scroll = $(window).scrollTop();
-            if (scroll > 0) {
-                nav.removeClass("z-depth-0");
-                nav.addClass("z-depth-2");
-            }
-            else {
-                nav.removeClass("z-depth-2");
-                nav.addClass("z-depth-0");
-            }
-        });
-    })
-</script>
-@endpush
