@@ -30,11 +30,6 @@
     @stack('css')
 
     <style>
-        .btn-profile {
-            position: absolute;
-            left: -20%;
-        }
-
         .post-meta ul li a {
             color: #616161 !important;
         }
@@ -48,6 +43,8 @@
     {{--<div id="app">--}}
         <header>
             @include('partials.navbar')
+
+            @include('partials.sidenav')
         </header>
 
         <main class="grey lighten-4">
@@ -60,6 +57,7 @@
     {{--</div>--}}
 
     <!-- Scripts -->
+
     <script src="{{ mix('js/app.js') }}"></script>
 
     @stack('js')
