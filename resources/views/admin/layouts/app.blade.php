@@ -33,16 +33,16 @@
 <body>
     <div id="app" v-cloak>
         <header>
-            @include('dashboard.partials.navbar')
+            @include('admin.partials.navbar')
 
-            @include('dashboard.partials.sidenav')
+            @include('admin.partials.sidenav')
         </header>
 
         <main class="grey lighten-4">
             @yield('content')
         </main>
 
-        @include('dashboard.partials.footer')
+        @include('admin.partials.footer')
     </div>
 
     <!-- Scripts -->

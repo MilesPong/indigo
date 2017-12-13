@@ -1,4 +1,4 @@
-@extends('dashboard.layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
     <h1>Indigo Dashboard Home Page</h1>
