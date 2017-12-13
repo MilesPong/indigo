@@ -21,7 +21,7 @@
     <meta name="description" content="@section('description'){{ setting('description') }}@show">
 
     <!-- Styles -->
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css', 'frontend') }}" rel="stylesheet">
 
     {{-- TODO stack is not work before push, if not using extend view --}}
     {{-- Solution 1: use section or yield instead, but still require to use extend view --}}
@@ -48,7 +48,9 @@
     {{--</div>--}}
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ mix('js/manifest.js', 'frontend') }}"></script>
+    <script src="{{ mix('js/vendor.js', 'frontend') }}"></script>
+    <script src="{{ mix('js/app.js', 'frontend') }}"></script>
 
     @stack('js')
 
