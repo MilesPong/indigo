@@ -19,3 +19,6 @@ _ide_helper.php
 /public/img
 /public/plugins
 /public/mix-manifest.json
+
+/public/frontend
+/public/backend

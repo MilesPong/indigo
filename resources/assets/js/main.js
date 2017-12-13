@@ -23,9 +23,6 @@ jQuery(document).ready(function () {
         return false;
     });
 
-    // Navigation bar's dropdown
-    $(".dropdown-trigger").dropdown();
-
     // Navigation bar's shadow control
     $(window).scroll(function () {
         let nav = $("#nav-bar");
@@ -40,6 +37,9 @@ jQuery(document).ready(function () {
         }
     });
 });
+
+// Navigation bar's dropdown
+let navDropdownInstance = new M.Dropdown(document.querySelector('.dropdown-trigger'));
 
 // Side navigation bar
 let sidenavInstance = new M.Sidenav(document.querySelector('.sidenav'));
