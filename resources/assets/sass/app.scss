@@ -9,8 +9,10 @@
 @import "modules/widget.scss";
 @import "modules/sidenav.scss";
 
+[v-cloak] { display: none; }
+
 // Sticky Footer
-body {
+body div#app {
   display: flex;
   display: -webkit-flex;
   min-height: 100vh;

@@ -16,7 +16,7 @@ mix.setPublicPath(path.normalize('public/frontend'))
     .sass('resources/assets/sass/app.scss', 'css');
 
 // Vendor extraction
-mix.extract(['lodash', 'jquery', 'materialize-css']);
+mix.extract(['lodash', 'jquery', 'materialize-css', 'vue']);
 
 if (!mix.inProduction()) {
     mix.sourceMaps();

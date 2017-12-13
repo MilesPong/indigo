@@ -31,9 +31,9 @@
 
 </head>
 <body>
-    {{--<div id="app">--}}
+    <div id="app" v-cloak>
         @yield('app_content')
-    {{--</div>--}}
+    </div>
 
     <!-- Scripts -->
     <script src="{{ mix('js/manifest.js', 'frontend') }}"></script>
