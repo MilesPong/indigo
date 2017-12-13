@@ -12,17 +12,22 @@
 
     <li><a href="{{ route('admin.home') }}" class="waves-effect waves-teal"><i class="material-icons">home</i>Home</a></li>
 
-    <li class="no-padding {{ setActiveClass('stores') }}">
+    <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
             <li>
                 <a class="collapsible-header waves-effect waves-teal">
-                    <i class="material-icons">edit</i>Post
+                    <i class="material-icons">security</i>RBAC
                 </a>
                 <div class="collapsible-body">
                     <ul>
-                        <li class="{{ setActiveClass('stores') }}">
-                            <a href="#" class="waves-effect">
-                                <i class="material-icons"></i>Index
+                        <li>
+                            <a href="{{ route('admin.permissions.index') }}" class="waves-effect">
+                                <i class="material-icons"></i>Permissions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.roles.index') }}" class="waves-effect">
+                                <i class="material-icons"></i>Roles
                             </a>
                         </li>
                     </ul>
@@ -30,4 +35,10 @@
             </li>
         </ul>
     </li>
+
+    <li><a href="{{ route('admin.users.index') }}" class="waves-effect waves-teal"><i class="material-icons">people</i>Users</a></li>
+    <li><a href="{{ route('admin.categories.index') }}" class="waves-effect waves-teal"><i class="material-icons">library_books</i>Categories</a></li>
+    <li><a href="{{ route('admin.tags.index') }}" class="waves-effect waves-teal"><i class="material-icons">loyalty</i>Tags</a></li>
+    <li><a href="{{ route('admin.posts.index') }}" class="waves-effect waves-teal"><i class="material-icons">insert_drive_file</i>Posts</a></li>
+    <li><a href="{{ route('admin.settings.index') }}" class="waves-effect waves-teal"><i class="material-icons">settings</i>Settings</a></li>
 </ul>
