@@ -11,6 +11,10 @@ const { mix } = require('laravel-mix');
  |
  */
 
+mix.browserSync({
+    proxy: 'indigo.dev'
+});
+
 mix.setPublicPath(path.normalize('public/frontend'))
     .js('resources/assets/js/app.js', 'js')
     .sass('resources/assets/sass/app.scss', 'css');
