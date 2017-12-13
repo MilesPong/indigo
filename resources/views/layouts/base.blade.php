@@ -15,3 +15,7 @@
 
     @include('partials.fab')
 @endsection
+
+@push('js')
+    <script src="{{ mix('js/main.js', 'frontend') }}"></script>
+@endpush

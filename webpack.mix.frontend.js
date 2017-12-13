@@ -17,6 +17,7 @@ mix.browserSync({
 
 mix.setPublicPath(path.normalize('public/frontend'))
     .js('resources/assets/js/app.js', 'js')
+    .js('resources/assets/js/main.js', 'js')
     .sass('resources/assets/sass/app.scss', 'css');
 
 // Vendor extraction
