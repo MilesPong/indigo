@@ -10,13 +10,9 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
-    "admin-lte": "^2.3.11",
     "axios": "^0.17.1",
     "bootstrap-sass": "^3.3.7",
     "cross-env": "^5.1.1",
-    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
-    "font-awesome": "^4.7.0",
-    "ionicons": "^3.0.0",
     "jquery": "^3.1.1",
     "laravel-mix": "1.*",
     "less": "^2.7.3",
