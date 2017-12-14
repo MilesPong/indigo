@@ -20,21 +20,15 @@
 
             <td>
                 @if (isset($hrefShow))
-                    <a class="btn-floating waves-effect waves-light" href="{{ $hrefShow }}">
-                        <i class="material-icons">visibility</i>
-                    </a>
+                    <vue-table-action link="{{ $hrefShow }}" identifier="{{ $item->id }}" icon="visibility"></vue-table-action>
                 @endif
 
                 @if (isset($hrefEdit))
-                    <a class="btn-floating waves-effect waves-light blue" href="{{ $hrefEdit }}">
-                        <i class="material-icons">mode_edit</i>
-                    </a>
+                    <vue-table-action link="{{ $hrefEdit }}" identifier="{{ $item->id }}" class="blue" icon="mode_edit"></vue-table-action>
                 @endif
 
                 @if (isset($hrefDestroy))
-                    <a class="btn-floating waves-effect waves-light red" href="{{ $hrefDestroy }}">
-                        <i class="material-icons">delete</i>
-                    </a>
+                    <vue-table-action link="{{ $hrefDestroy }}" identifier="{{ $item->id }}" class="red" icon="delete"></vue-table-action>
                 @endif
 
                 {{ $additional_action or null }}
