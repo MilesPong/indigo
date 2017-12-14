@@ -32,16 +32,27 @@
 </head>
 <body>
     <div id="app" v-cloak>
+        {{-- Header --}}
         <header>
             @include('admin.partials.navbar')
 
             @include('admin.partials.sidenav')
         </header>
 
+        {{-- Main --}}
         <main class="grey lighten-4">
-            @yield('content')
+            <div class="container">
+                <div class="section">
+                    <div class="card-panel">
+
+                        @yield('content')
+
+                    </div>
+                </div>
+            </div>
         </main>
 
+        {{-- Footer --}}
         @include('admin.partials.footer')
     </div>
 
