@@ -111,6 +111,7 @@ class PermissionController extends Controller
     {
         $this->permissionRepository->delete($id);
 
-        return redirect()->route('admin.permissions.index')->withSuccess('Delete permission successfully!');
+        // TODO union api response
+        return response()->json()->setStatusCode(204);
     }
 }

@@ -28,7 +28,7 @@
                 @endif
 
                 @if (isset($hrefDestroy))
-                    <vue-table-action link="{{ $hrefDestroy }}" identifier="{{ $item->id }}" class="red" icon="delete"></vue-table-action>
+                    <vue-table-action link="{{ $hrefDestroy }}" identifier="{{ $item->id }}" class="red" icon="delete" is-destroy></vue-table-action>
                 @endif
 
                 {{ $additional_action or null }}
