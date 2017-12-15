@@ -20,7 +20,12 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('./http');
+/**
+ * TODO don't know how to use window.axios and Vue.prototype in the same time.
+ * If uncomment the below code, will it be loading axios repeatedly against with
+ * the code under admin.js?
+ */
+// window.axios = require('./http');
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces

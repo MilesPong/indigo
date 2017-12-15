@@ -6,6 +6,8 @@
 
 require('./bootstrap');
 
+import axios from './http';
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -13,6 +15,8 @@ require('./bootstrap');
  */
 
 Vue.component('vue-table-action', require('./components/TableAction.vue'));
+
+Vue.prototype.$http = axios;
 
 const app = new Vue({
     el: '#app'
