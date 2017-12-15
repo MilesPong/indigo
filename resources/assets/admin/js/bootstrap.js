@@ -8,6 +8,7 @@ window._ = require('lodash');
 
 try {
     window.$ = window.jQuery = require('jquery');
+    window.swal = require('sweetalert2');
 
     require('materialize-css');
 } catch (e) {

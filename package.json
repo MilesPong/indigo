@@ -29,6 +29,7 @@
     "lodash": "^4.17.4",
     "materialize-css": "^1.0.0-alpha.2",
     "simplemde": "^1.11.2",
+    "sweetalert2": "^7.0.10",
     "vue": "^2.1.10"
   }
 }
