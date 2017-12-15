@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @component('admin.components.form_create', ['formAction' => route('admin.permissions.store')])
+    @component('admin.components.form_update', ['formAction' => route('admin.permissions.update', $permission->id)])
 
         @include('admin.permissions._form')
 
