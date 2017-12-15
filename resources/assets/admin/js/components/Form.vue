@@ -18,6 +18,9 @@
             formAction: {
                 type: String,
                 required: true
+            },
+            redirectUrl: {
+                type: String
             }
         },
         methods: {
@@ -32,11 +35,16 @@
                 this.$http.post(form.action, fd).then(this.successHandler).catch(this.errorHandler);
             },
             successHandler (response) {
+                let vue = this;
                 swal(
                     'Done!',
                     'Operation is successful.',
                     'success'
-                )
+                ).then(result => {
+                    if (vue.redirectUrl) {
+                        window.location.href = vue.redirectUrl;
+                    }
+                })
             },
             errorHandler (error) {
                 // TODO only handle 422 error now

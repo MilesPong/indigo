@@ -1,3 +1,6 @@
-@component('admin.components.form_base', ['formAction' => $formAction])
+@component('admin.components.form_base', [
+    'formAction' => $formAction,
+    'redirectUrl' => $redirectUrl
+])
     {{ $slot }}
 @endcomponent
