@@ -1,3 +1,4 @@
+{{-- Table --}}
 <table class="striped highlight responsive-table">
     <thead>
         <tr>
@@ -40,6 +41,16 @@
     </tbody>
 </table>
 
+{{-- Pagination --}}
 <div class="center-align">
     {{ $paginator->links('vendor.pagination.materialize') }}
 </div>
+
+{{-- FAB --}}
+@component('admin.components.fab', [
+    'link' => $hrefCreate ?? null,
+    'icon' => $iconCreate ?? null,
+    'color' => $iconColor ?? null
+])
+    {{ $fab or null }}
+@endcomponent

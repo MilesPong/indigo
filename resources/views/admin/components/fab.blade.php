@@ -1,5 +1,5 @@
 <div class="fixed-action-btn">
-    <a class="btn-floating btn-large red" href="{{ $link or '#!' }}">
+    <a class="btn-floating btn-large {{ $color or 'red' }}" href="{{ $link or '#!' }}">
         <i class="large material-icons">{{ $icon or 'add' }}</i>
     </a>
 
