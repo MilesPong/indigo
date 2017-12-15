@@ -26,3 +26,5 @@ if (!mix.inProduction()) {
 } else {
     mix.version();
 }
+
+mix.browserSync('indigo.dev');
