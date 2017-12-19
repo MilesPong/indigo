@@ -11,6 +11,6 @@
 <div class="row">
     <div class="input-field col s12">
         <input id="description" type="text" class="validate" name="description" value="{{ $permission->description ?? null }}">
-        <label for="description">Display Name</label>
+        <label for="description">Description</label>
     </div>
 </div>

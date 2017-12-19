@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Permission | @parent
+    Permissions | @parent
 @endsection
 
 @section('content')
