@@ -8,12 +8,19 @@
 @import "modules/article.scss";
 @import "modules/widget.scss";
 @import "modules/sidenav.scss";
+@import "modules/auth.scss";
+
+[v-cloak] { display: none; }
+
+html, body {
+  height: 100%;
+}
 
 // Sticky Footer
-body {
+body div#app {
   display: flex;
   display: -webkit-flex;
-  min-height: 100vh;
+  min-height: 100%;
   flex-direction: column;
 }
 

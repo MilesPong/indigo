@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 
 /**
@@ -9,11 +8,12 @@ window._ = require('lodash');
 
 try {
     window.$ = window.jQuery = require('jquery');
+    window.swal = require('sweetalert2');
 
-    require('bootstrap-sass');
-
-    require('admin-lte');
-} catch (e) {}
+    require('materialize-css');
+} catch (e) {
+    console.log(e);
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -21,10 +21,20 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+/**
+ * TODO don't know how to use window.axios and Vue.prototype in the same time.
+ * If uncomment the below code, will it be loading axios repeatedly against with
+ * the code under admin.js?
+ */
+// window.axios = require('./http');
 
-window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrfToken;
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+/**
+ * Vue is a modern JavaScript library for building interactive web interfaces
+ * using reactive data binding and reusable components. Vue's API is clean
+ * and simple, leaving you to focus on building your next great project.
+ */
+
+window.Vue = require('vue');
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

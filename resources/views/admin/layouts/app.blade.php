@@ -1,66 +1,66 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="{{ config('app.locale') }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-@include('admin.partials.head')
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<!--
-BODY TAG OPTIONS:
-=================
-Apply one or more of the following classes to get the
-desired effect
-|---------------------------------------------------------|
-| SKINS         | skin-blue                               |
-|               | skin-black                              |
-|               | skin-purple                             |
-|               | skin-yellow                             |
-|               | skin-red                                |
-|               | skin-green                              |
-|---------------------------------------------------------|
-|LAYOUT OPTIONS | fixed                                   |
-|               | layout-boxed                            |
-|               | layout-top-nav                          |
-|               | sidebar-collapse                        |
-|               | sidebar-mini                            |
-|---------------------------------------------------------|
--->
-<body class="hold-transition skin-blue sidebar-mini" id="app" v-cloak>
-<div class="wrapper">
+    <meta name="theme-color" content="#ee6e73"/>
 
-  @include('admin.partials.header')
+    @include('partials.favicon')
 
-  @include('admin.partials.sidebar')
-  
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    
-    @include('admin.partials.content-header')
+    <title>@section('title'){{ config('app.name', 'Laravel') }}@show</title>
 
-    <!-- Main content -->
-    <section class="content">
+    <meta name="keywords" content="@section('keywords'){{ setting('keywords') }}@show">
+    <meta name="description" content="@section('description'){{ setting('description') }}@show">
 
-      <!-- Content Header (Page header) -->
-      @include('admin.partials.alerts')
+    <!-- Styles -->
+    <link href="{{ mix('css/admin.css', 'backend') }}" rel="stylesheet">
 
-      <!-- Your Page Content Here -->
-      @yield('content')
+    {{-- TODO stack is not work before push, if not using extend view --}}
+    {{-- Solution 1: use section or yield instead, but still require to use extend view --}}
+    {{-- Solution 2: use stack is ok while in extend view --}}
+    {{--@yield('css')--}}
+    @stack('css')
 
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+</head>
+<body>
+    <div id="app" v-cloak>
+        {{-- Header --}}
+        <header>
+            @include('admin.partials.navbar')
 
-  @include('admin.partials.footer')
+            @include('admin.partials.sidenav')
+        </header>
 
-  @include('admin.partials.control-sidebar')
-  
-</div>
-<!-- ./wrapper -->
+        {{-- Main --}}
+        <main class="grey lighten-4">
+            <div class="container">
+                <div class="section">
+                    <div class="card-panel">
 
-@include('admin.partials.scripts')
+                        @yield('content')
 
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        {{-- Footer --}}
+        @include('admin.partials.footer')
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ mix('js/manifest.js', 'backend') }}"></script>
+    <script src="{{ mix('js/vendor.js', 'backend') }}"></script>
+    <script src="{{ mix('js/admin.js', 'backend') }}"></script>
+
+    @stack('js')
 </body>
 </html>

@@ -14,8 +14,6 @@ require('./prism');
  * the application, or feel free to tweak this setup for your needs.
  */
 
-// const app = new Vue({
-//     el: '#app',
-// });
-
-require('./main');
+const app = new Vue({
+    el: '#app',
+});

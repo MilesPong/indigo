@@ -30,7 +30,7 @@ try {
  * and simple, leaving you to focus on building your next great project.
  */
 
-// window.Vue = require('vue');
+window.Vue = require('vue');
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

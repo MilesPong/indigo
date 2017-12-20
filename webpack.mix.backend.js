@@ -11,20 +11,20 @@ const { mix } = require('laravel-mix');
  |
  */
 
-mix.browserSync({
-    proxy: 'indigo.dev'
-});
+mix.setPublicPath(path.normalize('public/backend'))
+    .js('resources/assets/admin/js/admin.js', 'js')
+    .sass('resources/assets/admin/sass/admin.scss', 'css');
 
-mix.setPublicPath(path.normalize('public/frontend'))
-    .js('resources/assets/js/app.js', 'js')
-    .js('resources/assets/js/main.js', 'js')
-    .sass('resources/assets/sass/app.scss', 'css');
+mix.copy('node_modules/simplemde/dist/simplemde.min.css', 'public/css')
+    .copy('node_modules/simplemde/dist/simplemde.min.js', 'public/js');
 
 // Vendor extraction
-mix.extract(['lodash', 'jquery', 'materialize-css', 'vue']);
+mix.extract(['lodash', 'jquery', 'materialize-css', 'vue', 'axios']);
 
 if (!mix.inProduction()) {
     mix.sourceMaps();
 } else {
     mix.version();
 }
+
+mix.browserSync('indigo.dev');

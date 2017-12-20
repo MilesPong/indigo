@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdatePermissionRequest;
 use App\Repositories\Contracts\PermissionRepository;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
+/**
+ * Class PermissionController
+ * @package App\Http\Controllers\Backend
+ */
 class PermissionController extends Controller
 {
-    protected $permRepo;
+    /**
+     * @var PermissionRepository
+     */
+    protected $permissionRepository;
 
     /**
      * PermissionController constructor.
-     * @param \App\Repositories\Contracts\PermissionRepository $permRepo
+     * @param \App\Repositories\Contracts\PermissionRepository $permissionRepository
      */
-    public function __construct(PermissionRepository $permRepo)
+    public function __construct(PermissionRepository $permissionRepository)
     {
-        $this->permRepo = $permRepo;
+        $this->permissionRepository = $permissionRepository;
     }
 
     /**
@@ -27,7 +33,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permissions = $this->permRepo->paginate();
+        $permissions = $this->permissionRepository->paginate(10);
 
         return view('admin.permissions.index', compact('permissions'));
     }
@@ -50,7 +56,7 @@ class PermissionController extends Controller
      */
     public function store(StoreUpdatePermissionRequest $request)
     {
-        $perm = $this->permRepo->create($request->all());
+        $permission = $this->permissionRepository->create($request->all());
 
         return redirect()->route('admin.permissions.index')->withSuccess('Create permission successfully!');
     }
@@ -63,7 +69,7 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        $perm = $this->permRepo->find($id);
+        $perm = $this->permissionRepository->find($id);
 
         return response($perm);
     }
@@ -76,7 +82,7 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        $permission = $this->permRepo->find($id);
+        $permission = $this->permissionRepository->find($id);
 
         return view('admin.permissions.edit', compact('permission'));
     }
@@ -90,7 +96,7 @@ class PermissionController extends Controller
      */
     public function update(StoreUpdatePermissionRequest $request, $id)
     {
-        $perm = $this->permRepo->update($request->all(), $id);
+        $permission = $this->permissionRepository->update($request->all(), $id);
 
         return redirect()->route('admin.permissions.index')->withSuccess('Update permission successfully!');
     }
@@ -103,8 +109,9 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        $this->permRepo->delete($id);
+        $this->permissionRepository->delete($id);
 
-        return redirect()->route('admin.permissions.index')->withSuccess('Delete permission successfully!');
+        // TODO union api response
+        return response()->json()->setStatusCode(204);
     }
 }

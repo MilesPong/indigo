@@ -31,21 +31,9 @@
 
 </head>
 <body>
-    {{--<div id="app">--}}
-        <header>
-            @include('partials.navbar')
-
-            @include('partials.sidenav')
-        </header>
-
-        <main class="grey lighten-4">
-            @yield('content')
-        </main>
-
-        @include('partials.footer')
-
-        @include('partials.fab')
-    {{--</div>--}}
+    <div id="app" v-cloak>
+        @yield('app_content')
+    </div>
 
     <!-- Scripts -->
     <script src="{{ mix('js/manifest.js', 'frontend') }}"></script>
