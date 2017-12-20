@@ -9,8 +9,10 @@ use App\Repositories\Events\RepositoryEntityUpdated;
 use App\Repositories\Exceptions\RepositoryException;
 use Closure;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
  * Class BaseRepository
@@ -19,20 +21,23 @@ use Illuminate\Database\Eloquent\Model;
 abstract class BaseRepository implements RepositoryInterface
 {
     /**
+     * Default not to use resource.
+     *
+     * @var bool
+     */
+    public $useResource = false;
+    /**
      * @var Container
      */
     protected $app;
-
     /**
      * @var Model|Builder
      */
     protected $model;
-
     /**
      * @var array
      */
     protected $relations = [];
-
     /**
      * @var Closure
      */
@@ -70,6 +75,17 @@ abstract class BaseRepository implements RepositoryInterface
     abstract public function model();
 
     /**
+     * @param bool $switch
+     * @return $this
+     */
+    public function useResource($switch = true)
+    {
+        $this->useResource = $switch;
+
+        return $this;
+    }
+
+    /**
      * @return Builder|Model
      */
     public function getModel()
@@ -96,6 +112,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * @param array $columns
      * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @throws RepositoryException
      */
     public function all($columns = ['*'])
     {
@@ -104,15 +121,15 @@ abstract class BaseRepository implements RepositoryInterface
         $this->applyScope();
 
         if ($this->model instanceof Builder) {
-            $results = $this->model->get($columns);
+            $result = $this->model->get($columns);
         } else {
-            $results = $this->model->all($columns);
+            $result = $this->model->all($columns);
         }
 
         $this->resetModel();
         $this->resetScope();
 
-        return $results;
+        return $this->parseResult($result);
     }
 
     /**
@@ -161,9 +178,54 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
+     * @param $result
+     * @return mixed
+     * @throws RepositoryException
+     */
+    protected function parseResult($result)
+    {
+        if (!$this->useResource) {
+            return $result;
+        }
+
+        return $this->parseThroughResource($result);
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     * @throws RepositoryException
+     */
+    protected function parseThroughResource($data)
+    {
+        $resource = $this->resource();
+
+        if (is_null($resource)) {
+            throw new RepositoryException('Resource is not defined yet.');
+        }
+
+        if ($data instanceof Collection || $data instanceof LengthAwarePaginator) {
+            return call_user_func_array([$resource, 'collection'], [$data]);
+        } elseif (is_null($data)) {
+            $data = collect([]);
+        }
+
+        return call_user_func_array([$resource, 'make'], [$data]);
+    }
+
+    /**
+     * @return null
+     */
+    public function resource()
+    {
+        return null;
+    }
+
+    /**
      * @param int $perPage
      * @param array $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @throws RepositoryException
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
@@ -173,12 +235,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $perPage = $perPage ?: $this->getDefaultPerPage();
 
-        $results = $this->model->paginate($perPage ?: $perPage, $columns);
+        $result = $this->model->paginate($perPage ?: $perPage, $columns);
 
         $this->resetModel();
         $this->resetScope();
 
-        return $results;
+        return $this->parseResult($result);
     }
 
     /**
@@ -251,6 +313,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @param $id
      * @param array $columns
      * @return \Illuminate\Database\Eloquent\Collection|Model
+     * @throws RepositoryException
      */
     public function find($id, $columns = ['*'])
     {
@@ -263,7 +326,7 @@ abstract class BaseRepository implements RepositoryInterface
         $this->resetModel();
         $this->resetScope();
 
-        return $result;
+        return $this->parseResult($result);
     }
 
     /**
@@ -271,6 +334,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @param $value
      * @param array $columns
      * @return mixed
+     * @throws RepositoryException
      */
     public function findBy($field, $value, $columns = ['*'])
     {
@@ -283,7 +347,7 @@ abstract class BaseRepository implements RepositoryInterface
         $this->resetModel();
         $this->resetScope();
 
-        return $result;
+        return $this->parseResult($result);
     }
 
     /**
@@ -291,6 +355,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @param $value
      * @param array $columns
      * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @throws RepositoryException
      */
     public function findAllBy($field, $value, $columns = ['*'])
     {
@@ -298,18 +363,19 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyScope();
 
-        $results = $this->model->where($field, '=', $value)->get($columns);
+        $result = $this->model->where($field, '=', $value)->get($columns);
 
         $this->resetModel();
         $this->resetScope();
 
-        return $results;
+        return $this->parseResult($result);
     }
 
     /**
      * @param array $where
      * @param array $columns
      * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @throws RepositoryException
      */
     public function findWhere(array $where, $columns = ['*'])
     {
@@ -319,12 +385,12 @@ abstract class BaseRepository implements RepositoryInterface
 
         $this->applyConditions($where);
 
-        $results = $this->model->get($columns);
+        $result = $this->model->get($columns);
 
         $this->resetModel();
         $this->resetScope();
 
-        return $results;
+        return $this->parseResult($result);
     }
 
     /**
@@ -364,6 +430,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * @param array $attributes
      * @return Model
+     * @throws RepositoryException
      */
     public function firstOrCreate(array $attributes = [])
     {
@@ -376,7 +443,7 @@ abstract class BaseRepository implements RepositoryInterface
         $this->resetModel();
         $this->resetScope();
 
-        return $result;
+        return $this->parseResult($result);
     }
 
     /**
@@ -405,6 +472,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * @param $id
      * @return mixed
+     * @throws RepositoryException
      */
     public function restore($id)
     {
@@ -417,7 +485,7 @@ abstract class BaseRepository implements RepositoryInterface
         $this->resetModel();
         $this->resetScope();
 
-        return $result;
+        return $this->parseResult($result);
     }
 
     /**
@@ -431,6 +499,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * @param $id
      * @return bool|null
+     * @throws RepositoryException
      */
     public function forceDelete($id)
     {
@@ -443,7 +512,7 @@ abstract class BaseRepository implements RepositoryInterface
         $this->resetModel();
         $this->resetScope();
 
-        return $result;
+        return $this->parseResult($result);
     }
 
     /**
@@ -508,6 +577,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * @param array $columns
      * @return mixed
+     * @throws RepositoryException
      */
     public function first($columns = ['*'])
     {
@@ -520,6 +590,6 @@ abstract class BaseRepository implements RepositoryInterface
         $this->resetModel();
         $this->resetScope();
 
-        return $result;
+        return $this->parseResult($result);
     }
 }

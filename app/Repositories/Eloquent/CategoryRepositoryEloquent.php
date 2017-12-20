@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepository;
 use App\Repositories\Eloquent\Traits\HasPost;
 use App\Repositories\Eloquent\Traits\Slugable;
+use App\Http\Resources\Category as CategoryResource;
 
 /**
  * Class CategoryRepositoryEloquent
@@ -21,6 +22,14 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
     public function model()
     {
         return Category::class;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function resource()
+    {
+        return CategoryResource::class;
     }
 
     /**
