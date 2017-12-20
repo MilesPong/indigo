@@ -14,6 +14,7 @@ use App\Repositories\Exceptions\RepositoryException;
 use App\Scopes\PublishedScope;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Resources\Post as PostResource;
 
 /**
  * Class PostRepositoryEloquent
@@ -54,6 +55,14 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     public function contentModel()
     {
         return Content::class;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function resource()
+    {
+        return PostResource::class;
     }
 
     /**

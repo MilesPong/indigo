@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Role;
 use App\Repositories\Contracts\RoleRepository;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Resources\Role as RoleResource;
 
 /**
  * Class RoleRepositoryEloquent
@@ -18,6 +19,14 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     public function model()
     {
         return Role::class;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function resource()
+    {
+        return RoleResource::class;
     }
 
     /**

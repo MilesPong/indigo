@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepository;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Resources\User as UserResource;
 
 /**
  * Class UserRepositoryEloquent
@@ -18,6 +19,14 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     public function model()
     {
         return User::class;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function resource()
+    {
+        return UserResource::class;
     }
 
     /**

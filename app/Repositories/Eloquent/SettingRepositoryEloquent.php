@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Setting;
 use App\Repositories\Contracts\SettingRepository;
+use App\Http\Resources\Setting as SettingResource;
 
 /**
  * Class SettingRepositoryEloquent
@@ -17,6 +18,14 @@ class SettingRepositoryEloquent extends BaseRepository implements SettingReposit
     public function model()
     {
         return Setting::class;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function resource()
+    {
+        return SettingResource::class;
     }
 
     /**
