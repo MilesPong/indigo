@@ -63,28 +63,4 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
 
         return $this->syncPermissions(array_get($attributes, 'permission'));
     }
-
-    /**
-     * Get role's permissions ids
-     *
-     * @param $value
-     * @param bool $toArray
-     * @return mixed
-     */
-    public function getPermissionIds($value, $toArray = true)
-    {
-        if ($value instanceof Model) {
-            $this->model = $value;
-        } else {
-            $this->model = $this->find($value);
-        }
-
-        $permIds = $this->model->perms()->get()->pluck('pivot.permission_id');
-
-        if ($toArray) {
-            return $permIds->toArray();
-        }
-
-        return $permIds;
-    }
 }
