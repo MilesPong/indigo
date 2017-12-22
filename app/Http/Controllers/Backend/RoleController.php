@@ -50,9 +50,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permissions = $this->permRepo->all();
-
-        return view('admin.roles.create', compact('permissions'));
+        return view('admin.roles.create');
     }
 
     /**
@@ -65,7 +63,7 @@ class RoleController extends Controller
     {
         $role = $this->roleRepo->createRole($request->all());
 
-        return redirect()->route('admin.roles.index')->withSuccess('Create role successfully!');
+        return response()->json($role)->setStatusCode(201);
     }
 
     /**
@@ -89,13 +87,9 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        $role = $this->roleRepo->find($id);
+        $role = $this->roleRepo->with('perms')->find($id);
 
-        $permissions = $this->permRepo->all();
-
-        $selected_perms = $this->roleRepo->getPermissionIds($role);
-
-        return view('admin.roles.edit', compact('role', 'permissions', 'selected_perms'));
+        return view('admin.roles.edit', compact('role'));
     }
 
     /**
