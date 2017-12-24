@@ -9,7 +9,7 @@
     @component('admin.components.table', [
         'paginator' => $tags,
         'columns' => [
-            'name' => 'ID',
+            'name' => 'Name',
             'description' => 'Description',
             'slug' => 'Slug'
         ],
