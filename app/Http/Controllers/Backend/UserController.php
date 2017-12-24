@@ -50,9 +50,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = $this->roleRepo->all();
-
-        return view('admin.users.create', compact('roles'));
+        return view('admin.users.create');
     }
 
     /**
@@ -63,9 +61,9 @@ class UserController extends Controller
      */
     public function store(StoreUpdateUserRequest $request)
     {
-        $this->userRepo->createUser($request->all());
+        $user = $this->userRepo->createUser($request->all());
 
-        return redirect()->route('admin.users.index')->withSuccess('Create user successfully!');
+        return response()->json($user)->setStatusCode(201);
     }
 
     /**
@@ -89,13 +87,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->userRepo->find($id);
+        $user = $this->userRepo->with('roles')->find($id);
 
-        $userRoles = $this->userRepo->getRoleIds($user);
-
-        $roles = $this->roleRepo->all();
-
-        return view('admin.users.edit', compact('user', 'userRoles', 'roles'));
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -107,9 +101,9 @@ class UserController extends Controller
      */
     public function update(StoreUpdateUserRequest $request, $id)
     {
-        $this->userRepo->updateUser($request->all(), $id);
+        $user = $this->userRepo->updateUser($request->all(), $id);
 
-        return redirect()->route('admin.users.index')->withSuccess('Update user successfully!');
+        return response()->json($user)->setStatusCode(201);
     }
 
     /**
@@ -122,6 +116,6 @@ class UserController extends Controller
     {
         $this->userRepo->delete($id);
 
-        return redirect()->route('admin.users.index')->withSuccess('Delete user successfully!');
+        return response()->json()->setStatusCode(204);
     }
 }
