@@ -6,7 +6,7 @@
             <slot></slot>
 
         </select>
-        <label :for="elemId">Permissions</label>
+        <label :for="elemId">{{ label }}</label>
     </div>
 </template>
 
