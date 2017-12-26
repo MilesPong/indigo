@@ -7,13 +7,12 @@ use App\Repositories\Contracts\CategoryRepository;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 /**
  * Class PostController
  * @package App\Http\Controllers\Backend
  */
-class PostController extends Controller
+class PostController extends BackendController
 {
     /**
      * @var PostRepository
@@ -34,8 +33,11 @@ class PostController extends Controller
      * @param CategoryRepository $categoryRepository
      * @param TagRepository $tagRepository
      */
-    public function __construct(PostRepository $postRepository, CategoryRepository $categoryRepository, TagRepository $tagRepository)
-    {
+    public function __construct(
+        PostRepository $postRepository,
+        CategoryRepository $categoryRepository,
+        TagRepository $tagRepository
+    ) {
         $this->postRepository = $postRepository;
         $this->categoryRepository = $categoryRepository;
         $this->tagRepository = $tagRepository;
@@ -74,13 +76,13 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  StoreUpdatePostRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $this->postRepository->createPost($request->except('_token'));
+        $post = $this->postRepository->createPost($request->except('_token'));
 
-        return redirect()->route('admin.posts.index')->withSuccess('Create post successfully!');
+        return $this->successCreated($post);
     }
 
     /**
@@ -117,47 +119,47 @@ class PostController extends Controller
      *
      * @param  StoreUpdatePostRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreUpdatePostRequest $request, $id)
     {
-        $this->postRepository->updatePost($request->all(), $id);
+        $post = $this->postRepository->updatePost($request->all(), $id);
 
-        return redirect()->route('admin.posts.index')->withSuccess('Update post successfully!');
+        return $this->successCreated($post);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         $this->postRepository->delete($id);
 
-        return redirect()->route('admin.posts.index')->withSuccess('Move post to trash successfully!');
+        return $this->successDeleted();
     }
 
     /**
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function restore($id)
     {
         $this->postRepository->restore($id);
 
-        return redirect()->route('admin.posts.index')->withSuccess('Restore post successfully!');
+        return $this->successNoContent();
     }
 
     /**
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function forceDelete($id)
     {
         $this->postRepository->forceDelete($id);
 
-        return redirect()->back()->withSuccess('Force delete post successfully!');
+        return $this->successDeleted();
     }
 }

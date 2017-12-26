@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Requests\StoreUpdateUserRequest;
 use App\Repositories\Contracts\RoleRepository;
 use App\Repositories\Contracts\UserRepository;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class UserController extends Controller
+class UserController extends BackendController
 {
     /**
      * @var UserRepository
@@ -57,13 +55,13 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  StoreUpdateUserRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUpdateUserRequest $request)
     {
         $user = $this->userRepository->createUser($request->all());
 
-        return response()->json($user)->setStatusCode(201);
+        return $this->successCreated($user);
     }
 
     /**
@@ -97,25 +95,25 @@ class UserController extends Controller
      *
      * @param  StoreUpdateUserRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreUpdateUserRequest $request, $id)
     {
         $user = $this->userRepository->updateUser($request->all(), $id);
 
-        return response()->json($user)->setStatusCode(201);
+        return $this->successCreated($user);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         $this->userRepository->delete($id);
 
-        return response()->json()->setStatusCode(204);
+        return $this->successDeleted();
     }
 }

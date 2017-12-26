@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Requests\StoreUpdateRoleRequest;
 use App\Repositories\Contracts\PermissionRepository;
 use App\Repositories\Contracts\RoleRepository;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class RoleController extends Controller
+class RoleController extends BackendController
 {
     /**
      * @var RoleRepository
@@ -57,13 +55,13 @@ class RoleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  StoreUpdateRoleRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUpdateRoleRequest $request)
     {
         $role = $this->roleRepository->createRole($request->all());
 
-        return response()->json($role)->setStatusCode(201);
+        return $this->successCreated($role);
     }
 
     /**
@@ -97,25 +95,25 @@ class RoleController extends Controller
      *
      * @param  StoreUpdateRoleRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreUpdateRoleRequest $request, $id)
     {
         $role = $this->roleRepository->updateRole($request->all(), $id);
 
-        return redirect()->route('admin.roles.index')->withSuccess('Update role successfully!');
+        return $this->successCreated($role);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         $this->roleRepository->delete($id);
 
-        return redirect()->route('admin.roles.index')->withSuccess('Delete role successfully!');
+        return $this->successDeleted();
     }
 }

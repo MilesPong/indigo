@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateCategoryRequest;
 use App\Repositories\Contracts\CategoryRepository;
-use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+/**
+ * Class CategoryController
+ * @package App\Http\Controllers\Backend
+ */
+class CategoryController extends BackendController
 {
+    /**
+     * @var CategoryRepository
+     */
     protected $categoryRepository;
 
     /**
@@ -46,13 +51,13 @@ class CategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  StoreUpdateCategoryRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUpdateCategoryRequest $request)
     {
         $category = $this->categoryRepository->createCategory($request->all());
 
-        return redirect()->route('admin.categories.index')->withSuccess('Create category successfully!');
+        return $this->successCreated($category);
     }
 
     /**
@@ -86,25 +91,25 @@ class CategoryController extends Controller
      *
      * @param  StoreUpdateCategoryRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreUpdateCategoryRequest $request, $id)
     {
         $category = $this->categoryRepository->updateCategory($request->all(), $id);
 
-        return redirect()->route('admin.categories.index')->withSuccess('Update category successfully!');
+        return $this->successCreated($category);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         $this->categoryRepository->delete($id);
 
-        return redirect()->route('admin.categories.index')->withSuccess('Delete category successfully!');
+        return $this->successDeleted();
     }
 }

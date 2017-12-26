@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class DashboardController extends Controller
+class DashboardController extends BackendController
 {
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdatePermissionRequest;
 use App\Repositories\Contracts\PermissionRepository;
 
@@ -10,7 +9,7 @@ use App\Repositories\Contracts\PermissionRepository;
  * Class PermissionController
  * @package App\Http\Controllers\Backend
  */
-class PermissionController extends Controller
+class PermissionController extends BackendController
 {
     /**
      * @var PermissionRepository
@@ -52,13 +51,13 @@ class PermissionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  StoreUpdatePermissionRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUpdatePermissionRequest $request)
     {
         $permission = $this->permissionRepository->create($request->all());
 
-        return redirect()->route('admin.permissions.index')->withSuccess('Create permission successfully!');
+        return $this->successCreated($permission);
     }
 
     /**
@@ -92,26 +91,25 @@ class PermissionController extends Controller
      *
      * @param  StoreUpdatePermissionRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreUpdatePermissionRequest $request, $id)
     {
         $permission = $this->permissionRepository->update($request->all(), $id);
 
-        return redirect()->route('admin.permissions.index')->withSuccess('Update permission successfully!');
+        return $this->successCreated($permission);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         $this->permissionRepository->delete($id);
 
-        // TODO union api response
-        return response()->json()->setStatusCode(204);
+        return $this->successDeleted();
     }
 }

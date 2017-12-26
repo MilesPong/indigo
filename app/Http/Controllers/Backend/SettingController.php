@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Repositories\Contracts\SettingRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 
-class SettingController extends Controller
+class SettingController extends BackendController
 {
     /**
      * @var SettingRepository
@@ -49,7 +48,7 @@ class SettingController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -59,16 +58,16 @@ class SettingController extends Controller
             'tag' => 'required',
         ]);
 
-        $this->settingRepository->create($request->all());
+        $setting = $this->settingRepository->create($request->all());
 
-        return redirect()->route('admin.settings.index')->withSuccess('Create setting successfully');
+        return $this->successCreated($setting);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function show($id)
     {
@@ -93,7 +92,7 @@ class SettingController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
@@ -106,9 +105,9 @@ class SettingController extends Controller
             'tag' => 'required',
         ]);
 
-        $this->settingRepository->update($request->all(), $id);
+        $setting = $this->settingRepository->update($request->all(), $id);
 
-        return redirect()->route('admin.settings.index')->withSuccess('Update setting successfully');
+        return $this->successCreated($setting);
 
     }
 
@@ -116,12 +115,12 @@ class SettingController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         $this->settingRepository->delete($id);
 
-        return redirect()->route('admin.settings.index')->withSuccess('Delete setting successfully!');
+        return $this->successDeleted();
     }
 }

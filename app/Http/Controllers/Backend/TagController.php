@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\StoreUpdateTagRequest;
 use App\Repositories\Contracts\TagRepository;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class TagController extends Controller
+class TagController extends BackendController
 {
     protected $tagRepository;
 
@@ -46,13 +44,13 @@ class TagController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  StoreUpdateTagRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUpdateTagRequest $request)
     {
-        $this->tagRepository->createTag($request->all());
+        $tag = $this->tagRepository->createTag($request->all());
 
-        return redirect()->route('admin.tags.index')->withSuccess('Create tag successfully!');
+        return $this->successCreated($tag);
     }
 
     /**
@@ -86,25 +84,25 @@ class TagController extends Controller
      *
      * @param  StoreUpdateTagRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreUpdateTagRequest $request, $id)
     {
-        $this->tagRepository->updateTag($request->all(), $id);
+        $tag = $this->tagRepository->updateTag($request->all(), $id);
 
-        return redirect()->route('admin.tags.index')->withSuccess('Update tag successfully!');
+        return $this->successCreated($tag);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         $this->tagRepository->delete($id);
 
-        return redirect()->route('admin.tags.index')->withSuccess('Delete tag successfully!');
+        return $this->successDeleted();
     }
 }

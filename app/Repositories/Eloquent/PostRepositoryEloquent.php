@@ -88,6 +88,8 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
+     * TODO return post instance
+     *
      * @param array $attributes
      * @return Model
      * @throws RepositoryException
@@ -214,6 +216,8 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
+     * TODO return post instance
+     *
      * @param array $attributes
      * @param $id
      * @return \Illuminate\Database\Eloquent\Collection|Model
