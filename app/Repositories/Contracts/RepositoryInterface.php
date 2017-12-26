@@ -74,7 +74,7 @@ interface RepositoryInterface
 
     /**
      * @param $relations
-     * @return mixed
+     * @return $this
      */
     public function with($relations);
 

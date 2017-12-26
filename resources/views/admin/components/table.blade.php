@@ -16,7 +16,7 @@
         <tr>
 
         @foreach ($columns as $field => $displayName)
-             <td>{{ $item->$field }}</td>
+             <td>{{ $item->$field ?: Indigo\Tools\EloquentPresenter::parseRelationship($item, $field)}}</td>
         @endforeach
 
             <td>

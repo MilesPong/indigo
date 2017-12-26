@@ -16,6 +16,7 @@ import axios from './http';
 
 Vue.component('vue-table-action', require('./components/TableAction.vue'));
 Vue.component('vue-form', require('./components/Form.vue'));
+Vue.component('vue-select', require('./components/Select.vue'));
 
 Vue.prototype.$http = axios;
 

@@ -9,15 +9,6 @@ namespace App\Repositories\Contracts;
 interface RoleRepository extends RepositoryInterface
 {
     /**
-     * Get role's permissions ids
-     *
-     * @param $value
-     * @param bool $toArray
-     * @return mixed
-     */
-    public function getPermissionIds($value, $toArray = true);
-
-    /**
      * Create role
      *
      * @param array $attributes
