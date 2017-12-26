@@ -18,27 +18,27 @@ class PostController extends Controller
     /**
      * @var PostRepository
      */
-    protected $postRepo;
+    protected $postRepository;
     /**
      * @var CategoryRepository
      */
-    protected $cateRepo;
+    protected $categoryRepository;
     /**
      * @var TagRepository
      */
-    protected $tagRepo;
+    protected $tagRepository;
 
     /**
      * PostController constructor.
-     * @param PostRepository $postRepo
-     * @param CategoryRepository $cateRepo
-     * @param TagRepository $tagRepo
+     * @param PostRepository $postRepository
+     * @param CategoryRepository $categoryRepository
+     * @param TagRepository $tagRepository
      */
-    public function __construct(PostRepository $postRepo, CategoryRepository $cateRepo, TagRepository $tagRepo)
+    public function __construct(PostRepository $postRepository, CategoryRepository $categoryRepository, TagRepository $tagRepository)
     {
-        $this->postRepo = $postRepo;
-        $this->cateRepo = $cateRepo;
-        $this->tagRepo = $tagRepo;
+        $this->postRepository = $postRepository;
+        $this->categoryRepository = $categoryRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     /**
@@ -49,10 +49,10 @@ class PostController extends Controller
     public function index(Request $request)
     {
         if ($request->has('trash')) {
-            $this->postRepo = $this->postRepo->onlyTrashed();
+            $this->postRepository = $this->postRepository->onlyTrashed();
         }
 
-        $posts = $this->postRepo->with(['category', 'author'])->paginate();
+        $posts = $this->postRepository->with(['category', 'author'])->paginate();
 
         return view('admin.posts.index', compact('posts'));
     }
@@ -64,8 +64,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = $this->cateRepo->all();
-        $tags = $this->tagRepo->all();
+        $categories = $this->categoryRepository->all();
+        $tags = $this->tagRepository->all();
 
         return view('admin.posts.create', compact('categories', 'tags'));
     }
@@ -78,7 +78,7 @@ class PostController extends Controller
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $this->postRepo->createPost($request->except('_token'));
+        $this->postRepository->createPost($request->except('_token'));
 
         return redirect()->route('admin.posts.index')->withSuccess('Create post successfully!');
     }
@@ -91,7 +91,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->postRepo->find($id);
+        $post = $this->postRepository->find($id);
 
         return response($post);
     }
@@ -104,10 +104,10 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = $this->postRepo->with('tags')->find($id);
+        $post = $this->postRepository->with('tags')->find($id);
 
-        $categories = $this->cateRepo->all();
-        $tags = $this->tagRepo->all();
+        $categories = $this->categoryRepository->all();
+        $tags = $this->tagRepository->all();
 
         return view('admin.posts.edit', compact('post', 'categories', 'tags', 'selected_tags'));
     }
@@ -121,7 +121,7 @@ class PostController extends Controller
      */
     public function update(StoreUpdatePostRequest $request, $id)
     {
-        $this->postRepo->updatePost($request->all(), $id);
+        $this->postRepository->updatePost($request->all(), $id);
 
         return redirect()->route('admin.posts.index')->withSuccess('Update post successfully!');
     }
@@ -134,7 +134,7 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $this->postRepo->delete($id);
+        $this->postRepository->delete($id);
 
         return redirect()->route('admin.posts.index')->withSuccess('Move post to trash successfully!');
     }
@@ -145,7 +145,7 @@ class PostController extends Controller
      */
     public function restore($id)
     {
-        $this->postRepo->restore($id);
+        $this->postRepository->restore($id);
 
         return redirect()->route('admin.posts.index')->withSuccess('Restore post successfully!');
     }
@@ -156,7 +156,7 @@ class PostController extends Controller
      */
     public function forceDelete($id)
     {
-        $this->postRepo->forceDelete($id);
+        $this->postRepository->forceDelete($id);
 
         return redirect()->back()->withSuccess('Force delete post successfully!');
     }

@@ -12,15 +12,15 @@ class SettingController extends Controller
     /**
      * @var SettingRepository
      */
-    protected $settingRepo;
+    protected $settingRepository;
 
     /**
      * SettingController constructor.
-     * @param SettingRepository $settingRepo
+     * @param SettingRepository $settingRepository
      */
-    public function __construct(SettingRepository $settingRepo)
+    public function __construct(SettingRepository $settingRepository)
     {
-        $this->settingRepo = $settingRepo;
+        $this->settingRepository = $settingRepository;
     }
 
     /**
@@ -30,7 +30,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $settings = $this->settingRepo->paginate();
+        $settings = $this->settingRepository->paginate();
 
         return view('admin.settings.index', compact('settings'));
     }
@@ -59,7 +59,7 @@ class SettingController extends Controller
             'tag' => 'required',
         ]);
 
-        $this->settingRepo->create($request->all());
+        $this->settingRepository->create($request->all());
 
         return redirect()->route('admin.settings.index')->withSuccess('Create setting successfully');
     }
@@ -83,7 +83,7 @@ class SettingController extends Controller
      */
     public function edit($id)
     {
-        $setting = $this->settingRepo->find($id);
+        $setting = $this->settingRepository->find($id);
 
         return view('admin.settings.edit', compact('setting'));
     }
@@ -106,7 +106,7 @@ class SettingController extends Controller
             'tag' => 'required',
         ]);
 
-        $this->settingRepo->update($request->all(), $id);
+        $this->settingRepository->update($request->all(), $id);
 
         return redirect()->route('admin.settings.index')->withSuccess('Update setting successfully');
 
@@ -120,7 +120,7 @@ class SettingController extends Controller
      */
     public function destroy($id)
     {
-        $this->settingRepo->delete($id);
+        $this->settingRepository->delete($id);
 
         return redirect()->route('admin.settings.index')->withSuccess('Delete setting successfully!');
     }

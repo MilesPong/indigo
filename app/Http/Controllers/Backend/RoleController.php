@@ -13,22 +13,22 @@ class RoleController extends Controller
     /**
      * @var RoleRepository
      */
-    protected $roleRepo;
+    protected $roleRepository;
 
     /**
      * @var PermissionRepository
      */
-    protected $permRepo;
+    protected $permissionRepository;
 
     /**
      * RoleController constructor.
-     * @param RoleRepository $roleRepo
-     * @param PermissionRepository $permRepo
+     * @param RoleRepository $roleRepository
+     * @param PermissionRepository $permissionRepository
      */
-    public function __construct(RoleRepository $roleRepo, PermissionRepository $permRepo)
+    public function __construct(RoleRepository $roleRepository, PermissionRepository $permissionRepository)
     {
-        $this->roleRepo = $roleRepo;
-        $this->permRepo = $permRepo;
+        $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
     }
 
     /**
@@ -38,7 +38,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = $this->roleRepo->paginate(10);
+        $roles = $this->roleRepository->paginate(10);
 
         return view('admin.roles.index', compact('roles'));
     }
@@ -61,7 +61,7 @@ class RoleController extends Controller
      */
     public function store(StoreUpdateRoleRequest $request)
     {
-        $role = $this->roleRepo->createRole($request->all());
+        $role = $this->roleRepository->createRole($request->all());
 
         return response()->json($role)->setStatusCode(201);
     }
@@ -74,7 +74,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = $this->roleRepo->find($id);
+        $role = $this->roleRepository->find($id);
 
         return response($role);
     }
@@ -87,7 +87,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        $role = $this->roleRepo->with('perms')->find($id);
+        $role = $this->roleRepository->with('perms')->find($id);
 
         return view('admin.roles.edit', compact('role'));
     }
@@ -101,7 +101,7 @@ class RoleController extends Controller
      */
     public function update(StoreUpdateRoleRequest $request, $id)
     {
-        $role = $this->roleRepo->updateRole($request->all(), $id);
+        $role = $this->roleRepository->updateRole($request->all(), $id);
 
         return redirect()->route('admin.roles.index')->withSuccess('Update role successfully!');
     }
@@ -114,7 +114,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $this->roleRepo->delete($id);
+        $this->roleRepository->delete($id);
 
         return redirect()->route('admin.roles.index')->withSuccess('Delete role successfully!');
     }

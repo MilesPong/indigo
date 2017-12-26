@@ -9,15 +9,15 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    protected $cateRepo;
+    protected $categoryRepository;
 
     /**
      * CategoryController constructor.
-     * @param CategoryRepository $cateRepo
+     * @param CategoryRepository $categoryRepository
      */
-    public function __construct(CategoryRepository $cateRepo)
+    public function __construct(CategoryRepository $categoryRepository)
     {
-        $this->cateRepo = $cateRepo;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -27,7 +27,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = $this->cateRepo->paginate();
+        $categories = $this->categoryRepository->paginate();
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -50,7 +50,7 @@ class CategoryController extends Controller
      */
     public function store(StoreUpdateCategoryRequest $request)
     {
-        $category = $this->cateRepo->createCategory($request->all());
+        $category = $this->categoryRepository->createCategory($request->all());
 
         return redirect()->route('admin.categories.index')->withSuccess('Create category successfully!');
     }
@@ -63,7 +63,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = $this->cateRepo->find($id);
+        $category = $this->categoryRepository->find($id);
 
         return response($category);
     }
@@ -76,7 +76,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = $this->cateRepo->find($id);
+        $category = $this->categoryRepository->find($id);
 
         return view('admin.categories.edit', compact('category'));
     }
@@ -90,7 +90,7 @@ class CategoryController extends Controller
      */
     public function update(StoreUpdateCategoryRequest $request, $id)
     {
-        $category = $this->cateRepo->updateCategory($request->all(), $id);
+        $category = $this->categoryRepository->updateCategory($request->all(), $id);
 
         return redirect()->route('admin.categories.index')->withSuccess('Update category successfully!');
     }
@@ -103,7 +103,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $this->cateRepo->delete($id);
+        $this->categoryRepository->delete($id);
 
         return redirect()->route('admin.categories.index')->withSuccess('Delete category successfully!');
     }

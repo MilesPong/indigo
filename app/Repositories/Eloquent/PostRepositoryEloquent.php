@@ -28,7 +28,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     /**
      * @var TagRepository
      */
-    protected $tagRepo;
+    protected $tagRepository;
 
     /**
      * @var mixed
@@ -38,14 +38,14 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     /**
      * PostRepositoryEloquent constructor.
      * @param Container $app
-     * @param TagRepository $tagRepo
+     * @param TagRepository $tagRepository
      * @throws RepositoryException
      */
-    public function __construct(Container $app, TagRepository $tagRepo)
+    public function __construct(Container $app, TagRepository $tagRepository)
     {
         parent::__construct($app);
 
-        $this->tagRepo = $tagRepo;
+        $this->tagRepository = $tagRepository;
         $this->contentModel = $this->app->make($this->contentModel());
     }
 
@@ -143,7 +143,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
         }
 
         foreach ($tags as $tagName) {
-            $tag = $this->tagRepo->firstOrCreate([
+            $tag = $this->tagRepository->firstOrCreate([
                 'name' => $tagName,
                 'slug' => str_slug($tagName)
             ]);

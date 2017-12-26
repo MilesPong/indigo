@@ -9,15 +9,15 @@ use App\Http\Controllers\Controller;
 
 class TagController extends Controller
 {
-    protected $tagRepo;
+    protected $tagRepository;
 
     /**
      * TagController constructor.
-     * @param TagRepository $tagRepo
+     * @param TagRepository $tagRepository
      */
-    public function __construct(TagRepository $tagRepo)
+    public function __construct(TagRepository $tagRepository)
     {
-        $this->tagRepo = $tagRepo;
+        $this->tagRepository = $tagRepository;
     }
 
     /**
@@ -27,7 +27,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = $this->tagRepo->paginate();
+        $tags = $this->tagRepository->paginate();
 
         return view('admin.tags.index', compact('tags'));
     }
@@ -50,7 +50,7 @@ class TagController extends Controller
      */
     public function store(StoreUpdateTagRequest $request)
     {
-        $this->tagRepo->createTag($request->all());
+        $this->tagRepository->createTag($request->all());
 
         return redirect()->route('admin.tags.index')->withSuccess('Create tag successfully!');
     }
@@ -63,7 +63,7 @@ class TagController extends Controller
      */
     public function show($id)
     {
-        $tag = $this->tagRepo->find($id);
+        $tag = $this->tagRepository->find($id);
 
         return response($tag);
     }
@@ -76,7 +76,7 @@ class TagController extends Controller
      */
     public function edit($id)
     {
-        $tag = $this->tagRepo->find($id);
+        $tag = $this->tagRepository->find($id);
 
         return view('admin.tags.edit', compact('tag'));
     }
@@ -90,7 +90,7 @@ class TagController extends Controller
      */
     public function update(StoreUpdateTagRequest $request, $id)
     {
-        $this->tagRepo->updateTag($request->all(), $id);
+        $this->tagRepository->updateTag($request->all(), $id);
 
         return redirect()->route('admin.tags.index')->withSuccess('Update tag successfully!');
     }
@@ -103,7 +103,7 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
-        $this->tagRepo->delete($id);
+        $this->tagRepository->delete($id);
 
         return redirect()->route('admin.tags.index')->withSuccess('Delete tag successfully!');
     }
