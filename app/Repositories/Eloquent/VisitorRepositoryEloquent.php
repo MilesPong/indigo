@@ -7,6 +7,7 @@ use App\Repositories\Contracts\VisitorRepository;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Agent;
+use App\Http\Resources\Visitor as VisitorResource;
 
 /**
  * Class VisitorRepositoryEloquent
@@ -43,6 +44,14 @@ class VisitorRepositoryEloquent extends BaseRepository implements VisitorReposit
     public function model()
     {
         return Visitor::class;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function resource()
+    {
+        return VisitorResource::class;
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\Tag;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\HasPost;
 use App\Repositories\Eloquent\Traits\Slugable;
+use App\Http\Resources\Tag as TagResource;
 
 /**
  * Class TagRepositoryEloquent
@@ -21,6 +22,14 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
     public function model()
     {
         return Tag::class;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function resource()
+    {
+        return TagResource::class;
     }
 
     /**
