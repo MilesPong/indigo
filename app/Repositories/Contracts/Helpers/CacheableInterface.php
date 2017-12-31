@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Contracts;
+namespace App\Repositories\Contracts\Helpers;
 
 use Closure;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
