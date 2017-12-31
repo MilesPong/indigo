@@ -13,12 +13,11 @@ class PublishedScope implements Scope
     /**
      * @param Builder $builder
      * @param Model $model
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return void
      */
     public function apply(Builder $builder, Model $model)
     {
-        return $builder
-            ->where('published_at', '<=', Carbon::now()->toDateTimeString())
+        $builder->where('published_at', '<=', Carbon::now()->toDateTimeString())
             ->where('is_draft', '=', Post::IS_NOT_DRAFT);
     }
 }

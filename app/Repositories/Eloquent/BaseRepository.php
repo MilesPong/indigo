@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\Contracts\RepositoryInterface;
+use App\Repositories\Contracts\Repository as RepositoryInterface;
 use App\Repositories\Events\RepositoryEntityCreated;
 use App\Repositories\Events\RepositoryEntityDeleted;
 use App\Repositories\Events\RepositoryEntityUpdated;
@@ -145,7 +145,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     protected function applyScope()
     {
-        if (!is_null($this->scopeQuery) && is_callable($this->scopeQuery)) {
+        if (isset($this->scopeQuery) && is_callable($this->scopeQuery)) {
             $callback = $this->scopeQuery;
             $this->model = $callback($this->model);
         }
@@ -336,7 +336,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @return mixed
      * @throws RepositoryException
      */
-    public function findBy($field, $value, $columns = ['*'])
+    public function firstBy($field, $value, $columns = ['*'])
     {
         $this->scopeBoot();
 
@@ -357,7 +357,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      * @throws RepositoryException
      */
-    public function findAllBy($field, $value, $columns = ['*'])
+    public function allBy($field, $value, $columns = ['*'])
     {
         $this->scopeBoot();
 
@@ -377,7 +377,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      * @throws RepositoryException
      */
-    public function findWhere(array $where, $columns = ['*'])
+    public function getByWhere(array $where, $columns = ['*'])
     {
         $this->scopeBoot();
 
@@ -458,7 +458,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @param bool $only
      * @return $this
      */
-    public function trashed($only = false)
+    protected function trashed($only = false)
     {
         if ($only) {
             $this->model = $this->model->onlyTrashed();

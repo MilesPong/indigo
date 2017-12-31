@@ -5,10 +5,10 @@ namespace App\Repositories\Contracts;
 use Closure;
 
 /**
- * Interface RepositoryInterface
+ * Interface Repository
  * @package App\Repositories\Contracts
  */
-interface RepositoryInterface
+interface Repository
 {
     /**
      * @param array $columns
@@ -55,7 +55,7 @@ interface RepositoryInterface
      * @param array $columns
      * @return mixed
      */
-    public function findBy($field, $value, $columns = ['*']);
+    public function firstBy($field, $value, $columns = ['*']);
 
     /**
      * @param $field
@@ -63,14 +63,14 @@ interface RepositoryInterface
      * @param array $columns
      * @return mixed
      */
-    public function findAllBy($field, $value, $columns = ['*']);
+    public function allBy($field, $value, $columns = ['*']);
 
     /**
      * @param array $where
      * @param array $columns
      * @return mixed
      */
-    public function findWhere(array $where, $columns = ['*']);
+    public function getByWhere(array $where, $columns = ['*']);
 
     /**
      * @param $relations
@@ -79,7 +79,7 @@ interface RepositoryInterface
     public function with($relations);
 
     /**
-     * Add subselect queries to count the relations.
+     * Add sub-select queries to count the relations.
      *
      * @param  mixed $relations
      * @return $this
@@ -88,14 +88,14 @@ interface RepositoryInterface
 
     /**
      * @param $relation
-     * @return mixed
+     * @return $this
      */
     public function has($relation);
 
     /**
      * @param $relation
      * @param Closure|null $callback
-     * @return mixed
+     * @return $this
      */
     public function whereHas($relation, Closure $callback = null);
 
@@ -104,12 +104,6 @@ interface RepositoryInterface
      * @return mixed
      */
     public function firstOrCreate(array $attributes = []);
-
-    /**
-     * @param bool $only
-     * @return mixed
-     */
-    public function trashed($only = false);
 
     /**
      * @return mixed

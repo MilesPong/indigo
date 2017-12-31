@@ -5,6 +5,7 @@ namespace App\Repositories\Contracts;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Repositories\Contracts\Repository as RepositoryInterface;
 
 /**
  * Interface PostRepository

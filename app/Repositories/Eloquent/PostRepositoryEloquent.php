@@ -252,7 +252,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function getBySlug($slug)
     {
-        return $this->withRelationships()->findBy('slug', $slug);
+        return $this->withRelationships()->firstBy('slug', $slug);
     }
 
     /**
