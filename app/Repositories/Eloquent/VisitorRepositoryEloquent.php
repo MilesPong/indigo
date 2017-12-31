@@ -2,12 +2,12 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Visitor as VisitorResource;
 use App\Models\Visitor;
 use App\Repositories\Contracts\VisitorRepository;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Agent;
-use App\Http\Resources\Visitor as VisitorResource;
 
 /**
  * Class VisitorRepositoryEloquent
@@ -27,9 +27,10 @@ class VisitorRepositoryEloquent extends BaseRepository implements VisitorReposit
 
     /**
      * VisitorRepositoryEloquent constructor.
-     * @param Container $app
-     * @param Request $request
-     * @param Agent $agent
+     * @param \Illuminate\Container\Container $app
+     * @param \Illuminate\Http\Request $request
+     * @param \Jenssegers\Agent\Agent $agent
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function __construct(Container $app, Request $request, Agent $agent)
     {
@@ -55,7 +56,8 @@ class VisitorRepositoryEloquent extends BaseRepository implements VisitorReposit
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function createLog()
     {
@@ -69,7 +71,7 @@ class VisitorRepositoryEloquent extends BaseRepository implements VisitorReposit
     {
         return [
             'ip' => $this->request->ip(),
-            'uri' =>$this->request->path(),
+            'uri' => $this->request->path(),
             'is_robot' => $this->agent->isRobot(),
             'platform' => $this->agent->platform(),
             'device' => $this->agent->device(),

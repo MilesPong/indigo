@@ -114,7 +114,7 @@ trait Cacheable
                 return call_user_func_array([$this, 'parent::' . $method], $args);
             });
 
-        $this->resetModel();
+        // $this->resetModel();
         $this->resetScope();
 
         return $result;

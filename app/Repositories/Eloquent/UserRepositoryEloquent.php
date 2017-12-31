@@ -30,10 +30,9 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     }
 
     /**
-     * Create User
-     *
      * @param array $attributes
      * @return mixed|null
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function create(array $attributes)
     {
@@ -43,8 +42,6 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     }
 
     /**
-     * Sync user's roles
-     *
      * @param $roleIds
      * @return mixed|null
      */
@@ -60,11 +57,10 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     }
 
     /**
-     * Update User
-     *
      * @param array $attributes
      * @param $id
      * @return mixed|null
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function update(array $attributes, $id)
     {

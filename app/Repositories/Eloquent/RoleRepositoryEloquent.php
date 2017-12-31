@@ -2,10 +2,9 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Role as RoleResource;
 use App\Models\Role;
 use App\Repositories\Contracts\RoleRepository;
-use Illuminate\Database\Eloquent\Model;
-use App\Http\Resources\Role as RoleResource;
 
 /**
  * Class RoleRepositoryEloquent
@@ -30,10 +29,9 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     }
 
     /**
-     * Create role
-     *
      * @param array $attributes
      * @return mixed|null
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function create(array $attributes)
     {
@@ -60,11 +58,10 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     }
 
     /**
-     * Update Role
-     *
      * @param array $attributes
      * @param $id
      * @return mixed|null
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function update(array $attributes, $id)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Post as PostResource;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Post;
@@ -14,7 +15,6 @@ use App\Repositories\Exceptions\RepositoryException;
 use App\Scopes\PublishedScope;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Resources\Post as PostResource;
 
 /**
  * Class PostRepositoryEloquent
@@ -68,9 +68,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     /**
      *
      */
-    public function scopeBoot()
+    public function boot()
     {
-        parent::scopeBoot();
+        parent::boot();
 
         // TODO to be optimized
         // Session middleware is called after ServiceProvider binding, so can't set method boot in constructor
@@ -158,7 +158,8 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     /**
      * @param null $perPage
      * @param array $columns
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|mixed
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
@@ -238,6 +239,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     /**
      * @param $slug
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function getBySlug($slug)
     {
@@ -245,8 +247,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     * @param Post $model
+     * @param \App\Models\Post $model
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function previous(Post $model)
     {
@@ -256,8 +259,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     * @param Post $model
+     * @param \App\Models\Post $model
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function next(Post $model)
     {
@@ -269,6 +273,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     /**
      * @param int $limit
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function hot($limit = 5)
     {
@@ -279,9 +284,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     * @param Category $category
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     * @throws RepositoryException
+     * @param \App\Models\Category $category
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function paginateOfCategory(Category $category)
     {
@@ -289,9 +294,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     * @param Model $model
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     * @throws RepositoryException
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     protected function paginateOfPostRelated(Model $model)
     {
@@ -303,9 +308,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     * @param Tag $tag
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     * @throws RepositoryException
+     * @param \App\Models\Tag $tag
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function paginateOfTag(Tag $tag)
     {

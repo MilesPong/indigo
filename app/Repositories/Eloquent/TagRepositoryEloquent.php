@@ -2,11 +2,11 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Tag as TagResource;
 use App\Models\Tag;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\HasPost;
 use App\Repositories\Eloquent\Traits\Slugable;
-use App\Http\Resources\Tag as TagResource;
 
 /**
  * Class TagRepositoryEloquent
@@ -34,7 +34,8 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
 
     /**
      * @param array $attributes
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function create(array $attributes)
     {
@@ -45,7 +46,7 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
 
     /**
      * @param array $attributes
-     * @return array
+     * @return array|mixed
      */
     protected function preHandleData(array $attributes)
     {
@@ -57,7 +58,8 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
     /**
      * @param array $attributes
      * @param $id
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function update(array $attributes, $id)
     {

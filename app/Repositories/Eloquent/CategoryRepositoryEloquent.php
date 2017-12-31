@@ -2,11 +2,11 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Category as CategoryResource;
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepository;
 use App\Repositories\Eloquent\Traits\HasPost;
 use App\Repositories\Eloquent\Traits\Slugable;
-use App\Http\Resources\Category as CategoryResource;
 
 /**
  * Class CategoryRepositoryEloquent
@@ -34,7 +34,8 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
 
     /**
      * @param array $attributes
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function create(array $attributes)
     {
@@ -57,7 +58,8 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
     /**
      * @param array $attributes
      * @param $id
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function update(array $attributes, $id)
     {
