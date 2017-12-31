@@ -80,7 +80,7 @@ class PostController extends BackendController
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $post = $this->postRepository->createPost($request->except('_token'));
+        $post = $this->postRepository->create($request->except('_token'));
 
         return $this->successCreated($post);
     }
@@ -123,7 +123,7 @@ class PostController extends BackendController
      */
     public function update(StoreUpdatePostRequest $request, $id)
     {
-        $post = $this->postRepository->updatePost($request->all(), $id);
+        $post = $this->postRepository->update($request->all(), $id);
 
         return $this->successCreated($post);
     }

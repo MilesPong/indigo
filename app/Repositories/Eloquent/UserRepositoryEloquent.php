@@ -35,9 +35,9 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      * @param array $attributes
      * @return mixed|null
      */
-    public function createUser(array $attributes)
+    public function create(array $attributes)
     {
-        $this->model = $this->create($attributes);
+        $this->model = parent::create($attributes);
 
         return $this->syncRoles(array_get($attributes, 'role'));
     }
@@ -66,34 +66,10 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      * @param $id
      * @return mixed|null
      */
-    public function updateUser(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
-        $this->model = $this->update($attributes, $id);
+        $this->model = parent::update($attributes, $id);
 
         return $this->syncRoles(array_get($attributes, 'role'));
-    }
-
-    /**
-     * Get user's role ids
-     *
-     * @param $id
-     * @param bool $toArray
-     * @return mixed
-     */
-    public function getRoleIds($id, $toArray = true)
-    {
-        if ($id instanceof Model) {
-            $this->model = $id;
-        } else {
-            $this->model = $this->find($id);
-        }
-
-        $roleIds = $this->model->roles()->get()->pluck('pivot.role_id');
-
-        if ($toArray) {
-            return $roleIds->toArray();
-        }
-
-        return $roleIds;
     }
 }

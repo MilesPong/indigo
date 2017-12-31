@@ -35,9 +35,9 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
      * @param array $attributes
      * @return mixed|null
      */
-    public function createRole(array $attributes)
+    public function create(array $attributes)
     {
-        $this->model = $this->create($attributes);
+        $this->model = parent::create($attributes);
 
         return $this->syncPermissions(array_get($attributes, 'permission'));
     }
@@ -66,9 +66,9 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
      * @param $id
      * @return mixed|null
      */
-    public function updateRole(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
-        $this->model = $this->update($attributes, $id);
+        $this->model = parent::update($attributes, $id);
 
         return $this->syncPermissions(array_get($attributes, 'permission'));
     }

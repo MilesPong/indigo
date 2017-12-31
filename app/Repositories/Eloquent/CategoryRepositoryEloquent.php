@@ -36,11 +36,11 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
      * @param array $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function createCategory(array $attributes)
+    public function create(array $attributes)
     {
         $attributes = $this->preHandleData($attributes);
 
-        return $this->create($attributes);
+        return parent::create($attributes);
     }
 
     /**
@@ -59,10 +59,10 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
      * @param $id
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
-    public function updateCategory(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
         $attributes = $this->preHandleData($attributes);
 
-        return $this->update($attributes, $id);
+        return parent::update($attributes, $id);
     }
 }

@@ -59,7 +59,7 @@ class UserController extends BackendController
      */
     public function store(StoreUpdateUserRequest $request)
     {
-        $user = $this->userRepository->createUser($request->all());
+        $user = $this->userRepository->create($request->all());
 
         return $this->successCreated($user);
     }
@@ -99,7 +99,7 @@ class UserController extends BackendController
      */
     public function update(StoreUpdateUserRequest $request, $id)
     {
-        $user = $this->userRepository->updateUser($request->all(), $id);
+        $user = $this->userRepository->update($request->all(), $id);
 
         return $this->successCreated($user);
     }

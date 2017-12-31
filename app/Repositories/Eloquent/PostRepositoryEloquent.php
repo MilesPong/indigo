@@ -94,7 +94,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      * @return Model
      * @throws RepositoryException
      */
-    public function createPost(array $attributes)
+    public function create(array $attributes)
     {
         $attributes = $this->preHandleData($attributes);
 
@@ -223,27 +223,16 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      * @return \Illuminate\Database\Eloquent\Collection|Model
      * @throws RepositoryException
      */
-    public function updatePost(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
         $attributes = $this->preHandleData($attributes);
 
         // TODO use transaction
-        $this->model = $this->update(array_except($attributes, 'slug'), $id);
+        $this->model = parent::update(array_except($attributes, 'slug'), $id);
 
         $this->model->content()->update($attributes);
 
         return $this->syncTags(data_get($attributes, 'tag', []));
-    }
-
-    /**
-     * Get a single post.
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function retrieve($id)
-    {
-        return $this->withRelationships()->find($id);
     }
 
     /**

@@ -81,7 +81,7 @@ interface Repository
     /**
      * Add sub-select queries to count the relations.
      *
-     * @param  mixed $relations
+     * @param mixed $relations
      * @return $this
      */
     public function withCount($relations);
@@ -94,7 +94,7 @@ interface Repository
 
     /**
      * @param $relation
-     * @param Closure|null $callback
+     * @param \Closure|null $callback
      * @return $this
      */
     public function whereHas($relation, Closure $callback = null);
@@ -145,7 +145,7 @@ interface Repository
     public function orderBy($column, $direction = 'asc');
 
     /**
-     * @param Closure $callback
+     * @param \Closure $callback
      * @return mixed
      */
     public function scopeQuery(Closure $callback);

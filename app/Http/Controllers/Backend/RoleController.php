@@ -59,7 +59,7 @@ class RoleController extends BackendController
      */
     public function store(StoreUpdateRoleRequest $request)
     {
-        $role = $this->roleRepository->createRole($request->all());
+        $role = $this->roleRepository->create($request->all());
 
         return $this->successCreated($role);
     }
@@ -99,7 +99,7 @@ class RoleController extends BackendController
      */
     public function update(StoreUpdateRoleRequest $request, $id)
     {
-        $role = $this->roleRepository->updateRole($request->all(), $id);
+        $role = $this->roleRepository->update($request->all(), $id);
 
         return $this->successCreated($role);
     }

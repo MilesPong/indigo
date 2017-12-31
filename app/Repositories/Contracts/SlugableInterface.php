@@ -3,10 +3,10 @@
 namespace App\Repositories\Contracts;
 
 /**
- * Interface SlugInterface
+ * Interface SlugableInterface
  * @package App\Repositories\Contracts
  */
-interface SlugInterface
+interface SlugableInterface
 {
     /**
      * @param $slug

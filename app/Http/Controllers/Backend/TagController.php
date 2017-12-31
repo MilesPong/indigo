@@ -48,7 +48,7 @@ class TagController extends BackendController
      */
     public function store(StoreUpdateTagRequest $request)
     {
-        $tag = $this->tagRepository->createTag($request->all());
+        $tag = $this->tagRepository->create($request->all());
 
         return $this->successCreated($tag);
     }
@@ -88,7 +88,7 @@ class TagController extends BackendController
      */
     public function update(StoreUpdateTagRequest $request, $id)
     {
-        $tag = $this->tagRepository->updateTag($request->all(), $id);
+        $tag = $this->tagRepository->update($request->all(), $id);
 
         return $this->successCreated($tag);
     }

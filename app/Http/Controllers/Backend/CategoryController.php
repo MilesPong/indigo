@@ -55,7 +55,7 @@ class CategoryController extends BackendController
      */
     public function store(StoreUpdateCategoryRequest $request)
     {
-        $category = $this->categoryRepository->createCategory($request->all());
+        $category = $this->categoryRepository->create($request->all());
 
         return $this->successCreated($category);
     }
@@ -95,7 +95,7 @@ class CategoryController extends BackendController
      */
     public function update(StoreUpdateCategoryRequest $request, $id)
     {
-        $category = $this->categoryRepository->updateCategory($request->all(), $id);
+        $category = $this->categoryRepository->update($request->all(), $id);
 
         return $this->successCreated($category);
     }

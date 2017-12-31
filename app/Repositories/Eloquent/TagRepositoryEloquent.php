@@ -36,11 +36,11 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
      * @param array $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function createTag(array $attributes)
+    public function create(array $attributes)
     {
         $attributes = $this->preHandleData($attributes);
 
-        return $this->create($attributes);
+        return parent::create($attributes);
     }
 
     /**
@@ -59,10 +59,10 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
      * @param $id
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
-    public function updateTag(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
         $attributes = $this->preHandleData($attributes);
 
-        return $this->update($attributes, $id);
+        return parent::update($attributes, $id);
     }
 }

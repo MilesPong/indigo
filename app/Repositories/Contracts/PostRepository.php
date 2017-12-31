@@ -11,41 +11,16 @@ use App\Repositories\Contracts\Repository as RepositoryInterface;
  * Interface PostRepository
  * @package App\Repositories\Contracts
  */
-interface PostRepository extends RepositoryInterface, SlugInterface
+interface PostRepository extends RepositoryInterface, SlugableInterface
 {
     /**
-     * @param array $attributes
-     * @return mixed
-     */
-    public function createPost(array $attributes);
-
-    /**
-     * @param array $attributes
-     * @param $id
-     * @return mixed
-     */
-    public function updatePost(array $attributes, $id);
-
-    // /**
-    //  * @param null $perPage
-    //  * @return mixed
-    //  */
-    // public function lists($perPage = null);
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function retrieve($id);
-
-    /**
-     * @param Post $model
+     * @param \App\Models\Post $model
      * @return mixed
      */
     public function previous(Post $model);
 
     /**
-     * @param Post $model
+     * @param \App\Models\Post $model
      * @return mixed
      */
     public function next(Post $model);
@@ -57,13 +32,13 @@ interface PostRepository extends RepositoryInterface, SlugInterface
     public function hot($limit = 5);
 
     /**
-     * @param Category $category
+     * @param \App\Models\Category $category
      * @return mixed
      */
     public function paginateOfCategory(Category $category);
 
     /**
-     * @param Tag $tag
+     * @param \App\Models\Tag $tag
      * @return mixed
      */
     public function paginateOfTag(Tag $tag);
