@@ -2,13 +2,14 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Repositories\Contracts\Helpers\ApiResourceInterface;
 use Closure;
 
 /**
  * Interface Repository
  * @package App\Repositories\Contracts
  */
-interface Repository
+interface Repository extends ApiResourceInterface
 {
     /**
      * @param array $columns
