@@ -2,30 +2,35 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\CategoryRepository;
 use App\Repositories\Contracts\PostRepository;
 
-class CategoryController extends Controller
+/**
+ * Class CategoryController
+ * @package App\Http\Controllers\Frontend
+ */
+class CategoryController extends FrontendController
 {
     /**
-     * @var CategoryRepository
+     * @var \App\Repositories\Contracts\CategoryRepository
      */
     protected $categoryRepository;
     /**
-     * @var PostRepository
+     * @var \App\Repositories\Contracts\PostRepository
      */
     protected $postRepository;
 
     /**
      * CategoryController constructor.
-     * @param CategoryRepository $categoryRepository
-     * @param PostRepository $postRepository
+     * @param \App\Repositories\Contracts\CategoryRepository $categoryRepository
+     * @param \App\Repositories\Contracts\PostRepository $postRepository
      */
     public function __construct(CategoryRepository $categoryRepository, PostRepository $postRepository)
     {
         $this->categoryRepository = $categoryRepository;
         $this->postRepository = $postRepository;
+
+        $this->disableApiResource($this->categoryRepository, $this->postRepository);
     }
 
     /**
