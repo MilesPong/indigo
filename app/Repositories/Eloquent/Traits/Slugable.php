@@ -71,9 +71,10 @@ trait Slugable
     /**
      * @param $slug
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function getBySlug($slug)
     {
-        return $this->firstBy('slug', $slug);
+        return $this->parseResult($this->firstBy('slug', $slug));
     }
 }

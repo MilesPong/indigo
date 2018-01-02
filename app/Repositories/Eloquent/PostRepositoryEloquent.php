@@ -246,9 +246,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function previous(Post $model)
     {
-        return $this->scopeQuery(function ($query) use ($model) {
+        return $this->parseResult($this->scopeQuery(function ($query) use ($model) {
             return $query->previous($model->id, ['title', 'slug']);
-        })->first();
+        })->first());
     }
 
     /**
@@ -258,9 +258,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function next(Post $model)
     {
-        return $this->scopeQuery(function ($query) use ($model) {
+        return $this->parseResult($this->scopeQuery(function ($query) use ($model) {
             return $query->next($model->id, ['title', 'slug']);
-        })->first();
+        })->first());
     }
 
     /**
@@ -271,9 +271,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     public function hot($limit = 5)
     {
         // TODO cache support
-        return $this->scopeQuery(function ($query) use ($limit) {
+        return $this->parseResult($this->scopeQuery(function ($query) use ($limit) {
             return $query->hot($limit, ['slug', 'title', 'view_count']);
-        })->all();
+        })->all());
     }
 
     /**
@@ -288,13 +288,16 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
+     * @param string $relation
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    protected function paginateOfPostRelated(Model $model)
+    protected function paginateOfPostRelated(Model $model, $relation = 'posts')
     {
-        if (method_exists($model, $relation = 'posts')) {
-            return $model->$relation()->with($this->relationships())->paginate($this->getDefaultPerPage());
+        if (method_exists($model, $relation)) {
+            $paginator = $model->$relation()->with($this->relationships())->paginate($this->getDefaultPerPage());
+
+            return $this->parseResult($paginator);
         }
 
         throw new RepositoryException("Current model " . get_class($model) . " doesn't have relationship of '{$relation}'.");

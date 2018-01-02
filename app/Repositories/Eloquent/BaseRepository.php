@@ -291,7 +291,7 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->applyScope();
 
-        $result = $this->model->where($field, '=', $value)->first($columns);
+        $result = $this->model->where($field, '=', $value)->firstOrFail($columns);
 
         // $this->resetModel();
         $this->resetScope();
