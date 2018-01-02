@@ -2,11 +2,14 @@
 
 namespace App\Repositories\Eloquent\Traits;
 
-use App\Repositories\Eloquent\BaseRepository;
 use App\Repositories\Exceptions\RepositoryException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
+/**
+ * Trait ApiResource
+ * @package App\Repositories\Eloquent\Traits
+ */
 trait ApiResource
 {
     /**
@@ -28,17 +31,9 @@ trait ApiResource
     }
 
     /**
-     * @return null
-     */
-    public function resource()
-    {
-        return null;
-    }
-
-    /**
      * @param $data
-     * @return mixed
-     * @throws RepositoryException
+     * @return \Illuminate\Support\Collection|mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     protected function parseResult($data)
     {
@@ -53,12 +48,19 @@ trait ApiResource
         }
 
         if ($data instanceof Collection || $data instanceof LengthAwarePaginator) {
-            return call_user_func_array([$resource, 'collection'], [$data]);
+            return forward_static_call_array([$resource, 'collection'], [$data]);
         } elseif (is_null($data)) {
             $data = collect([]);
         }
 
-        return call_user_func_array([$resource, 'make'], [$data]);
+        return forward_static_call_array([$resource, 'make'], [$data]);
     }
 
+    /**
+     * @return null
+     */
+    public function resource()
+    {
+        return null;
+    }
 }
