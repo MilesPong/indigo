@@ -75,6 +75,6 @@ trait Slugable
      */
     public function getBySlug($slug)
     {
-        return $this->parseResult($this->firstBy('slug', $slug));
+        return $this->firstBy('slug', $slug);
     }
 }
