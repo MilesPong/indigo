@@ -12,7 +12,6 @@ use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\FieldsHandler;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
-use App\Scopes\PublishedScope;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 
@@ -71,12 +70,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     public function boot()
     {
         parent::boot();
-
-        // TODO to be optimized
-        // Session middleware is called after ServiceProvider binding, so can't set method boot in constructor
-        if (isAdmin()) {
-            $this->model = $this->model->withoutGlobalScope(PublishedScope::class);
-        }
     }
 
     /**
