@@ -23,7 +23,6 @@ abstract class BaseRepository implements RepositoryInterface
     use HasCriteria, ApiResource {
         ApiResource::parseResult as apiResourceParser;
     }
-
     /**
      * @var \Illuminate\Container\Container
      */
@@ -79,7 +78,6 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function boot()
     {
-
     }
 
     /**
@@ -113,6 +111,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function all($columns = ['*'])
     {
+        $this->applyExtraQuery();
         $this->applyScope();
 
         if ($this->model instanceof Builder) {
@@ -128,6 +127,16 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
+     *
+     */
+    protected function applyExtraQuery()
+    {
+        if (method_exists($this, $method = 'applyCriteria')) {
+            call_user_func([$this, $method]);
+        }
+    }
+
+    /**
      * @return $this
      */
     protected function applyScope()
@@ -136,16 +145,6 @@ abstract class BaseRepository implements RepositoryInterface
             $callback = $this->scopeQuery;
             $this->model = $callback($this->model);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function resetScope()
-    {
-        $this->scopeQuery = null;
 
         return $this;
     }
@@ -165,6 +164,16 @@ abstract class BaseRepository implements RepositoryInterface
     // }
 
     /**
+     * @return $this
+     */
+    public function resetScope()
+    {
+        $this->scopeQuery = null;
+
+        return $this;
+    }
+
+    /**
      * @param $result
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
@@ -182,6 +191,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
+        $this->applyExtraQuery();
         $this->applyScope();
 
         $result = $this->model->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
@@ -200,7 +210,6 @@ abstract class BaseRepository implements RepositoryInterface
         return config('blog.repository.pagination.per_page');
     }
 
-
     /**
      * @param array $attributes
      * @return mixed
@@ -214,7 +223,6 @@ abstract class BaseRepository implements RepositoryInterface
 
         return $this->parseResult($model);
     }
-
 
     /**
      * @param array $attributes
@@ -238,7 +246,6 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->parseResult($model);
     }
 
-
     /**
      * @param $id
      * @return mixed
@@ -261,7 +268,6 @@ abstract class BaseRepository implements RepositoryInterface
         return $deleted;
     }
 
-
     /**
      * @param $id
      * @param array $columns
@@ -270,6 +276,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function find($id, $columns = ['*'])
     {
+        $this->applyExtraQuery();
         $this->applyScope();
 
         $result = $this->model->findOrFail($id, $columns);
@@ -280,7 +287,6 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->parseResult($result);
     }
 
-
     /**
      * @param $field
      * @param $value
@@ -290,6 +296,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function firstBy($field, $value, $columns = ['*'])
     {
+        $this->applyExtraQuery();
         $this->applyScope();
 
         $result = $this->model->where($field, '=', $value)->firstOrFail($columns);
@@ -300,7 +307,6 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->parseResult($result);
     }
 
-
     /**
      * @param $field
      * @param $value
@@ -310,6 +316,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function allBy($field, $value, $columns = ['*'])
     {
+        $this->applyExtraQuery();
         $this->applyScope();
 
         $result = $this->model->where($field, '=', $value)->get($columns);
@@ -320,7 +327,6 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->parseResult($result);
     }
 
-
     /**
      * @param array $where
      * @param array $columns
@@ -329,6 +335,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function getByWhere(array $where, $columns = ['*'])
     {
+        $this->applyExtraQuery();
         $this->applyScope();
 
         $this->applyConditions($where);
@@ -375,7 +382,6 @@ abstract class BaseRepository implements RepositoryInterface
         return $this;
     }
 
-
     /**
      * @param array $attributes
      * @return mixed
@@ -383,6 +389,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function firstOrCreate(array $attributes = [])
     {
+        $this->applyExtraQuery();
         $this->applyScope();
 
         $result = $this->model->firstOrCreate($attributes);
@@ -392,7 +399,6 @@ abstract class BaseRepository implements RepositoryInterface
 
         return $this->parseResult($result);
     }
-
 
     /**
      * @return \App\Repositories\Eloquent\BaseRepository|mixed
@@ -416,7 +422,6 @@ abstract class BaseRepository implements RepositoryInterface
 
         return $this;
     }
-
 
     /**
      * @param $id
@@ -519,7 +524,6 @@ abstract class BaseRepository implements RepositoryInterface
         return $this;
     }
 
-
     /**
      * @param array $columns
      * @return mixed
@@ -527,6 +531,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function first($columns = ['*'])
     {
+        $this->applyExtraQuery();
         $this->applyScope();
 
         $result = $this->model->firstOrFail($columns);
