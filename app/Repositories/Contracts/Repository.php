@@ -3,13 +3,14 @@
 namespace App\Repositories\Contracts;
 
 use App\Repositories\Contracts\Helpers\ApiResourceInterface;
+use App\Repositories\Contracts\Helpers\HasCriteriaInterface;
 use Closure;
 
 /**
  * Interface Repository
  * @package App\Repositories\Contracts
  */
-interface Repository extends ApiResourceInterface
+interface Repository extends ApiResourceInterface, HasCriteriaInterface
 {
     /**
      * @param array $columns

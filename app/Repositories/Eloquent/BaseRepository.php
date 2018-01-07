@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Repositories\Contracts\Repository as RepositoryInterface;
 use App\Repositories\Eloquent\Traits\ApiResource;
+use App\Repositories\Eloquent\Traits\HasCriteria;
 use App\Repositories\Events\RepositoryEntityCreated;
 use App\Repositories\Events\RepositoryEntityDeleted;
 use App\Repositories\Events\RepositoryEntityUpdated;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 abstract class BaseRepository implements RepositoryInterface
 {
-    use ApiResource {
+    use HasCriteria, ApiResource {
         ApiResource::parseResult as apiResourceParser;
     }
 
