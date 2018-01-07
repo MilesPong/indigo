@@ -19,9 +19,9 @@ class FrontendController extends Controller
     {
         $repositories = is_string($repositories) ? func_get_args() : $repositories;
 
-        foreach ($repositories as &$repository) {
+        foreach ($repositories as $repository) {
             if ($repository instanceof ApiResourceInterface) {
-                $repository = $repository->useResource(false);
+                $repository->useResource(false);
             }
         }
     }
