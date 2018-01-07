@@ -35,26 +35,25 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
      */
     public function create(array $attributes)
     {
-        $this->model = parent::create($attributes);
+        $model = $this->tempDisableApiResource(function () use ($attributes) {
+            return parent::create($attributes);
+        });
 
-        return $this->syncPermissions(array_get($attributes, 'permission'));
+        $this->syncPermissions($model, array_get($attributes, 'permission'));
+
+        return $this->parseResult($model);
     }
 
     /**
      * Sync role's permissions
      *
+     * @param $model
      * @param $permissionIds
      * @return mixed|null
      */
-    protected function syncPermissions($permissionIds)
+    protected function syncPermissions($model, $permissionIds)
     {
-        if (!$this->model->exists) {
-            return null;
-        }
-
-        $permission = call_user_func([$this->model, 'perms']);
-
-        return call_user_func_array([$permission, 'sync'], [$permissionIds]);
+        return $model->perms()->sync($permissionIds);
     }
 
     /**
@@ -65,8 +64,12 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
      */
     public function update(array $attributes, $id)
     {
-        $this->model = parent::update($attributes, $id);
+        $model = $this->tempDisableApiResource(function () use ($attributes, $id) {
+            return parent::update($attributes, $id);
+        });
 
-        return $this->syncPermissions(array_get($attributes, 'permission'));
+        $this->syncPermissions($model, array_get($attributes, 'permission'));
+
+        return $this->parseResult($model);
     }
 }

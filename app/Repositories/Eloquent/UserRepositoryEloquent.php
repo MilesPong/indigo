@@ -36,22 +36,23 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function create(array $attributes)
     {
-        $this->model = parent::create($attributes);
+        $model = $this->tempDisableApiResource(function () use ($attributes) {
+            return parent::create($attributes);
+        });
 
-        return $this->syncRoles(array_get($attributes, 'role'));
+        $this->syncRoles($model, array_get($attributes, 'role'));
+
+        return $this->parseResult($model);
     }
 
     /**
+     * @param $model
      * @param $roleIds
      * @return mixed|null
      */
-    protected function syncRoles($roleIds)
+    protected function syncRoles($model, $roleIds)
     {
-        if (!$this->model->exists) {
-            return null;
-        }
-
-        $roles = call_user_func([$this->model, 'roles']);
+        $roles = call_user_func([$model, 'roles']);
 
         return call_user_func_array([$roles, 'sync'], [$roleIds]);
     }
@@ -64,8 +65,12 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function update(array $attributes, $id)
     {
-        $this->model = parent::update($attributes, $id);
+        $model = $this->tempDisableApiResource(function () use ($attributes, $id) {
+            return parent::update($attributes, $id);
+        });
 
-        return $this->syncRoles(array_get($attributes, 'role'));
+        $this->syncRoles($model, array_get($attributes, 'role'));
+
+        return $this->parseResult($model);
     }
 }

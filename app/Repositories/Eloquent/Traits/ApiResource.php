@@ -63,4 +63,21 @@ trait ApiResource
     {
         return null;
     }
+
+    /**
+     * @param \Closure $callback
+     * @return mixed
+     */
+    protected function tempDisableApiResource($callback)
+    {
+        $tempUseResource = $this->useResource;
+
+        $this->useResource(false);
+
+        $return = $callback();
+
+        $this->useResource($tempUseResource);
+
+        return $return;
+    }
 }
