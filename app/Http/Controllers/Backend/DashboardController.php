@@ -15,10 +15,12 @@ class DashboardController extends BackendController
     }
 
     /**
+     * TODO temp location
+     *
      * @param Request $request
-     * @return \Illuminate\Foundation\Application|\JellyBool\Translug\Translation|mixed|string|\translug
+     * @return string
      */
-    public function autoSlug(Request $request)
+    public function createSlug(Request $request)
     {
         $this->validate($request, [
             'text' => 'required',

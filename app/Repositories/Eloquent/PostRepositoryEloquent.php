@@ -105,7 +105,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     protected function preHandleData(array $attributes)
     {
-        $attributes = $this->autoSlug($attributes, 'title');
+        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['title']);
 
         foreach ($attributes as $field => $value) {
             if (method_exists($this, $method = 'handle' . ucfirst(camel_case($field)))) {

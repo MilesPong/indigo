@@ -53,11 +53,10 @@ if (!function_exists('hasChinese')) {
 }
 
 if (!function_exists('str_slug_with_cn')) {
-
     /**
      * @param $text
      * @param bool $forceTrans
-     * @return \Illuminate\Foundation\Application|\JellyBool\Translug\Translation|mixed|string|translug
+     * @return \JellyBool\Translug\Translation|mixed|string
      */
     function str_slug_with_cn($text, $forceTrans = false)
     {

@@ -27,7 +27,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::post('posts/{id}/force-delete', 'PostController@forceDelete')->name('posts.force-delete');
     Route::resource('posts', 'PostController');
 
-    Route::post('auto-slug', 'DashboardController@autoSlug')->name('auto-slug');
+    Route::post('helpers/slugs', 'DashboardController@createSlug')->name('slugs.create');
 
     Route::resource('settings', 'SettingController', ['except' => ['show']]);
 });
