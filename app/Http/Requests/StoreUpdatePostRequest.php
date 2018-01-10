@@ -30,7 +30,6 @@ class StoreUpdatePostRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'slug' => 'unique:posts',
             'body' => 'required',
-            'excerpt' => 'required',
             'feature_img' => 'required|url',
         ];
 

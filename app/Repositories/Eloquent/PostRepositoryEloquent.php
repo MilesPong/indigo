@@ -113,10 +113,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
             }
         }
 
-        // TODO remove excerpt
-
-        // TODO excerpt should be html purifier
-
         return $attributes;
     }
 

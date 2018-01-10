@@ -80,7 +80,6 @@ $factory->define(\App\Models\Post::class, function (\Faker\Generator $faker) {
         'category_id' => \App\Models\Category::pluck('id')->random(),
         'description' => $faker->sentence(10),
         'slug' => str_slug($title),
-        'excerpt' => $faker->sentences(3, true),
         'feature_img' => random_img_url(),
         'content_id' => function () {
             return factory(\App\Models\Content::class)->create()->id;

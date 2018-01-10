@@ -49,7 +49,6 @@ class Post extends Model implements Markdownable
         'content_id',
         'published_at',
         'is_draft',
-        'excerpt',
         'feature_img'
     ];
 
