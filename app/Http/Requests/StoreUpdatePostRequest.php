@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUpdatePostRequest extends FormRequest
 {
@@ -38,7 +39,9 @@ class StoreUpdatePostRequest extends FormRequest
             case "PUT":
             case "PATCH":
                 $rules = array_merge($rules, [
-                    'slug' => 'unique:posts,slug,' . $this->route('post')
+                    'slug' => [
+                        Rule::unique('posts')->ignore($this->route('post'))
+                    ]
                 ]);
                 break;
             case "POST":
@@ -49,6 +52,7 @@ class StoreUpdatePostRequest extends FormRequest
     }
 
     /**
+     * TODO to figure out rules of empty input
      * Prepare the data for validation.
      *
      * @return void
