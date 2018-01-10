@@ -19,7 +19,7 @@ trait ApiResponse
      * @param $data
      * @return \Illuminate\Http\JsonResponse
      */
-    public function successCreated($data)
+    protected function successCreated($data)
     {
         return $this->setStatusCode(IlluminateResponse::HTTP_CREATED)->respondWith($data);
     }
@@ -29,7 +29,7 @@ trait ApiResponse
      * @param array $headers
      * @return \Illuminate\Http\JsonResponse
      */
-    public function respondWith($array = [], $headers = [])
+    protected function respondWith($array = [], $headers = [])
     {
         return response()->json($array, $this->statusCode, $headers);
     }
@@ -38,7 +38,7 @@ trait ApiResponse
      * @param $status
      * @return $this
      */
-    public function setStatusCode($status)
+    protected function setStatusCode($status)
     {
         $this->statusCode = $status;
 
@@ -48,7 +48,7 @@ trait ApiResponse
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function successDeleted()
+    protected function successDeleted()
     {
         return $this->successNoContent();
     }
@@ -56,7 +56,7 @@ trait ApiResponse
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function successNoContent()
+    protected function successNoContent()
     {
         return $this->setStatusCode(IlluminateResponse::HTTP_NO_CONTENT)->respondWith();
     }
