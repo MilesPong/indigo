@@ -15,23 +15,23 @@ use Illuminate\Http\Request;
 class PostController extends BackendController
 {
     /**
-     * @var PostRepository
+     * @var \App\Repositories\Contracts\PostRepository
      */
     protected $postRepository;
     /**
-     * @var CategoryRepository
+     * @var \App\Repositories\Contracts\CategoryRepository
      */
     protected $categoryRepository;
     /**
-     * @var TagRepository
+     * @var \App\Repositories\Contracts\TagRepository
      */
     protected $tagRepository;
 
     /**
      * PostController constructor.
-     * @param PostRepository $postRepository
-     * @param CategoryRepository $categoryRepository
-     * @param TagRepository $tagRepository
+     * @param \App\Repositories\Contracts\PostRepository $postRepository
+     * @param \App\Repositories\Contracts\CategoryRepository $categoryRepository
+     * @param \App\Repositories\Contracts\TagRepository $tagRepository
      */
     public function __construct(
         PostRepository $postRepository,
@@ -45,13 +45,13 @@ class PostController extends BackendController
 
     /**
      * Display a listing of the resource.
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         if ($request->has('trash')) {
-            $this->postRepository = $this->postRepository->onlyTrashed();
+            $this->postRepository->onlyTrashed();
         }
 
         $posts = $this->postRepository->with(['category', 'author'])->paginate();
@@ -66,21 +66,18 @@ class PostController extends BackendController
      */
     public function create()
     {
-        $categories = $this->categoryRepository->all();
-        $tags = $this->tagRepository->all();
-
-        return view('admin.posts.create', compact('categories', 'tags'));
+        return view('admin.posts.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StoreUpdatePostRequest $request
+     * @param \App\Http\Requests\StoreUpdatePostRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $post = $this->postRepository->create($request->except('_token'));
+        $post = $this->postRepository->create($request->all());
 
         return $this->successCreated($post);
     }
@@ -108,16 +105,13 @@ class PostController extends BackendController
     {
         $post = $this->postRepository->with('tags')->find($id);
 
-        $categories = $this->categoryRepository->all();
-        $tags = $this->tagRepository->all();
-
-        return view('admin.posts.edit', compact('post', 'categories', 'tags', 'selected_tags'));
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  StoreUpdatePostRequest $request
+     * @param \App\Http\Requests\StoreUpdatePostRequest $request
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
      */

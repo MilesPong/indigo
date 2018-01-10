@@ -14,6 +14,8 @@ use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class PostRepositoryEloquent
@@ -21,24 +23,21 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PostRepositoryEloquent extends BaseRepository implements PostRepository
 {
-    use Slugable;
-    use FieldsHandler;
-
+    use Slugable, FieldsHandler;
     /**
-     * @var TagRepository
+     * @var \App\Repositories\Contracts\TagRepository
      */
     protected $tagRepository;
-
     /**
-     * @var mixed
+     * @var \Illuminate\Database\Eloquent\Model
      */
     protected $contentModel;
 
     /**
      * PostRepositoryEloquent constructor.
-     * @param Container $app
-     * @param TagRepository $tagRepository
-     * @throws RepositoryException
+     * @param \Illuminate\Container\Container $app
+     * @param \App\Repositories\Contracts\TagRepository $tagRepository
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function __construct(Container $app, TagRepository $tagRepository)
     {
@@ -65,14 +64,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     *
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
-
-    /**
      * @return string
      */
     public function model()
@@ -81,22 +72,30 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     * TODO return post instance
-     *
      * @param array $attributes
-     * @return Model
-     * @throws RepositoryException
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function create(array $attributes)
     {
         $attributes = $this->preHandleData($attributes);
 
-        // TODO use transaction
-        $this->model = request()->user()->posts()->create(array_merge($attributes, [
-            'content_id' => $this->contentModel->create($attributes)->id,
-        ]));
+        // Reference: Illuminate\Database\Eloquent\Relations\HasOneOrMany@create to allow "mass assign" attributes.
+        $model = DB::transaction(function () use ($attributes) {
+            return tap($this->getModelNewInstance($attributes), function (Model $instance) use ($attributes) {
+                // TODO how to decouple 'field_name' and logic?
+                $instance->setAttribute('content_id', $this->contentModel->create($attributes)->getKey());
+                $instance->setAttribute('user_id', Auth::id());
 
-        return $this->syncTags(data_get($attributes, 'tag', []));
+                $instance->save();
+
+                $this->syncTags($instance, array_get($attributes, 'tag', []));
+            });
+        });
+
+        return $this->parseResult($model);
     }
 
     /**
@@ -107,13 +106,16 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     {
         $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['title']);
 
-        foreach ($attributes as $field => $value) {
-            if (method_exists($this, $method = 'handle' . ucfirst(camel_case($field)))) {
-                array_set($attributes, $field, call_user_func_array([$this, $method], [$value]));
+        foreach ($attributes as $field => &$value) {
+            if (method_exists($this, $method = 'handle' . studly_case($field))) {
+                // Note that the parameters for call_user_func() are not passed by reference.
+                $value = call_user_func([$this, $method], $value);
             }
         }
 
-        $attributes = $this->handleImg($attributes);
+        // TODO image ajax upload and remove feature_img_file in FormRequest
+
+        // TODO remove excerpt
 
         // TODO excerpt should be html purifier
 
@@ -121,21 +123,13 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
+     * @param \App\Models\Post|\Illuminate\Database\Eloquent\Model $model
      * @param array $tags
      * @return mixed
-     * @throws RepositoryException
      */
-    protected function syncTags(array $tags)
+    protected function syncTags($model, array $tags = [])
     {
-        if (!$this->model->exists) {
-            throw new RepositoryException('Model is not exist');
-        }
-
         $ids = [];
-
-        if (empty($tags)) {
-            return $this->model->tags()->sync($ids);
-        }
 
         foreach ($tags as $tagName) {
             $tag = $this->tagRepository->firstOrCreate([
@@ -145,7 +139,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
             array_push($ids, $tag->id);
         }
 
-        return $this->model->tags()->sync($ids);
+        return $model->tags()->sync($ids);
     }
 
     /**
@@ -156,25 +150,15 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
-        $this->withRelationships();
-
         return parent::paginate($perPage ?: $this->getDefaultPerPage(), $columns);
     }
 
     /**
-     * @return $this
+     * @return int
      */
-    protected function withRelationships()
+    public function getDefaultPerPage()
     {
-        return $this->with($this->relationships());
-    }
-
-    /**
-     * @return array
-     */
-    protected function relationships()
-    {
-        return ['author', 'category', 'tags'];
+        return config('blog.posts.per_page');
     }
 
     // /**
@@ -202,31 +186,29 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     // }
 
     /**
-     * @return int
-     */
-    public function getDefaultPerPage()
-    {
-        return config('blog.posts.per_page');
-    }
-
-    /**
-     * TODO return post instance
-     *
      * @param array $attributes
      * @param $id
-     * @return \Illuminate\Database\Eloquent\Collection|Model
-     * @throws RepositoryException
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function update(array $attributes, $id)
     {
         $attributes = $this->preHandleData($attributes);
 
-        // TODO use transaction
-        $this->model = parent::update(array_except($attributes, 'slug'), $id);
+        // Oops...
+        $model = DB::transaction(function () use ($attributes, $id) {
+            return tap($this->tempDisableApiResource(function () use ($attributes, $id) {
+                return parent::update($attributes, $id);
+            }), function (Post $instance) use ($attributes) {
+                $instance->content()->update($attributes);
 
-        $this->model->content()->update($attributes);
+                $this->syncTags($instance, array_get($attributes, 'tag', []));
+            });
+        });
 
-        return $this->syncTags(data_get($attributes, 'tag', []));
+        return $this->parseResult($model);
     }
 
     /**
@@ -236,7 +218,15 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function getBySlug($slug)
     {
-        return $this->withRelationships()->firstBy('slug', $slug);
+        return $this->with($this->relationships())->firstBy('slug', $slug);
+    }
+
+    /**
+     * @return array
+     */
+    protected function relationships()
+    {
+        return ['author', 'category', 'tags'];
     }
 
     /**
