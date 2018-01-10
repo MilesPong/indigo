@@ -27,9 +27,13 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::post('posts/{id}/force-delete', 'PostController@forceDelete')->name('posts.force-delete');
     Route::resource('posts', 'PostController');
 
-    Route::post('helpers/slugs', 'DashboardController@createSlug')->name('slugs.create');
-
     Route::resource('settings', 'SettingController', ['except' => ['show']]);
+
+    // Helpers
+    Route::group(['prefix' => 'helpers', 'namespace' => 'Helpers', 'as' => 'helpers.'], function () {
+        Route::post('slug', 'SlugController@translate')->name('slug.translate');
+        Route::post('image', 'UploadController@uploadImage')->name('upload.image');
+    });
 });
 
 Route::group(['namespace' => 'Frontend'], function () {

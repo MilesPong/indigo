@@ -13,19 +13,4 @@ class DashboardController extends BackendController
     {
         return view('admin.home');
     }
-
-    /**
-     * TODO temp location
-     *
-     * @param Request $request
-     * @return string
-     */
-    public function createSlug(Request $request)
-    {
-        $this->validate($request, [
-            'text' => 'required',
-        ]);
-
-        return str_slug_with_cn($request->input('text'));
-    }
 }
