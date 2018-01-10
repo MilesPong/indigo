@@ -541,4 +541,13 @@ abstract class BaseRepository implements RepositoryInterface
 
         return $this->parseResult($result);
     }
+
+    /**
+     * @param array $attributes
+     * @return \Illuminate\Database\Eloquent\Model|static
+     */
+    protected function getModelNewInstance($attributes = [])
+    {
+        return $this->model instanceof Model ? $this->model->newInstance($attributes) : $this->model->newModelInstance($attributes);
+    }
 }
