@@ -31,8 +31,7 @@ class StoreUpdatePostRequest extends FormRequest
             'slug' => 'unique:posts',
             'body' => 'required',
             'excerpt' => 'required',
-            'feature_img' => 'required_without:feature_img_file|url',
-            'feature_img_file' => 'required_without:feature_img|image|max:2048'
+            'feature_img' => 'required|url',
         ];
 
         switch ($this->method()) {
@@ -59,12 +58,6 @@ class StoreUpdatePostRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $fields = ['feature_img', 'feature_img_file'];
 
-        foreach ($fields as $field) {
-            if (!$this->has($field)) {
-                $this->replace($this->except($field));
-            }
-        }
     }
 }
