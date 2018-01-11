@@ -279,7 +279,10 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     protected function paginateOfPostRelated(Model $model, $relation = 'posts')
     {
         if (method_exists($model, $relation)) {
-            $paginator = $model->$relation()->with($this->relationships())->paginate($this->getDefaultPerPage());
+            $paginator = $model->$relation()
+                ->with($this->relationships())
+                ->latestPublished()
+                ->paginate($this->getDefaultPerPage());
 
             return $this->parseResult($paginator);
         }
@@ -295,5 +298,14 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     public function paginateOfTag(Tag $tag)
     {
         return $this->paginateOfPostRelated($tag);
+    }
+
+    /**
+     * @param string $column
+     * @return $this
+     */
+    public function latestPublished($column = 'published_at')
+    {
+        return $this->orderBy($column, 'desc');
     }
 }

@@ -43,4 +43,10 @@ interface PostRepository extends RepositoryInterface, SlugableInterface
      * @return mixed
      */
     public function paginateOfTag(Tag $tag);
+
+    /**
+     * @param string $column
+     * @return $this
+     */
+    public function latestPublished($column = 'published_at');
 }

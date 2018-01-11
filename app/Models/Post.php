@@ -147,6 +147,15 @@ class Post extends Model implements Markdownable
     }
 
     /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeLatestPublished($query)
+    {
+        return $query->orderBy('published_at', 'desc');
+    }
+
+    /**
      * @return mixed
      */
     public function getMarkdownContent()
