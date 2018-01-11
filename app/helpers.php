@@ -103,7 +103,7 @@ if (!function_exists('random_img_url')) {
      */
     function random_img_url($width = 640, $height = 480)
     {
-        return "https://temp.im/{$width}x{$height}/" . strtoupper(dechex(rand(0x000000, 0xFFFFFF)));
+        return "https://dn-placeholder.qbox.me/{$width}x{$height}/" . strtoupper(dechex(rand(0x000000, 0xFFFFFF)));
     }
 }
 
