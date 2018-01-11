@@ -212,7 +212,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function getBySlug($slug)
     {
-        return $this->with($this->relationships())->firstBy('slug', $slug);
+        return $this->with($this->relationships())->findBy('slug', $slug);
     }
 
     /**
@@ -257,7 +257,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
         // TODO cache support
         return $this->parseResult($this->scopeQuery(function ($query) use ($limit) {
             return $query->hot($limit, ['slug', 'title', 'view_count']);
-        })->all());
+        })->findAll());
     }
 
     /**

@@ -16,7 +16,7 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
      * @param array $columns
      * @return mixed
      */
-    public function all($columns = ['*']);
+    public function findAll($columns = ['*']);
 
     /**
      * @param int $perPage
@@ -57,22 +57,7 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
      * @param array $columns
      * @return mixed
      */
-    public function firstBy($field, $value, $columns = ['*']);
-
-    /**
-     * @param $field
-     * @param $value
-     * @param array $columns
-     * @return mixed
-     */
-    public function allBy($field, $value, $columns = ['*']);
-
-    /**
-     * @param array $where
-     * @param array $columns
-     * @return mixed
-     */
-    public function getByWhere(array $where, $columns = ['*']);
+    public function findBy($field, $value, $columns = ['*']);
 
     /**
      * @param $relations
@@ -162,4 +147,27 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
      * @return mixed
      */
     public function first($columns = ['*']);
+
+    /**
+     * @param $limit
+     * @return $this
+     */
+    public function limit($limit);
+
+    /**
+     * @param $offset
+     * @return $this
+     */
+    public function offset($offset);
+
+    /**
+     * Add a basic where clause to the query.
+     *
+     * @param  string|array|\Closure $column
+     * @param  string $operator
+     * @param  mixed $value
+     * @param  string $boolean
+     * @return $this
+     */
+    public function where($column, $operator = null, $value = null, $boolean = 'and');
 }

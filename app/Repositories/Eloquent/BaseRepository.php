@@ -109,7 +109,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function all($columns = ['*'])
+    public function findAll($columns = ['*'])
     {
         $this->applyExtraQuery();
         $this->applyScope();
@@ -294,53 +294,12 @@ abstract class BaseRepository implements RepositoryInterface
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function firstBy($field, $value, $columns = ['*'])
+    public function findBy($field, $value, $columns = ['*'])
     {
         $this->applyExtraQuery();
         $this->applyScope();
 
         $result = $this->model->where($field, '=', $value)->firstOrFail($columns);
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $this->parseResult($result);
-    }
-
-    /**
-     * @param $field
-     * @param $value
-     * @param array $columns
-     * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
-     */
-    public function allBy($field, $value, $columns = ['*'])
-    {
-        $this->applyExtraQuery();
-        $this->applyScope();
-
-        $result = $this->model->where($field, '=', $value)->get($columns);
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $this->parseResult($result);
-    }
-
-    /**
-     * @param array $where
-     * @param array $columns
-     * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
-     */
-    public function getByWhere(array $where, $columns = ['*'])
-    {
-        $this->applyExtraQuery();
-        $this->applyScope();
-
-        $this->applyConditions($where);
-
-        $result = $this->model->get($columns);
 
         // $this->resetModel();
         $this->resetScope();
