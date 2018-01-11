@@ -534,7 +534,7 @@ abstract class BaseRepository implements RepositoryInterface
         $this->applyExtraQuery();
         $this->applyScope();
 
-        $result = $this->model->firstOrFail($columns);
+        $result = $this->model->first($columns);
 
         // $this->resetModel();
         $this->resetScope();
