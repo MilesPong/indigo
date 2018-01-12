@@ -84,7 +84,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         // Reference: Illuminate\Database\Eloquent\Relations\HasOneOrMany@create to allow "mass assign" attributes.
         $model = DB::transaction(function () use ($attributes) {
-            return tap($this->getModelNewInstance($attributes), function (Model $instance) use ($attributes) {
+            return tap($this->getNewModelInstance($attributes), function (Model $instance) use ($attributes) {
                 // TODO how to decouple 'field_name' and logic?
                 $instance->setAttribute('content_id', $this->contentModel->create($attributes)->getKey());
                 $instance->setAttribute('user_id', Auth::id());

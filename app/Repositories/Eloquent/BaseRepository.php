@@ -11,6 +11,7 @@ use App\Repositories\Events\RepositoryEntityUpdated;
 use App\Repositories\Exceptions\RepositoryException;
 use Closure;
 use Illuminate\Container\Container;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -32,33 +33,9 @@ abstract class BaseRepository implements RepositoryInterface
      */
     protected $model;
     /**
-     * @var array
-     */
-    protected $with = [];
-    /**
-     * @var array
-     */
-    protected $withCount = [];
-    /**
      * @var \Closure
      */
     protected $scopeQuery;
-    /**
-     * @var array
-     */
-    protected $where = [];
-    /**
-     * @var
-     */
-    protected $limit;
-    /**
-     * @var
-     */
-    protected $offset;
-    /**
-     * @var array
-     */
-    protected $orderBy = [];
 
     /**
      * BaseRepository constructor.
@@ -141,8 +118,6 @@ abstract class BaseRepository implements RepositoryInterface
      */
     protected function runQuery($callback)
     {
-        $this->prepareQuery();
-
         if (method_exists($this, $method = 'applyCriteria')) {
             call_user_func([$this, $method]);
         }
@@ -159,40 +134,10 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * @return $this
      */
-    protected function prepareQuery()
-    {
-        if (!empty($this->with)) {
-            $this->model->with($this->with);
-        }
-
-        $this->model->withCount($this->withCount);
-
-        foreach ($this->where as $where) {
-            $this->model->where(...$where);
-        }
-
-        foreach ($this->orderBy as $orderBy) {
-            $this->model->orderBy(...$orderBy);
-        }
-
-        if ($this->offset > 0) {
-            $this->model->offset($this->offset);
-        }
-
-        if ($this->limit > 0) {
-            $this->model->limit($this->limit);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
     protected function applyScope()
     {
         if (isset($this->scopeQuery) && is_callable($this->scopeQuery)) {
-            call_user_func($this->scopeQuery, $this->model);
+            $this->model = call_user_func($this->scopeQuery, $this->model);
         }
 
         return $this;
@@ -204,12 +149,6 @@ abstract class BaseRepository implements RepositoryInterface
      */
     protected function resetRepository()
     {
-        $this->with = [];
-        $this->where = [];
-        $this->orderBy = [];
-        $this->offset = null;
-        $this->limit = null;
-
         $this->resetScope();
 
         $this->makeModel();
@@ -220,7 +159,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * @return $this
      */
-    public function resetScope()
+    protected function resetScope()
     {
         $this->scopeQuery = null;
 
@@ -268,6 +207,8 @@ abstract class BaseRepository implements RepositoryInterface
         $model = $this->model->create($attributes);
 
         event(new RepositoryEntityCreated($this, $model));
+
+        $this->resetRepository();
 
         return $this->parseResult($model);
     }
@@ -348,7 +289,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function with($relations)
     {
-        $this->with = $relations;
+        $this->model = $this->model->with($relations);
 
         return $this;
     }
@@ -359,7 +300,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function withCount($relations)
     {
-        $this->withCount = $relations;
+        $this->model = $this->model->withCount($relations);
 
         return $this;
     }
@@ -377,20 +318,15 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * @return \App\Repositories\Eloquent\BaseRepository|mixed
+     * @return $this|mixed
      */
     public function onlyTrashed()
     {
-        return $this->trashed(true);
-    }
-
-    /**
-     * @param bool $only
-     * @return $this
-     */
-    protected function trashed($only = false)
-    {
-        $only ? $this->model->onlyTrashed() : $this->model->withTrashed();
+        // As noted [elsewhere] method_exists() does not care about
+        // the existence of __call(), whereas is_callable() does.
+        if (is_callable($this->model, $method = 'onlyTrashed')) {
+            $this->model = call_user_func([$this->model, $method]);
+        }
 
         return $this;
     }
@@ -402,19 +338,31 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function restore($id)
     {
-        $this->withTrashed();
+        return $this->withTrashed()
+            ->useResource(false)
+            ->runQuery(function () use ($id) {
+                $model = $this->model->findOrFail($id);
 
-        return $this->runQuery(function () use ($id) {
-            return $this->model->findOrFail($id)->restore();
-        });
+                if (is_callable($model, $method = 'restore')) {
+                    $result = call_user_func([$model, $method]);
+                }
+
+                return $result ?? false;
+            });
     }
 
     /**
-     * @return \App\Repositories\Eloquent\BaseRepository|mixed
+     * @return $this|mixed
      */
     public function withTrashed()
     {
-        return $this->trashed();
+        // As noted [elsewhere] method_exists() does not care about
+        // the existence of __call(), whereas is_callable() does.
+        if (is_callable($this->model, $method = 'withTrashed')) {
+            $this->model = call_user_func([$this->model, $method]);
+        }
+
+        return $this;
     }
 
     /**
@@ -432,25 +380,13 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * @param $method
-     * @param $parameters
-     * @return $this
-     */
-    public function __call($method, $parameters)
-    {
-        $this->model->{$method}(...$parameters);
-
-        return $this;
-    }
-
-    /**
      * @param $column
      * @param string $direction
      * @return $this
      */
     public function orderBy($column, $direction = 'asc')
     {
-        array_push($this->orderBy, [$column, $direction]);
+        $this->model = $this->model->orderBy($column, $direction);
 
         return $this;
     }
@@ -484,7 +420,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function limit($limit)
     {
-        $this->limit = $limit;
+        $this->model = $this->model->limit($limit);
 
         return $this;
     }
@@ -495,30 +431,24 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function offset($offset)
     {
-        $this->offset = $offset;
+        $this->model = $this->model->offset($offset);
 
         return $this;
     }
 
     /**
-     * @param array|\Closure|string $column
-     * @param null $operator
-     * @param null $value
-     * @param string $boolean
-     * @return $this
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
      */
-    public function where($column, $operator = null, $value = null, $boolean = 'and')
+    public function getModelInstance()
     {
-        array_push($this->where, func_get_args());
-
-        return $this;
+        return $this->model instanceof Builder ? $this->model->getModel() : $this->model;
     }
 
     /**
      * @param array $attributes
      * @return \Illuminate\Database\Eloquent\Model|static
      */
-    protected function getModelNewInstance($attributes = [])
+    protected function getNewModelInstance($attributes = [])
     {
         return $this->model instanceof Model ? $this->model->newInstance($attributes) : $this->model->newModelInstance($attributes);
     }

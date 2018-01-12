@@ -120,11 +120,6 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
     public function scopeQuery(Closure $callback);
 
     /**
-     * @return mixed
-     */
-    public function resetScope();
-
-    /**
      * @param array $columns
      * @return mixed
      */
@@ -141,15 +136,4 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
      * @return $this
      */
     public function offset($offset);
-
-    /**
-     * Add a basic where clause to the query.
-     *
-     * @param  string|array|\Closure $column
-     * @param  string $operator
-     * @param  mixed $value
-     * @param  string $boolean
-     * @return $this
-     */
-    public function where($column, $operator = null, $value = null, $boolean = 'and');
 }
