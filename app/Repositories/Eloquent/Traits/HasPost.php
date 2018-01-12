@@ -16,6 +16,6 @@ trait HasPost
     {
         return $this->whereHas('posts')
             ->withCount('posts')
-            ->all($columns);
+            ->findAll($columns);
     }
 }

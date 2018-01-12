@@ -74,19 +74,6 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
     public function withCount($relations);
 
     /**
-     * @param $relation
-     * @return $this
-     */
-    public function has($relation);
-
-    /**
-     * @param $relation
-     * @param \Closure|null $callback
-     * @return $this
-     */
-    public function whereHas($relation, Closure $callback = null);
-
-    /**
      * @param array $attributes
      * @return mixed
      */
@@ -118,11 +105,6 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
      * @return mixed
      */
     public function getModel();
-
-    /**
-     * @return mixed
-     */
-    public function getModelTable();
 
     /**
      * @param $column
