@@ -14,7 +14,9 @@ trait HasPost
      */
     public function getResultsHavePosts($columns = ['*'])
     {
-        return $this->whereHas('posts')
+        return $this->scopeQuery(function ($query) {
+            return $query->whereHas('posts');
+        })
             ->withCount('posts')
             ->findAll($columns);
     }
