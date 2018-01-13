@@ -54,10 +54,7 @@ class PostController extends BackendController
             $this->postRepository->onlyTrashed();
         }
 
-        $posts = $this->postRepository
-            ->with(['category', 'author'])
-            ->orderBy('id', 'desc')
-            ->paginate();
+        $posts = $this->postRepository->backendPaginate();
 
         return view('admin.posts.index', compact('posts'));
     }

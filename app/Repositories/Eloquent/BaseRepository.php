@@ -28,13 +28,9 @@ abstract class BaseRepository implements RepositoryInterface
      */
     protected $app;
     /**
-     * @var \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @var \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder
      */
     protected $model;
-    /**
-     * @var array
-     */
-    protected $relations = [];
     /**
      * @var \Closure
      */
@@ -54,7 +50,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Model|mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function makeModel()
@@ -85,23 +81,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function getModel()
     {
-        if ($this->model instanceof Builder) {
-            return $this->model->getModel();
-        }
-
         return $this->model;
-    }
-
-    /**
-     * @return string
-     */
-    public function getModelTable()
-    {
-        if ($this->model instanceof Builder) {
-            return $this->model->getModel()->getTable();
-        } else {
-            return $this->model->getTable();
-        }
     }
 
     /**
@@ -109,64 +89,77 @@ abstract class BaseRepository implements RepositoryInterface
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function all($columns = ['*'])
+    public function findAll($columns = ['*'])
     {
-        $this->applyExtraQuery();
-        $this->applyScope();
+        return $this->runQuery(function () use ($columns) {
+            return $this->model->get($columns);
+        });
+    }
 
-        if ($this->model instanceof Builder) {
-            $result = $this->model->get($columns);
-        } else {
-            $result = $this->model->all($columns);
-        }
+    /**
+     * @param $callback
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    private function runQuery($callback)
+    {
+        $this->prepareQuery();
 
-        // $this->resetModel();
-        $this->resetScope();
+        $result = $callback();
+
+        $this->resetRepository();
 
         return $this->parseResult($result);
     }
 
     /**
-     *
+     * @return $this
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    protected function applyExtraQuery()
+    protected function prepareQuery()
     {
-        if (method_exists($this, $method = 'applyCriteria')) {
-            call_user_func([$this, $method]);
-        }
+        $this->applyCriteria();
+
+        $this->applyScope();
+
+        return $this;
     }
 
     /**
      * @return $this
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     protected function applyScope()
     {
-        if (isset($this->scopeQuery) && is_callable($this->scopeQuery)) {
-            $callback = $this->scopeQuery;
-            $this->model = $callback($this->model);
+        if (isset($this->scopeQuery)) {
+            if (!is_callable($this->scopeQuery)) {
+                throw new RepositoryException('Scope query is not callable.');
+            }
+            $this->model = call_user_func($this->scopeQuery, $this->model);
         }
 
         return $this;
     }
 
-    // /**
-    //  * Reset the model after query
-    //  */
-    // protected function resetModel()
-    // {
-    //     try {
-    //         $this->makeModel();
-    //     } catch (RepositoryException $exception) {
-    //         return false;
-    //     }
-    //
-    //     return true;
-    // }
+    /**
+     * @return $this
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    protected function resetRepository()
+    {
+        $this->resetScope();
+
+        $this->resetCriteria();
+
+        $this->makeModel();
+
+        return $this;
+    }
 
     /**
      * @return $this
      */
-    public function resetScope()
+    protected function resetScope()
     {
         $this->scopeQuery = null;
 
@@ -191,15 +184,9 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
-        $this->applyExtraQuery();
-        $this->applyScope();
-
-        $result = $this->model->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $this->parseResult($result);
+        return $this->runQuery(function () use ($perPage, $columns) {
+            return $this->model->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+        });
     }
 
     /**
@@ -221,6 +208,8 @@ abstract class BaseRepository implements RepositoryInterface
 
         event(new RepositoryEntityCreated($this, $model));
 
+        $this->resetRepository();
+
         return $this->parseResult($model);
     }
 
@@ -232,18 +221,16 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function update(array $attributes, $id)
     {
-        $this->applyScope();
+        return $this->runQuery(function () use ($attributes, $id) {
+            $model = $this->model->findOrFail($id);
 
-        $model = $this->model->findOrFail($id);
-        $model->fill($attributes);
-        $model->save();
+            $model->fill($attributes);
+            $model->save();
 
-        event(new RepositoryEntityUpdated($this, $model));
+            event(new RepositoryEntityUpdated($this, $model));
 
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $this->parseResult($model);
+            return $model;
+        });
     }
 
     /**
@@ -253,19 +240,16 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function delete($id)
     {
-        $this->applyScope();
+        return $this->useResource(false)->runQuery(function () use ($id) {
+            $model = $this->find($id);
+            $originalModel = clone $model;
 
-        $model = $this->find($id);
-        $originalModel = clone $model;
+            $deleted = $model->delete();
 
-        $deleted = $model->delete();
+            event(new RepositoryEntityDeleted($this, $originalModel));
 
-        event(new RepositoryEntityDeleted($this, $originalModel));
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $deleted;
+            return $deleted;
+        });
     }
 
     /**
@@ -276,15 +260,9 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function find($id, $columns = ['*'])
     {
-        $this->applyExtraQuery();
-        $this->applyScope();
-
-        $result = $this->model->findOrFail($id, $columns);
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $this->parseResult($result);
+        return $this->runQuery(function () use ($id, $columns) {
+            return $this->model->findOrFail($id, $columns);
+        });
     }
 
     /**
@@ -294,76 +272,11 @@ abstract class BaseRepository implements RepositoryInterface
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function firstBy($field, $value, $columns = ['*'])
+    public function findBy($field, $value, $columns = ['*'])
     {
-        $this->applyExtraQuery();
-        $this->applyScope();
-
-        $result = $this->model->where($field, '=', $value)->firstOrFail($columns);
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $this->parseResult($result);
-    }
-
-    /**
-     * @param $field
-     * @param $value
-     * @param array $columns
-     * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
-     */
-    public function allBy($field, $value, $columns = ['*'])
-    {
-        $this->applyExtraQuery();
-        $this->applyScope();
-
-        $result = $this->model->where($field, '=', $value)->get($columns);
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $this->parseResult($result);
-    }
-
-    /**
-     * @param array $where
-     * @param array $columns
-     * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
-     */
-    public function getByWhere(array $where, $columns = ['*'])
-    {
-        $this->applyExtraQuery();
-        $this->applyScope();
-
-        $this->applyConditions($where);
-
-        $result = $this->model->get($columns);
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $this->parseResult($result);
-    }
-
-    /**
-     * Applies the given where conditions to the model.
-     *
-     * @param array $where
-     * @return void
-     */
-    protected function applyConditions(array $where)
-    {
-        foreach ($where as $field => $value) {
-            if (is_array($value)) {
-                list($field, $condition, $val) = $value;
-                $this->model = $this->model->where($field, $condition, $val);
-            } else {
-                $this->model = $this->model->where($field, '=', $value);
-            }
-        }
+        return $this->runQuery(function () use ($field, $value, $columns) {
+            return $this->model->where($field, $value)->firstOrFail($columns);
+        });
     }
 
     /**
@@ -377,7 +290,16 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->model = $this->model->with($relations);
 
-        $this->relations = is_string($relations) ? func_get_args() : $relations;
+        return $this;
+    }
+
+    /**
+     * @param mixed $relations
+     * @return $this
+     */
+    public function withCount($relations)
+    {
+        $this->model = $this->model->withCount($relations);
 
         return $this;
     }
@@ -389,36 +311,17 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function firstOrCreate(array $attributes = [])
     {
-        $this->applyExtraQuery();
-        $this->applyScope();
-
-        $result = $this->model->firstOrCreate($attributes);
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $this->parseResult($result);
+        return $this->runQuery(function () use ($attributes) {
+            return $this->model->firstOrCreate($attributes);
+        });
     }
 
     /**
-     * @return \App\Repositories\Eloquent\BaseRepository|mixed
+     * @return $this|mixed
      */
     public function onlyTrashed()
     {
-        return $this->trashed(true);
-    }
-
-    /**
-     * @param bool $only
-     * @return $this
-     */
-    protected function trashed($only = false)
-    {
-        if ($only) {
-            $this->model = $this->model->onlyTrashed();
-        } else {
-            $this->model = $this->model->withTrashed();
-        }
+        $this->model = call_user_func([$this->model, 'onlyTrashed']);
 
         return $this;
     }
@@ -430,22 +333,23 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function restore($id)
     {
-        $this->applyScope();
+        return $this->withTrashed()
+            ->useResource(false)
+            ->runQuery(function () use ($id) {
+                $model = $this->model->findOrFail($id);
 
-        $result = $this->withTrashed()->find($id)->restore();
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $result;
+                return call_user_func([$model, 'restore']);
+            });
     }
 
     /**
-     * @return \App\Repositories\Eloquent\BaseRepository|mixed
+     * @return $this|mixed
      */
     public function withTrashed()
     {
-        return $this->trashed();
+        $this->model = call_user_func([$this->model, 'withTrashed']);
+
+        return $this;
     }
 
     /**
@@ -455,50 +359,9 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function forceDelete($id)
     {
-        $this->applyScope();
-
-        $result = $this->withTrashed()->find($id)->forceDelete();
-
-        // $this->resetModel();
-        $this->resetScope();
-
-        return $result;
-    }
-
-    /**
-     * @param mixed $relations
-     * @return $this
-     */
-    public function withCount($relations)
-    {
-        $this->model = $this->model->withCount($relations);
-
-        $this->relations = is_string($relations) ? func_get_args() : $relations;
-
-        return $this;
-    }
-
-    /**
-     * @param $relation
-     * @return $this
-     */
-    public function has($relation)
-    {
-        $this->model = $this->model->has($relation);
-
-        return $this;
-    }
-
-    /**
-     * @param $relation
-     * @param \Closure|null $callback
-     * @return $this
-     */
-    public function whereHas($relation, Closure $callback = null)
-    {
-        $this->model = $this->model->whereHas($relation, $callback);
-
-        return $this;
+        return $this->withTrashed()->runQuery(function () use ($id) {
+            return $this->model->findOrFail($id)->forceDelete();
+        });
     }
 
     /**
@@ -531,22 +394,46 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function first($columns = ['*'])
     {
-        $this->applyExtraQuery();
-        $this->applyScope();
+        return $this->runQuery(function () use ($columns) {
+            return $this->model->first($columns);
+        });
+    }
 
-        $result = $this->model->first($columns);
+    /**
+     * @param $limit
+     * @return $this
+     */
+    public function limit($limit)
+    {
+        $this->model = $this->model->limit($limit);
 
-        // $this->resetModel();
-        $this->resetScope();
+        return $this;
+    }
 
-        return $this->parseResult($result);
+    /**
+     * @param $offset
+     * @return $this
+     */
+    public function offset($offset)
+    {
+        $this->model = $this->model->offset($offset);
+
+        return $this;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
+    public function getModelInstance()
+    {
+        return $this->model instanceof Builder ? $this->model->getModel() : $this->model;
     }
 
     /**
      * @param array $attributes
      * @return \Illuminate\Database\Eloquent\Model|static
      */
-    protected function getModelNewInstance($attributes = [])
+    protected function getNewModelInstance($attributes = [])
     {
         return $this->model instanceof Model ? $this->model->newInstance($attributes) : $this->model->newModelInstance($attributes);
     }

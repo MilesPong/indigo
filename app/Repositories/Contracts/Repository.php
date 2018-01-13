@@ -16,7 +16,7 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
      * @param array $columns
      * @return mixed
      */
-    public function all($columns = ['*']);
+    public function findAll($columns = ['*']);
 
     /**
      * @param int $perPage
@@ -57,22 +57,7 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
      * @param array $columns
      * @return mixed
      */
-    public function firstBy($field, $value, $columns = ['*']);
-
-    /**
-     * @param $field
-     * @param $value
-     * @param array $columns
-     * @return mixed
-     */
-    public function allBy($field, $value, $columns = ['*']);
-
-    /**
-     * @param array $where
-     * @param array $columns
-     * @return mixed
-     */
-    public function getByWhere(array $where, $columns = ['*']);
+    public function findBy($field, $value, $columns = ['*']);
 
     /**
      * @param $relations
@@ -87,19 +72,6 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
      * @return $this
      */
     public function withCount($relations);
-
-    /**
-     * @param $relation
-     * @return $this
-     */
-    public function has($relation);
-
-    /**
-     * @param $relation
-     * @param \Closure|null $callback
-     * @return $this
-     */
-    public function whereHas($relation, Closure $callback = null);
 
     /**
      * @param array $attributes
@@ -135,11 +107,6 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
     public function getModel();
 
     /**
-     * @return mixed
-     */
-    public function getModelTable();
-
-    /**
      * @param $column
      * @param string $direction
      * @return mixed
@@ -153,13 +120,20 @@ interface Repository extends ApiResourceInterface, HasCriteriaInterface
     public function scopeQuery(Closure $callback);
 
     /**
-     * @return mixed
-     */
-    public function resetScope();
-
-    /**
      * @param array $columns
      * @return mixed
      */
     public function first($columns = ['*']);
+
+    /**
+     * @param $limit
+     * @return $this
+     */
+    public function limit($limit);
+
+    /**
+     * @param $offset
+     * @return $this
+     */
+    public function offset($offset);
 }

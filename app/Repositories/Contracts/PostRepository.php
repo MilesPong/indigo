@@ -49,4 +49,18 @@ interface PostRepository extends RepositoryInterface, SlugableInterface
      * @return $this
      */
     public function latestPublished($column = 'published_at');
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     */
+    public function frontendPaginate($perPage = null, $columns = ['*']);
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     */
+    public function backendPaginate($perPage = null, $columns = ['*']);
 }

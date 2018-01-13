@@ -34,10 +34,7 @@ class PostController extends FrontendController
      */
     public function index()
     {
-        $posts = $this->postRepository
-            ->with(['author', 'category', 'tags'])
-            ->latestPublished()
-            ->paginate();
+        $posts = $this->postRepository->frontendPaginate();
 
         return view('posts.index', compact('posts'));
     }
