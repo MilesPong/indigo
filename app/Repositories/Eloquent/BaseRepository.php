@@ -308,30 +308,12 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * @return $this|mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function onlyTrashed()
     {
-        $this->model = $this->callExtendedMethod($this->model, 'onlyTrashed');
+        $this->model = call_user_func([$this->model, 'onlyTrashed']);
 
         return $this;
-    }
-
-    /**
-     * @param $instance
-     * @param $method
-     * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
-     */
-    private function callExtendedMethod($instance, $method)
-    {
-        // As noted [elsewhere] method_exists() does not care about
-        // the existence of __call(), whereas is_callable() does.
-        if (!is_callable($instance, $method)) {
-            throw new RepositoryException('Class ' . get_class($instance) . ' has no extended method named ' . $method);
-        }
-
-        return call_user_func([$instance, $method]);
     }
 
     /**
@@ -346,17 +328,16 @@ abstract class BaseRepository implements RepositoryInterface
             ->runQuery(function () use ($id) {
                 $model = $this->model->findOrFail($id);
 
-                return $this->callExtendedMethod($model, 'restore');
+                return call_user_func([$model, 'restore']);
             });
     }
 
     /**
      * @return $this|mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function withTrashed()
     {
-        $this->model = $this->callExtendedMethod($this->model, 'withTrashed');
+        $this->model = call_user_func([$this->model, 'withTrashed']);
 
         return $this;
     }
