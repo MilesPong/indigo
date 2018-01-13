@@ -104,7 +104,7 @@ trait HasCriteria
             return $this;
         }
 
-        foreach ($this->getCriteria() as $criteria) {
+        foreach ($this->criteria as $criteria) {
             if ($criteria instanceof CriteriaInterface) {
                 $this->model = $criteria->apply($this->model, $this);
             }

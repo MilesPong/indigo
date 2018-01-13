@@ -103,17 +103,26 @@ abstract class BaseRepository implements RepositoryInterface
      */
     private function runQuery($callback)
     {
-        if (method_exists($this, $method = 'applyCriteria')) {
-            call_user_func([$this, $method]);
-        }
-
-        $this->applyScope();
+        $this->prepareQuery();
 
         $result = $callback();
 
         $this->resetRepository();
 
         return $this->parseResult($result);
+    }
+
+    /**
+     * @return $this
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    protected function prepareQuery()
+    {
+        $this->applyCriteria();
+
+        $this->applyScope();
+
+        return $this;
     }
 
     /**
@@ -139,6 +148,8 @@ abstract class BaseRepository implements RepositoryInterface
     protected function resetRepository()
     {
         $this->resetScope();
+
+        $this->resetCriteria();
 
         $this->makeModel();
 
@@ -229,17 +240,16 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function delete($id)
     {
-        return $this->useResource(false)
-            ->runQuery(function () use ($id) {
-                $model = $this->find($id);
-                $originalModel = clone $model;
+        return $this->useResource(false)->runQuery(function () use ($id) {
+            $model = $this->find($id);
+            $originalModel = clone $model;
 
-                $deleted = $model->delete();
+            $deleted = $model->delete();
 
-                event(new RepositoryEntityDeleted($this, $originalModel));
+            event(new RepositoryEntityDeleted($this, $originalModel));
 
-                return $deleted;
-            });
+            return $deleted;
+        });
     }
 
     /**

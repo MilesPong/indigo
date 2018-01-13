@@ -17,18 +17,7 @@ trait ApiResource
      *
      * @var bool
      */
-    public $useResource = false;
-
-    /**
-     * @param bool $switch
-     * @return $this
-     */
-    public function useResource($switch = true)
-    {
-        $this->useResource = $switch;
-
-        return $this;
-    }
+    protected $useResource = false;
 
     /**
      * @param $data
@@ -48,12 +37,12 @@ trait ApiResource
         }
 
         if ($data instanceof Collection || $data instanceof LengthAwarePaginator) {
-            return forward_static_call_array([$resource, 'collection'], [$data]);
+            return forward_static_call([$resource, 'collection'], $data);
         } elseif (is_null($data)) {
             $data = collect([]);
         }
 
-        return forward_static_call_array([$resource, 'make'], [$data]);
+        return forward_static_call([$resource, 'make'], $data);
     }
 
     /**
@@ -61,7 +50,6 @@ trait ApiResource
      */
     public function resource()
     {
-        return null;
     }
 
     /**
@@ -79,5 +67,16 @@ trait ApiResource
         $this->useResource($tempUseResource);
 
         return $return;
+    }
+
+    /**
+     * @param bool $switch
+     * @return $this
+     */
+    public function useResource($switch = true)
+    {
+        $this->useResource = $switch;
+
+        return $this;
     }
 }
