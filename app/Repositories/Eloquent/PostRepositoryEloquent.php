@@ -137,49 +137,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     * @param null $perPage
-     * @param array $columns
-     * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
-     */
-    public function paginate($perPage = null, $columns = ['*'])
-    {
-        return parent::paginate($perPage ?: $this->getDefaultPerPage(), $columns);
-    }
-
-    /**
-     * @return int
-     */
-    public function getDefaultPerPage()
-    {
-        return config('blog.posts.per_page');
-    }
-
-    // /**
-    //  * Fetch posts data of home page with pagination.
-    //  *
-    //  * Alert: It's not optimized without cache support,
-    //  * so just only use this while with cache enabled.
-    //  *
-    //  * @param null $perPage
-    //  * @return mixed
-    //  */
-    // public function lists($perPage = null)
-    // {
-    //     $perPage = $perPage ?: $this->getDefaultPerPage();
-    //
-    //     // Second layer cache
-    //     $pagination = $this->paginate($perPage, ['slug']);
-    //
-    //     $items = $pagination->getCollection()->map(function ($post) {
-    //         // First layer cache
-    //         return $this->getBySlug($post->slug);
-    //     });
-    //
-    //     return $pagination->setCollection($items);
-    // }
-
-    /**
      * @param array $attributes
      * @param $id
      * @return mixed
@@ -214,6 +171,30 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     {
         return $this->with($this->relationships())->findBy('slug', $slug);
     }
+
+    // /**
+    //  * Fetch posts data of home page with pagination.
+    //  *
+    //  * Alert: It's not optimized without cache support,
+    //  * so just only use this while with cache enabled.
+    //  *
+    //  * @param null $perPage
+    //  * @return mixed
+    //  */
+    // public function lists($perPage = null)
+    // {
+    //     $perPage = $perPage ?: $this->getDefaultPerPage();
+    //
+    //     // Second layer cache
+    //     $pagination = $this->paginate($perPage, ['slug']);
+    //
+    //     $items = $pagination->getCollection()->map(function ($post) {
+    //         // First layer cache
+    //         return $this->getBySlug($post->slug);
+    //     });
+    //
+    //     return $pagination->setCollection($items);
+    // }
 
     /**
      * @return array
@@ -291,6 +272,14 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
+     * @return int
+     */
+    public function getDefaultPerPage()
+    {
+        return config('blog.posts.per_page');
+    }
+
+    /**
      * @param \App\Models\Tag $tag
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
@@ -301,11 +290,44 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function frontendPaginate($perPage = null, $columns = ['*'])
+    {
+        return $this->with($this->relationships())->latestPublished()->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+    }
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function paginate($perPage = null, $columns = ['*'])
+    {
+        return parent::paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+    }
+
+    /**
      * @param string $column
      * @return $this
      */
     public function latestPublished($column = 'published_at')
     {
         return $this->orderBy($column, 'desc');
+    }
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function backendPaginate($perPage = null, $columns = ['*'])
+    {
+        return $this->with(['category', 'author'])->orderBy('id', 'desc')->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
     }
 }
