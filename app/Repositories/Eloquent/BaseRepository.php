@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class BaseRepository
  * @package App\Repositories\Eloquent
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 abstract class BaseRepository implements RepositoryInterface
 {
@@ -78,20 +77,6 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * @param $method
-     * @param $parameters
-     * @return string
-     */
-    public static function __callStatic($method, $parameters)
-    {
-        $class = static::class;
-
-        forward_static_call_array([$class, $method], $parameters);
-
-        return $class;
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|mixed
      */
     public function getModel()
@@ -116,7 +101,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    protected function runQuery($callback)
+    private function runQuery($callback)
     {
         if (method_exists($this, $method = 'applyCriteria')) {
             call_user_func([$this, $method]);
@@ -133,10 +118,14 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * @return $this
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     protected function applyScope()
     {
-        if (isset($this->scopeQuery) && is_callable($this->scopeQuery)) {
+        if (isset($this->scopeQuery)) {
+            if (!is_callable($this->scopeQuery)) {
+                throw new RepositoryException('Scope query is not callable.');
+            }
             $this->model = call_user_func($this->scopeQuery, $this->model);
         }
 
@@ -319,16 +308,30 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * @return $this|mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function onlyTrashed()
     {
-        // As noted [elsewhere] method_exists() does not care about
-        // the existence of __call(), whereas is_callable() does.
-        if (is_callable($this->model, $method = 'onlyTrashed')) {
-            $this->model = call_user_func([$this->model, $method]);
-        }
+        $this->model = $this->callExtendedMethod($this->model, 'onlyTrashed');
 
         return $this;
+    }
+
+    /**
+     * @param $instance
+     * @param $method
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    private function callExtendedMethod($instance, $method)
+    {
+        // As noted [elsewhere] method_exists() does not care about
+        // the existence of __call(), whereas is_callable() does.
+        if (!is_callable($instance, $method)) {
+            throw new RepositoryException('Class ' . get_class($instance) . ' has no extended method named ' . $method);
+        }
+
+        return call_user_func([$instance, $method]);
     }
 
     /**
@@ -343,24 +346,17 @@ abstract class BaseRepository implements RepositoryInterface
             ->runQuery(function () use ($id) {
                 $model = $this->model->findOrFail($id);
 
-                if (is_callable($model, $method = 'restore')) {
-                    $result = call_user_func([$model, $method]);
-                }
-
-                return $result ?? false;
+                return $this->callExtendedMethod($model, 'restore');
             });
     }
 
     /**
      * @return $this|mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function withTrashed()
     {
-        // As noted [elsewhere] method_exists() does not care about
-        // the existence of __call(), whereas is_callable() does.
-        if (is_callable($this->model, $method = 'withTrashed')) {
-            $this->model = call_user_func([$this->model, $method]);
-        }
+        $this->model = $this->callExtendedMethod($this->model, 'withTrashed');
 
         return $this;
     }
@@ -372,9 +368,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function forceDelete($id)
     {
-        $this->withTrashed();
-
-        return $this->runQuery(function () use ($id) {
+        return $this->withTrashed()->runQuery(function () use ($id) {
             return $this->model->findOrFail($id)->forceDelete();
         });
     }
