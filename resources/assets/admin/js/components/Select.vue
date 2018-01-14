@@ -40,7 +40,7 @@
         },
         mounted () {
             this.setDefaultSelected()
-            new M.Select(document.querySelector(`#${this.elemId}`))
+            M.Select.init(document.querySelector(`#${this.elemId}`))
         },
         methods: {
             setDefaultSelected () {
