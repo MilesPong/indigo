@@ -3,27 +3,28 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Events\PostViewEvent;
-use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\PostRepository;
 
 /**
  * Class PostController
  * @package App\Http\Controllers\Frontend
  */
-class PostController extends Controller
+class PostController extends FrontendController
 {
     /**
-     * @var PostRepository
+     * @var \App\Repositories\Contracts\PostRepository
      */
     protected $postRepository;
 
     /**
      * PostController constructor.
-     * @param PostRepository $postRepository
+     * @param \App\Repositories\Contracts\PostRepository $postRepository
      */
     public function __construct(PostRepository $postRepository)
     {
         $this->postRepository = $postRepository;
+
+        $this->disableApiResource($this->postRepository);
     }
 
     /**
@@ -33,7 +34,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->postRepository->paginate();
+        $posts = $this->postRepository->frontendPaginate();
 
         return view('posts.index', compact('posts'));
     }

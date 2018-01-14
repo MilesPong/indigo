@@ -4,23 +4,22 @@ namespace App\Http\Controllers\Backend;
 
 use App\Repositories\Contracts\SettingRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 
-class SettingController extends Controller
+class SettingController extends BackendController
 {
     /**
      * @var SettingRepository
      */
-    protected $settingRepo;
+    protected $settingRepository;
 
     /**
      * SettingController constructor.
-     * @param SettingRepository $settingRepo
+     * @param SettingRepository $settingRepository
      */
-    public function __construct(SettingRepository $settingRepo)
+    public function __construct(SettingRepository $settingRepository)
     {
-        $this->settingRepo = $settingRepo;
+        $this->settingRepository = $settingRepository;
     }
 
     /**
@@ -30,7 +29,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $settings = $this->settingRepo->paginate();
+        $settings = $this->settingRepository->paginate();
 
         return view('admin.settings.index', compact('settings'));
     }
@@ -49,7 +48,7 @@ class SettingController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -59,16 +58,16 @@ class SettingController extends Controller
             'tag' => 'required',
         ]);
 
-        $this->settingRepo->create($request->all());
+        $setting = $this->settingRepository->create($request->all());
 
-        return redirect()->route('admin.settings.index')->withSuccess('Create setting successfully');
+        return $this->successCreated($setting);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function show($id)
     {
@@ -83,7 +82,7 @@ class SettingController extends Controller
      */
     public function edit($id)
     {
-        $setting = $this->settingRepo->find($id);
+        $setting = $this->settingRepository->find($id);
 
         return view('admin.settings.edit', compact('setting'));
     }
@@ -93,7 +92,7 @@ class SettingController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
@@ -106,9 +105,9 @@ class SettingController extends Controller
             'tag' => 'required',
         ]);
 
-        $this->settingRepo->update($request->all(), $id);
+        $setting = $this->settingRepository->update($request->all(), $id);
 
-        return redirect()->route('admin.settings.index')->withSuccess('Update setting successfully');
+        return $this->successCreated($setting);
 
     }
 
@@ -116,12 +115,12 @@ class SettingController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        $this->settingRepo->delete($id);
+        $this->settingRepository->delete($id);
 
-        return redirect()->route('admin.settings.index')->withSuccess('Delete setting successfully!');
+        return $this->successDeleted();
     }
 }

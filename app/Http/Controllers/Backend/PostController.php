@@ -7,52 +7,54 @@ use App\Repositories\Contracts\CategoryRepository;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 /**
  * Class PostController
  * @package App\Http\Controllers\Backend
  */
-class PostController extends Controller
+class PostController extends BackendController
 {
     /**
-     * @var PostRepository
+     * @var \App\Repositories\Contracts\PostRepository
      */
-    protected $postRepo;
+    protected $postRepository;
     /**
-     * @var CategoryRepository
+     * @var \App\Repositories\Contracts\CategoryRepository
      */
-    protected $cateRepo;
+    protected $categoryRepository;
     /**
-     * @var TagRepository
+     * @var \App\Repositories\Contracts\TagRepository
      */
-    protected $tagRepo;
+    protected $tagRepository;
 
     /**
      * PostController constructor.
-     * @param PostRepository $postRepo
-     * @param CategoryRepository $cateRepo
-     * @param TagRepository $tagRepo
+     * @param \App\Repositories\Contracts\PostRepository $postRepository
+     * @param \App\Repositories\Contracts\CategoryRepository $categoryRepository
+     * @param \App\Repositories\Contracts\TagRepository $tagRepository
      */
-    public function __construct(PostRepository $postRepo, CategoryRepository $cateRepo, TagRepository $tagRepo)
-    {
-        $this->postRepo = $postRepo;
-        $this->cateRepo = $cateRepo;
-        $this->tagRepo = $tagRepo;
+    public function __construct(
+        PostRepository $postRepository,
+        CategoryRepository $categoryRepository,
+        TagRepository $tagRepository
+    ) {
+        $this->postRepository = $postRepository;
+        $this->categoryRepository = $categoryRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     /**
      * Display a listing of the resource.
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         if ($request->has('trash')) {
-            $this->postRepo = $this->postRepo->onlyTrashed();
+            $this->postRepository->onlyTrashed();
         }
 
-        $posts = $this->postRepo->with(['category', 'author'])->paginate();
+        $posts = $this->postRepository->backendPaginate();
 
         return view('admin.posts.index', compact('posts'));
     }
@@ -64,23 +66,20 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = $this->cateRepo->all();
-        $tags = $this->tagRepo->all();
-
-        return view('admin.posts.create', compact('categories', 'tags'));
+        return view('admin.posts.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StoreUpdatePostRequest $request
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\StoreUpdatePostRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $this->postRepo->createPost($request->except('_token'));
+        $post = $this->postRepository->create($request->all());
 
-        return redirect()->route('admin.posts.index')->withSuccess('Create post successfully!');
+        return $this->successCreated($post);
     }
 
     /**
@@ -91,7 +90,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->postRepo->find($id);
+        $post = $this->postRepository->find($id);
 
         return response($post);
     }
@@ -104,60 +103,57 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = $this->postRepo->with('tags')->find($id);
+        $post = $this->postRepository->with('tags')->find($id);
 
-        $categories = $this->cateRepo->all();
-        $tags = $this->tagRepo->all();
-
-        return view('admin.posts.edit', compact('post', 'categories', 'tags', 'selected_tags'));
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  StoreUpdatePostRequest $request
+     * @param \App\Http\Requests\StoreUpdatePostRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreUpdatePostRequest $request, $id)
     {
-        $this->postRepo->updatePost($request->all(), $id);
+        $post = $this->postRepository->update($request->all(), $id);
 
-        return redirect()->route('admin.posts.index')->withSuccess('Update post successfully!');
+        return $this->successCreated($post);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        $this->postRepo->delete($id);
+        $this->postRepository->delete($id);
 
-        return redirect()->route('admin.posts.index')->withSuccess('Move post to trash successfully!');
+        return $this->successDeleted();
     }
 
     /**
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function restore($id)
     {
-        $this->postRepo->restore($id);
+        $this->postRepository->restore($id);
 
-        return redirect()->route('admin.posts.index')->withSuccess('Restore post successfully!');
+        return $this->successNoContent();
     }
 
     /**
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function forceDelete($id)
     {
-        $this->postRepo->forceDelete($id);
+        $this->postRepository->forceDelete($id);
 
-        return redirect()->back()->withSuccess('Force delete post successfully!');
+        return $this->successDeleted();
     }
 }

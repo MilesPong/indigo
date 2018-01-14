@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUpdateCategoryRequest extends FormRequest
 {
@@ -32,8 +33,15 @@ class StoreUpdateCategoryRequest extends FormRequest
             case "PUT":
             case "PATCH":
                 $rules = array_merge($rules, [
-                    'name' => 'required|min:2|max:255|unique:categories,name,' . $this->route('category'),
-                    'slug' => 'unique:categories,slug,' . $this->route('category')
+                    'name' => [
+                        'required',
+                        'min:2',
+                        'max:255',
+                        Rule::unique('categories')->ignore($this->route('category'))
+                    ],
+                    'slug' => [
+                        Rule::unique('categories')->ignore($this->route('category'))
+                    ]
                 ]);
                 break;
             case "POST":

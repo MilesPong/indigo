@@ -67,7 +67,7 @@ class MarkDownParser
      */
     protected static function getHtmlConverter()
     {
-        if (static::$htmlConverter) {
+        if (!static::$htmlConverter) {
             static::$htmlConverter = new HtmlConverter;
         }
 

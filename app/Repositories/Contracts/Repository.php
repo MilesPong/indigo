@@ -2,19 +2,21 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Repositories\Contracts\Helpers\ApiResourceInterface;
+use App\Repositories\Contracts\Helpers\HasCriteriaInterface;
 use Closure;
 
 /**
- * Interface RepositoryInterface
+ * Interface Repository
  * @package App\Repositories\Contracts
  */
-interface RepositoryInterface
+interface Repository extends ApiResourceInterface, HasCriteriaInterface
 {
     /**
      * @param array $columns
      * @return mixed
      */
-    public function all($columns = ['*']);
+    public function findAll($columns = ['*']);
 
     /**
      * @param int $perPage
@@ -58,58 +60,24 @@ interface RepositoryInterface
     public function findBy($field, $value, $columns = ['*']);
 
     /**
-     * @param $field
-     * @param $value
-     * @param array $columns
-     * @return mixed
-     */
-    public function findAllBy($field, $value, $columns = ['*']);
-
-    /**
-     * @param array $where
-     * @param array $columns
-     * @return mixed
-     */
-    public function findWhere(array $where, $columns = ['*']);
-
-    /**
      * @param $relations
      * @return $this
      */
     public function with($relations);
 
     /**
-     * Add subselect queries to count the relations.
+     * Add sub-select queries to count the relations.
      *
-     * @param  mixed $relations
+     * @param mixed $relations
      * @return $this
      */
     public function withCount($relations);
-
-    /**
-     * @param $relation
-     * @return mixed
-     */
-    public function has($relation);
-
-    /**
-     * @param $relation
-     * @param Closure|null $callback
-     * @return mixed
-     */
-    public function whereHas($relation, Closure $callback = null);
 
     /**
      * @param array $attributes
      * @return mixed
      */
     public function firstOrCreate(array $attributes = []);
-
-    /**
-     * @param bool $only
-     * @return mixed
-     */
-    public function trashed($only = false);
 
     /**
      * @return mixed
@@ -139,11 +107,6 @@ interface RepositoryInterface
     public function getModel();
 
     /**
-     * @return mixed
-     */
-    public function getModelTable();
-
-    /**
      * @param $column
      * @param string $direction
      * @return mixed
@@ -151,19 +114,26 @@ interface RepositoryInterface
     public function orderBy($column, $direction = 'asc');
 
     /**
-     * @param Closure $callback
+     * @param \Closure $callback
      * @return mixed
      */
     public function scopeQuery(Closure $callback);
-
-    /**
-     * @return mixed
-     */
-    public function resetScope();
 
     /**
      * @param array $columns
      * @return mixed
      */
     public function first($columns = ['*']);
+
+    /**
+     * @param $limit
+     * @return $this
+     */
+    public function limit($limit);
+
+    /**
+     * @param $offset
+     * @return $this
+     */
+    public function offset($offset);
 }

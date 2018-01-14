@@ -53,11 +53,10 @@ if (!function_exists('hasChinese')) {
 }
 
 if (!function_exists('str_slug_with_cn')) {
-
     /**
      * @param $text
      * @param bool $forceTrans
-     * @return \Illuminate\Foundation\Application|\JellyBool\Translug\Translation|mixed|string|translug
+     * @return \JellyBool\Translug\Translation|mixed|string
      */
     function str_slug_with_cn($text, $forceTrans = false)
     {
@@ -104,6 +103,19 @@ if (!function_exists('random_img_url')) {
      */
     function random_img_url($width = 640, $height = 480)
     {
-        return "https://temp.im/{$width}x{$height}/" . strtoupper(dechex(rand(0x000000, 0xFFFFFF)));
+        return "https://dn-placeholder.qbox.me/{$width}x{$height}/" . strtoupper(dechex(rand(0x000000, 0xFFFFFF)));
+    }
+}
+
+if (!function_exists('human_filesize')) {
+    /**
+     * @param $bytes
+     * @param int $decimals
+     * @return string
+     */
+    function human_filesize($bytes, $decimals = 2) {
+        $sz = 'BKMGTP';
+        $factor = floor((strlen($bytes) - 1) / 3);
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Category as CategoryResource;
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepository;
 use App\Repositories\Eloquent\Traits\HasPost;
@@ -24,14 +25,23 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
     }
 
     /**
-     * @param array $attributes
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return null|string
      */
-    public function createCategory(array $attributes)
+    public function resource()
+    {
+        return CategoryResource::class;
+    }
+
+    /**
+     * @param array $attributes
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function create(array $attributes)
     {
         $attributes = $this->preHandleData($attributes);
 
-        return $this->create($attributes);
+        return parent::create($attributes);
     }
 
     /**
@@ -40,7 +50,7 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
      */
     protected function preHandleData(array $attributes)
     {
-        $attributes = $this->autoSlug($attributes);
+        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['name']);
 
         return $attributes;
     }
@@ -48,12 +58,13 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
     /**
      * @param array $attributes
      * @param $id
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function updateCategory(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
         $attributes = $this->preHandleData($attributes);
 
-        return $this->update($attributes, $id);
+        return parent::update($attributes, $id);
     }
 }

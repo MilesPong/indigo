@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repositories\Contracts;
+namespace App\Repositories\Contracts\Helpers;
 
 /**
- * Interface SlugInterface
+ * Interface SlugableInterface
  * @package App\Repositories\Contracts
  */
-interface SlugInterface
+interface SlugableInterface
 {
     /**
      * @param $slug

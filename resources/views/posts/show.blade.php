@@ -24,7 +24,7 @@
             <div class="col s12 post-desc">
                 <div class="card-panel teal">
                     <blockquote class="white-text flow-text">
-                        {{ $post->excerpt }}
+                        {{ $post->description }}
                     </blockquote>
                 </div>
             </div>

@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\Contracts\RepositoryInterface;
+use App\Repositories\Contracts\Repository as RepositoryInterface;
+use App\Repositories\Eloquent\Traits\ApiResource;
+use App\Repositories\Eloquent\Traits\HasCriteria;
 use App\Repositories\Events\RepositoryEntityCreated;
 use App\Repositories\Events\RepositoryEntityDeleted;
 use App\Repositories\Events\RepositoryEntityUpdated;
@@ -18,40 +20,38 @@ use Illuminate\Database\Eloquent\Model;
  */
 abstract class BaseRepository implements RepositoryInterface
 {
+    use HasCriteria, ApiResource {
+        ApiResource::parseResult as apiResourceParser;
+    }
     /**
-     * @var Container
+     * @var \Illuminate\Container\Container
      */
     protected $app;
-
     /**
-     * @var Model|Builder
+     * @var \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder
      */
     protected $model;
-
     /**
-     * @var array
-     */
-    protected $relations = [];
-
-    /**
-     * @var Closure
+     * @var \Closure
      */
     protected $scopeQuery;
 
     /**
      * BaseRepository constructor.
-     * @param Container $app
-     * @throws RepositoryException
+     * @param \Illuminate\Container\Container $app
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function __construct(Container $app)
     {
         $this->app = $app;
         $this->makeModel();
+
+        $this->boot();
     }
 
     /**
-     * @return Model|mixed
-     * @throws RepositoryException
+     * @return \Illuminate\Database\Eloquent\Model|mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function makeModel()
     {
@@ -65,95 +65,101 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     abstract public function model();
 
     /**
-     * @return Builder|Model
+     * The fake "booting" method of the model in calling scopes.
+     */
+    public function boot()
+    {
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|mixed
      */
     public function getModel()
     {
-        if ($this->model instanceof Builder) {
-            return $this->model->getModel();
-        }
-
         return $this->model;
     }
 
     /**
-     * @return string
-     */
-    public function getModelTable()
-    {
-        if ($this->model instanceof Builder) {
-            return $this->model->getModel()->getTable();
-        } else {
-            return $this->model->getTable();
-        }
-    }
-
-    /**
      * @param array $columns
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function all($columns = ['*'])
+    public function findAll($columns = ['*'])
     {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
-        if ($this->model instanceof Builder) {
-            $results = $this->model->get($columns);
-        } else {
-            $results = $this->model->all($columns);
-        }
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $results;
+        return $this->runQuery(function () use ($columns) {
+            return $this->model->get($columns);
+        });
     }
 
     /**
-     * The fake "booting" method of the model in calling scopes.
+     * @param $callback
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function scopeBoot()
+    private function runQuery($callback)
     {
+        $this->prepareQuery();
 
+        $result = $callback();
+
+        $this->resetRepository();
+
+        return $this->parseResult($result);
     }
 
     /**
      * @return $this
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    protected function prepareQuery()
+    {
+        $this->applyCriteria();
+
+        $this->applyScope();
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     protected function applyScope()
     {
-        if (!is_null($this->scopeQuery) && is_callable($this->scopeQuery)) {
-            $callback = $this->scopeQuery;
-            $this->model = $callback($this->model);
+        if (isset($this->scopeQuery)) {
+            if (!is_callable($this->scopeQuery)) {
+                throw new RepositoryException('Scope query is not callable.');
+            }
+            $this->model = call_user_func($this->scopeQuery, $this->model);
         }
 
         return $this;
     }
 
     /**
-     * Reset the model after query
+     * @return $this
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    protected function resetModel()
+    protected function resetRepository()
     {
-        try {
-            $this->makeModel();
-        } catch (RepositoryException $exception) {
-            return false;
-        }
+        $this->resetScope();
 
-        return true;
+        $this->resetCriteria();
+
+        $this->makeModel();
+
+        return $this;
     }
 
     /**
      * @return $this
      */
-    public function resetScope()
+    protected function resetScope()
     {
         $this->scopeQuery = null;
 
@@ -161,24 +167,26 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * @param int $perPage
+     * @param $result
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    protected function parseResult($result)
+    {
+        return $this->apiResourceParser($result);
+    }
+
+    /**
+     * @param null $perPage
      * @param array $columns
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
-        $perPage = $perPage ?: $this->getDefaultPerPage();
-
-        $results = $this->model->paginate($perPage ?: $perPage, $columns);
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $results;
+        return $this->runQuery(function () use ($perPage, $columns) {
+            return $this->model->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+        });
     }
 
     /**
@@ -191,79 +199,70 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * @param array $attributes
-     * @return Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function create(array $attributes)
     {
-        return tap($this->model->create($attributes), function ($model) {
-            event(new RepositoryEntityCreated($this, $model));
-        });
+        $model = $this->model->create($attributes);
+
+        event(new RepositoryEntityCreated($this, $model));
+
+        $this->resetRepository();
+
+        return $this->parseResult($model);
     }
 
     /**
      * @param array $attributes
      * @param $id
-     * @return \Illuminate\Database\Eloquent\Collection|Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function update(array $attributes, $id)
     {
-        $this->scopeBoot();
+        return $this->runQuery(function () use ($attributes, $id) {
+            $model = $this->model->findOrFail($id);
 
-        $this->applyScope();
+            $model->fill($attributes);
+            $model->save();
 
-        $model = $this->model->findOrFail($id);
-        $model->fill($attributes);
-        $model->save();
+            event(new RepositoryEntityUpdated($this, $model));
 
-        event(new RepositoryEntityUpdated($this, $model));
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $model;
+            return $model;
+        });
     }
 
     /**
      * @param $id
-     * @return int
-     * @throws \Exception
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function delete($id)
     {
-        $this->scopeBoot();
+        return $this->useResource(false)->runQuery(function () use ($id) {
+            $model = $this->find($id);
+            $originalModel = clone $model;
 
-        $this->applyScope();
+            $deleted = $model->delete();
 
-        $model = $this->find($id);
-        $originalModel = clone $model;
+            event(new RepositoryEntityDeleted($this, $originalModel));
 
-        $deleted = $model->delete();
-
-        event(new RepositoryEntityDeleted($this, $originalModel));
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $deleted;
+            return $deleted;
+        });
     }
 
     /**
      * @param $id
      * @param array $columns
-     * @return \Illuminate\Database\Eloquent\Collection|Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function find($id, $columns = ['*'])
     {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
-        $result = $this->model->findOrFail($id, $columns);
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $result;
+        return $this->runQuery(function () use ($id, $columns) {
+            return $this->model->findOrFail($id, $columns);
+        });
     }
 
     /**
@@ -271,78 +270,13 @@ abstract class BaseRepository implements RepositoryInterface
      * @param $value
      * @param array $columns
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function findBy($field, $value, $columns = ['*'])
     {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
-        $result = $this->model->where($field, '=', $value)->first($columns);
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $result;
-    }
-
-    /**
-     * @param $field
-     * @param $value
-     * @param array $columns
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function findAllBy($field, $value, $columns = ['*'])
-    {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
-        $results = $this->model->where($field, '=', $value)->get($columns);
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $results;
-    }
-
-    /**
-     * @param array $where
-     * @param array $columns
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function findWhere(array $where, $columns = ['*'])
-    {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
-        $this->applyConditions($where);
-
-        $results = $this->model->get($columns);
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $results;
-    }
-
-    /**
-     * Applies the given where conditions to the model.
-     *
-     * @param array $where
-     * @return void
-     */
-    protected function applyConditions(array $where)
-    {
-        foreach ($where as $field => $value) {
-            if (is_array($value)) {
-                list($field, $condition, $val) = $value;
-                $this->model = $this->model->where($field, $condition, $val);
-            } else {
-                $this->model = $this->model->where($field, '=', $value);
-            }
-        }
+        return $this->runQuery(function () use ($field, $value, $columns) {
+            return $this->model->where($field, $value)->firstOrFail($columns);
+        });
     }
 
     /**
@@ -356,94 +290,7 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->model = $this->model->with($relations);
 
-        $this->relations = is_string($relations) ? func_get_args() : $relations;
-
         return $this;
-    }
-
-    /**
-     * @param array $attributes
-     * @return Model
-     */
-    public function firstOrCreate(array $attributes = [])
-    {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
-        $result = $this->model->firstOrCreate($attributes);
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $result;
-    }
-
-    /**
-     * @return BaseRepository
-     */
-    public function onlyTrashed()
-    {
-        return $this->trashed(true);
-    }
-
-    /**
-     * @param bool $only
-     * @return $this
-     */
-    public function trashed($only = false)
-    {
-        if ($only) {
-            $this->model = $this->model->onlyTrashed();
-        } else {
-            $this->model = $this->model->withTrashed();
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function restore($id)
-    {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
-        $result = $this->withTrashed()->find($id)->restore();
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $result;
-    }
-
-    /**
-     * @return BaseRepository
-     */
-    public function withTrashed()
-    {
-        return $this->trashed();
-    }
-
-    /**
-     * @param $id
-     * @return bool|null
-     */
-    public function forceDelete($id)
-    {
-        $this->scopeBoot();
-
-        $this->applyScope();
-
-        $result = $this->withTrashed()->find($id)->forceDelete();
-
-        $this->resetModel();
-        $this->resetScope();
-
-        return $result;
     }
 
     /**
@@ -454,32 +301,67 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->model = $this->model->withCount($relations);
 
-        $this->relations = is_string($relations) ? func_get_args() : $relations;
+        return $this;
+    }
+
+    /**
+     * @param array $attributes
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function firstOrCreate(array $attributes = [])
+    {
+        return $this->runQuery(function () use ($attributes) {
+            return $this->model->firstOrCreate($attributes);
+        });
+    }
+
+    /**
+     * @return $this|mixed
+     */
+    public function onlyTrashed()
+    {
+        $this->model = call_user_func([$this->model, 'onlyTrashed']);
 
         return $this;
     }
 
     /**
-     * @param $relation
-     * @return $this
+     * @param $id
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function has($relation)
+    public function restore($id)
     {
-        $this->model = $this->model->has($relation);
+        return $this->withTrashed()
+            ->useResource(false)
+            ->runQuery(function () use ($id) {
+                $model = $this->model->findOrFail($id);
+
+                return call_user_func([$model, 'restore']);
+            });
+    }
+
+    /**
+     * @return $this|mixed
+     */
+    public function withTrashed()
+    {
+        $this->model = call_user_func([$this->model, 'withTrashed']);
 
         return $this;
     }
 
     /**
-     * @param $relation
-     * @param Closure|null $callback
-     * @return $this
+     * @param $id
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function whereHas($relation, Closure $callback = null)
+    public function forceDelete($id)
     {
-        $this->model = $this->model->whereHas($relation, $callback);
-
-        return $this;
+        return $this->withTrashed()->runQuery(function () use ($id) {
+            return $this->model->findOrFail($id)->forceDelete();
+        });
     }
 
     /**
@@ -495,7 +377,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * @param Closure $callback
+     * @param \Closure $callback
      * @return $this
      */
     public function scopeQuery(Closure $callback)
@@ -508,18 +390,51 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * @param array $columns
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function first($columns = ['*'])
     {
-        $this->scopeBoot();
+        return $this->runQuery(function () use ($columns) {
+            return $this->model->first($columns);
+        });
+    }
 
-        $this->applyScope();
+    /**
+     * @param $limit
+     * @return $this
+     */
+    public function limit($limit)
+    {
+        $this->model = $this->model->limit($limit);
 
-        $result = $this->model->first($columns);
+        return $this;
+    }
 
-        $this->resetModel();
-        $this->resetScope();
+    /**
+     * @param $offset
+     * @return $this
+     */
+    public function offset($offset)
+    {
+        $this->model = $this->model->offset($offset);
 
-        return $result;
+        return $this;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
+    public function getModelInstance()
+    {
+        return $this->model instanceof Builder ? $this->model->getModel() : $this->model;
+    }
+
+    /**
+     * @param array $attributes
+     * @return \Illuminate\Database\Eloquent\Model|static
+     */
+    protected function getNewModelInstance($attributes = [])
+    {
+        return $this->model instanceof Model ? $this->model->newInstance($attributes) : $this->model->newModelInstance($attributes);
     }
 }

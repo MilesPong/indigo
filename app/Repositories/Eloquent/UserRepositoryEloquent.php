@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepository;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Resources\User as UserResource;
 
 /**
  * Class UserRepositoryEloquent
@@ -21,70 +22,55 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     }
 
     /**
-     * Create User
-     *
-     * @param array $attributes
-     * @return mixed|null
+     * @return null|string
      */
-    public function createUser(array $attributes)
+    public function resource()
     {
-        $this->model = $this->create($attributes);
-
-        return $this->syncRoles(array_get($attributes, 'role'));
+        return UserResource::class;
     }
 
     /**
-     * Sync user's roles
-     *
+     * @param array $attributes
+     * @return mixed|null
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function create(array $attributes)
+    {
+        $model = $this->tempDisableApiResource(function () use ($attributes) {
+            return parent::create($attributes);
+        });
+
+        $this->syncRoles($model, array_get($attributes, 'role'));
+
+        return $this->parseResult($model);
+    }
+
+    /**
+     * @param $model
      * @param $roleIds
      * @return mixed|null
      */
-    protected function syncRoles($roleIds)
+    protected function syncRoles($model, $roleIds)
     {
-        if (!$this->model->exists) {
-            return null;
-        }
-
-        $roles = call_user_func([$this->model, 'roles']);
+        $roles = call_user_func([$model, 'roles']);
 
         return call_user_func_array([$roles, 'sync'], [$roleIds]);
     }
 
     /**
-     * Update User
-     *
      * @param array $attributes
      * @param $id
      * @return mixed|null
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function updateUser(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
-        $this->model = $this->update($attributes, $id);
+        $model = $this->tempDisableApiResource(function () use ($attributes, $id) {
+            return parent::update($attributes, $id);
+        });
 
-        return $this->syncRoles(array_get($attributes, 'role'));
-    }
+        $this->syncRoles($model, array_get($attributes, 'role'));
 
-    /**
-     * Get user's role ids
-     *
-     * @param $id
-     * @param bool $toArray
-     * @return mixed
-     */
-    public function getRoleIds($id, $toArray = true)
-    {
-        if ($id instanceof Model) {
-            $this->model = $id;
-        } else {
-            $this->model = $this->find($id);
-        }
-
-        $roleIds = $this->model->roles()->get()->pluck('pivot.role_id');
-
-        if ($toArray) {
-            return $roleIds->toArray();
-        }
-
-        return $roleIds;
+        return $this->parseResult($model);
     }
 }

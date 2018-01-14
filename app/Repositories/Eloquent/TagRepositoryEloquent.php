@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Tag as TagResource;
 use App\Models\Tag;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\HasPost;
@@ -24,23 +25,32 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
     }
 
     /**
-     * @param array $attributes
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return null|string
      */
-    public function createTag(array $attributes)
+    public function resource()
     {
-        $attributes = $this->preHandleData($attributes);
-
-        return $this->create($attributes);
+        return TagResource::class;
     }
 
     /**
      * @param array $attributes
-     * @return array
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function create(array $attributes)
+    {
+        $attributes = $this->preHandleData($attributes);
+
+        return parent::create($attributes);
+    }
+
+    /**
+     * @param array $attributes
+     * @return array|mixed
      */
     protected function preHandleData(array $attributes)
     {
-        $attributes = $this->autoSlug($attributes);
+        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['name']);
 
         return $attributes;
     }
@@ -48,12 +58,13 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
     /**
      * @param array $attributes
      * @param $id
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function updateTag(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
         $attributes = $this->preHandleData($attributes);
 
-        return $this->update($attributes, $id);
+        return parent::update($attributes, $id);
     }
 }

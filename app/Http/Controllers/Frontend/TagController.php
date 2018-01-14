@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 
@@ -10,26 +9,28 @@ use App\Repositories\Contracts\TagRepository;
  * Class TagController
  * @package App\Http\Controllers\Frontend
  */
-class TagController extends Controller
+class TagController extends FrontendController
 {
     /**
-     * @var TagRepository
+     * @var \App\Repositories\Contracts\TagRepository
      */
     protected $tagRepository;
     /**
-     * @var PostRepository
+     * @var \App\Repositories\Contracts\PostRepository
      */
     protected $postRepository;
 
     /**
      * TagController constructor.
-     * @param TagRepository $tagRepository
-     * @param PostRepository $postRepository
+     * @param \App\Repositories\Contracts\TagRepository $tagRepository
+     * @param \App\Repositories\Contracts\PostRepository $postRepository
      */
     public function __construct(TagRepository $tagRepository, PostRepository $postRepository)
     {
         $this->tagRepository = $tagRepository;
         $this->postRepository = $postRepository;
+
+        $this->disableApiResource($this->tagRepository, $this->postRepository);
     }
 
     /**
