@@ -212,7 +212,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     public function previous(Post $model)
     {
         return $this->parseResult($this->scopeQuery(function ($query) use ($model) {
-            return $query->previous($model->id, ['title', 'slug']);
+            return $query->previous($model, ['title', 'slug']);
         })->first());
     }
 
@@ -224,7 +224,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     public function next(Post $model)
     {
         return $this->parseResult($this->scopeQuery(function ($query) use ($model) {
-            return $query->next($model->id, ['title', 'slug']);
+            return $query->next($model, ['title', 'slug']);
         })->first());
     }
 
