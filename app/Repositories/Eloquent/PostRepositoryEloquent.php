@@ -127,7 +127,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         foreach ($tags as $tagName) {
             $tag = $this->tagRepository->firstOrCreate([
-                'name' => $tagName,
+                'name' => strtolower($tagName),
                 'slug' => str_slug($tagName)
             ]);
             array_push($ids, $tag->id);

@@ -60,9 +60,7 @@ class Post extends Model implements Markdownable
     {
         parent::boot();
 
-        if (!isAdmin()) {
-            static::addGlobalScope(new PublishedScope);
-        }
+        static::addGlobalScope(new PublishedScope);
     }
 
     /**

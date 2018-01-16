@@ -21,6 +21,10 @@ class PublishedScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
+        if (isAdmin()) {
+            return;
+        }
+
         $builder->where('published_at', '<=', Carbon::now()->toDateTimeString())
             ->where('is_draft', '=', Post::IS_NOT_DRAFT);
     }

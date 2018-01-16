@@ -26,11 +26,11 @@ class StoreUpdatePostRequest extends FormRequest
     {
         $rules = [
             'title' => 'required',
-            'description' => 'max:100',
+            'description' => 'required|max:100',
             'category_id' => 'required|exists:categories,id',
             'slug' => 'unique:posts',
             'body' => 'required',
-            'feature_img' => 'required|url',
+            'feature_img' => 'required',
         ];
 
         switch ($this->method()) {
