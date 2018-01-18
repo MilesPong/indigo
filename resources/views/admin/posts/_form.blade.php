@@ -4,7 +4,7 @@
         <label for="title">Title</label>
     </div>
     <div class="input-field col s12 m6">
-        <input id="slug" type="text" class="validate" name="slug" value="{{ $post->slug ?? null }}" @if(isset($post->id))disabled="disabled"@endif>
+        <input id="slug" type="text" class="validate" name="slug" value="{{ $post->slug ?? null }}" @if(isset($post->id))readonly="readonly"@endif>
         <label id="slug-label" for="slug">Slug</label>
     </div>
 
