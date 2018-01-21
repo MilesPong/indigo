@@ -39,10 +39,10 @@ jQuery(document).ready(function () {
 });
 
 // Navigation bar's dropdown
-let navDropdownInstance = new M.Dropdown(document.querySelector('.dropdown-trigger'));
+M.Dropdown.init(document.querySelector('.dropdown-trigger'));
 
 // Side navigation bar
-let sidenavInstance = new M.Sidenav(document.querySelector('.sidenav'));
+M.Sidenav.init(document.querySelector('.sidenav'));
 
 // Collapsible in side navigation bar
-let collapsibleInstance = new M.Collapsible(document.querySelector('.collapsible'));
+M.Collapsible.init(document.querySelector('.collapsible'));

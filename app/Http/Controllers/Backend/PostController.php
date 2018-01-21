@@ -41,6 +41,8 @@ class PostController extends BackendController
         $this->postRepository = $postRepository;
         $this->categoryRepository = $categoryRepository;
         $this->tagRepository = $tagRepository;
+
+        $this->postRepository->adminMode();
     }
 
     /**

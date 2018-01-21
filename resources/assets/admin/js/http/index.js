@@ -21,6 +21,13 @@ axios.interceptors.response.use(
     },
     error => {
         console.log('Oops..Error occur');
+        if (error.response && error.response.status) {
+            swal(
+                'Oops...',
+                'Something went wrong!',
+                'error'
+            );
+        }
         return Promise.reject(error);
     }
 );

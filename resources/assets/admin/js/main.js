@@ -2,6 +2,6 @@ jQuery(document).ready(function () {
 
 });
 
-let sidenavInstance = new M.Sidenav(document.querySelector('.sidenav'));
+M.Sidenav.init(document.querySelector('.sidenav'));
 
-let collapsibleInstance = new M.Collapsible(document.querySelector('.collapsible'));
+M.Collapsible.init(document.querySelector('.collapsible'));

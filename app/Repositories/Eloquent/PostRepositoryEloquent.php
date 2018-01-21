@@ -12,6 +12,7 @@ use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\FieldsHandler;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
+use App\Scopes\PublishedScope;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -45,6 +46,14 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         $this->tagRepository = $tagRepository;
         $this->contentModel = $this->app->make($this->contentModel());
+    }
+
+    /**
+     *
+     */
+    public function boot()
+    {
+        parent::boot();
     }
 
     /**
@@ -127,7 +136,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         foreach ($tags as $tagName) {
             $tag = $this->tagRepository->firstOrCreate([
-                'name' => $tagName,
+                'name' => strtolower($tagName),
                 'slug' => str_slug($tagName)
             ]);
             array_push($ids, $tag->id);
@@ -329,5 +338,15 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     public function backendPaginate($perPage = null, $columns = ['*'])
     {
         return $this->with(['category', 'author'])->orderBy('id', 'desc')->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+    }
+
+    /**
+     * @return $this
+     */
+    public function adminMode()
+    {
+        $this->model = $this->model->withoutGlobalScope(PublishedScope::class);
+
+        return $this;
     }
 }

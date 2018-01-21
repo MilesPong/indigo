@@ -50,6 +50,12 @@ class Post extends Model implements Markdownable
      * @var array
      */
     protected $dates = ['published_at', 'deleted_at'];
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'is_draft' => 'boolean'
+    ];
 
     /**
      * The "booting" method of the model.
@@ -60,9 +66,7 @@ class Post extends Model implements Markdownable
     {
         parent::boot();
 
-        if (!isAdmin()) {
-            static::addGlobalScope(new PublishedScope);
-        }
+        static::addGlobalScope(new PublishedScope);
     }
 
     /**
