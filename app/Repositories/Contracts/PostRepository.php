@@ -63,4 +63,9 @@ interface PostRepository extends RepositoryInterface, SlugableInterface
      * @return mixed
      */
     public function backendPaginate($perPage = null, $columns = ['*']);
+
+    /**
+     * @return mixed
+     */
+    public function adminMode();
 }
