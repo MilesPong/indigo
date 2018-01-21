@@ -79,7 +79,7 @@
         <div class="switch">
             <label>
                 Publish
-                <input type="checkbox" name="is_draft" id="is_draft">
+                <input type="checkbox" name="is_draft" id="is_draft" @if($post->is_draft ?? false)checked="checked"@endif>
                 <span class="lever"></span>
                 Draft
             </label>
