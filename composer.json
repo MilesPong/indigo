@@ -6,8 +6,9 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "fideloper/proxy": "~3.3",
+        "doctrine/dbal": "~2.3",
         "erusev/parsedown": "^1.6",
+        "fideloper/proxy": "~3.3",
         "jellybool/translug": "^2.0",
         "jenssegers/agent": "^2.5",
         "laracasts/presenter": "^0.2.1",
@@ -65,6 +66,7 @@
         ],
         "post-update-cmd": [
             "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:models --dir='app/Models' --nowrite",
             "@php artisan ide-helper:meta"
         ]
     },
