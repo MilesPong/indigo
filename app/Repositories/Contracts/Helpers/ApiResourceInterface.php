@@ -10,7 +10,7 @@ interface ApiResourceInterface
 {
     /**
      * @param bool $switch
-     * @return mixed
+     * @return $this
      */
     public function useResource($switch = true);
 }
