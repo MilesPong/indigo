@@ -1,1 +1,1 @@
-@each('posts._show', $posts, 'post')
+@each('posts._post-card', $posts, 'post')

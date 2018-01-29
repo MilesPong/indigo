@@ -1,28 +1,18 @@
 @extends('admin.layouts.app')
 
-@inject('role', 'App\Models\Role')
+@section('title')
+    Roles | @parent
+@endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
 
-            <!-- general form elements disabled -->
-            <div class="box box-warning">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Role Info</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
+    @component('admin.components.form_create', [
+        'formAction' => route('admin.roles.store'),
+        'redirectUrl' => route('admin.roles.index')
+    ])
 
-                    <form role="form" action="{{ route('admin.roles.store') }}" method="POST">
+        @include('admin.roles._form')
 
-                        @include('admin.roles._form')
+    @endcomponent
 
-                    </form>
-                </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-        </div>
-    </div>
 @endsection

@@ -11,7 +11,6 @@ use App\Observers\PostObserver;
 use App\Observers\SettingObserver;
 use App\Observers\TagObserver;
 use App\Repositories\Contracts\SettingRepository;
-use App\Services\CacheHelper;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
@@ -35,9 +34,7 @@ class AppServiceProvider extends ServiceProvider
         Setting::observe(SettingObserver::class);
 
         $this->app->singleton('settings', function (Container $app) {
-            return $app['cache']->rememberForever(CacheHelper::keySiteSettings(), function () use ($app) {
-                return $app->make(SettingRepository::class)->siteSettings();
-            });
+            return $app->make(SettingRepository::class)->siteSettings();
         });
     }
 
@@ -48,9 +45,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment() != 'production' ) {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
-        }
+
     }
 }

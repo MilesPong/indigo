@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="{{ config('app.locale') }}">
+@extends('layouts.app')
 
-@include('admin.partials.head')
+@section('app_content')
 
-@yield('content')
+    @yield('content')
 
-</html>
+@endsection

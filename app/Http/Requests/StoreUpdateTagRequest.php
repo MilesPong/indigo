@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUpdateTagRequest extends FormRequest
 {
@@ -33,9 +34,16 @@ class StoreUpdateTagRequest extends FormRequest
             case "PUT":
             case "PATCH":
                 $rules = [
-                    'name' => 'required|min:2|max:255|unique:tags,name,' . $this->route('tag'),
+                    'name' => [
+                        'required',
+                        'min:2',
+                        'max:255',
+                        Rule::unique('tags')->ignore($this->route('tag'))
+                    ],
                     'description' => 'max:255',
-                    'slug' => 'unique:tags,slug,' . $this->route('tag')
+                    'slug' => [
+                        Rule::unique('tags')->ignore($this->route('tag'))
+                    ]
                 ];
                 break;
             case "POST":

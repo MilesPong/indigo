@@ -1,23 +1,16 @@
-{{ csrf_field() }}
-
-<!-- text input -->
-<div class="form-group">
-    <label>Permission Name</label>
-    <input type="text" class="form-control" placeholder="" name="name" value="{{ old('name', $permission->name) }}"}>
+<div class="row">
+    <div class="input-field col s12 m6">
+        <input id="name" type="text" class="validate" name="name" value="{{ $permission->name ?? null }}">
+        <label for="name">Name</label>
+    </div>
+    <div class="input-field col s12 m6">
+        <input id="display_name" type="text" class="validate" name="display_name" value="{{ $permission->display_name ?? null }}">
+        <label for="display_name">Display Name</label>
+    </div>
 </div>
-
-<div class="form-group">
-    <label>Display Name</label>
-    <input type="text" class="form-control" placeholder="" name="display_name" value="{{ old('display_name', $permission->display_name) }}">
-</div>
-
-<div class="form-group">
-    <label>Description</label>
-    <textarea class="form-control" rows="3" name="description">{{ old('description', $permission->description) }}</textarea>
-</div>
-
-<div class="form-group">
-    <button class="btn btn-primary pull-right" type="submit">
-        {{ isset($permission->id) ? 'Save' : 'Submit' }}
-    </button>
+<div class="row">
+    <div class="input-field col s12">
+        <input id="description" type="text" class="validate" name="description" value="{{ $permission->description ?? null }}">
+        <label for="description">Description</label>
+    </div>
 </div>

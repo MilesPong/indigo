@@ -15,6 +15,6 @@ class CategoryObserver extends BaseObserver
      */
     public function updated(Category $category)
     {
-        $this->cacheHelper->flushEntity($category);
+
     }
 }

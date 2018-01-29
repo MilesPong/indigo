@@ -1,16 +1,24 @@
 @extends('admin.layouts.app')
 
+@section('title')
+    Permissions | @parent
+@endsection
+
 @section('content')
-    <a href="{{ route('admin.permissions.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
 
-    <div class="row">
-        <div class="col-xs-12">
+    @component('admin.components.table', [
+        'paginator' => $permissions,
+        'columns' => [
+            'id' => 'ID',
+            'name' => 'Name',
+            'display_name' => 'Display Name',
+            'description' => 'Description'
+        ],
+        'hrefCreate' => route('admin.permissions.create'),
+        'hrefShow' => route('admin.permissions.show', ':id'),
+        'hrefEdit' => route('admin.permissions.edit', ':id'),
+        'hrefDestroy' => route('admin.permissions.destroy', ':id'),
+    ])
+    @endcomponent
 
-            <div class="box box-default">
-                <div class="box-body">
-                    @include('admin.permissions._list')
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection

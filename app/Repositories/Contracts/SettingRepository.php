@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Repositories\Contracts\Repository as RepositoryInterface;
+
 /**
  * Interface SettingRepository
  * @package App\Repositories\Contracts

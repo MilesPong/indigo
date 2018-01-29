@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Side navigation bar style
 
 ### Fixed
-- Fix Postable retrieve data bug (`890c082`)
+- Fix HasPost retrieve data bug (`890c082`)
 
 ## 0.2.0 - 2017-06-15
 ### Added

@@ -1,21 +1,26 @@
-// Material icons
-@import "material-icons.css";
-
 // Variables
 @import "variables";
 
 // Bootstrap
-@import "node_modules/materialize-css/sass/materialize.scss";
+@import "~materialize-css/sass/materialize.scss";
 
 @import "modules/prism.css";
-@import "modules/article.css";
-@import "modules/search.css";
-@import "modules/tag.css";
-@import "modules/sidenav.css";
+@import "modules/article.scss";
+@import "modules/widget.scss";
+@import "modules/sidenav.scss";
+@import "modules/auth.scss";
 
-body {
+[v-cloak] { display: none; }
+
+html, body {
+  height: 100%;
+}
+
+// Sticky Footer
+body div#app {
   display: flex;
-  min-height: 100vh;
+  display: -webkit-flex;
+  min-height: 100%;
   flex-direction: column;
 }
 

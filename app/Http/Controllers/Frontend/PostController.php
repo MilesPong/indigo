@@ -4,23 +4,27 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Events\PostViewEvent;
 use App\Repositories\Contracts\PostRepository;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class PostController extends Controller
+/**
+ * Class PostController
+ * @package App\Http\Controllers\Frontend
+ */
+class PostController extends FrontendController
 {
     /**
-     * @var PostRepository
+     * @var \App\Repositories\Contracts\PostRepository
      */
-    protected $postRepo;
+    protected $postRepository;
 
     /**
      * PostController constructor.
-     * @param PostRepository $postRepo
+     * @param \App\Repositories\Contracts\PostRepository $postRepository
      */
-    public function __construct(PostRepository $postRepo)
+    public function __construct(PostRepository $postRepository)
     {
-        $this->postRepo = $postRepo;
+        $this->postRepository = $postRepository;
+
+        $this->disableApiResource($this->postRepository);
     }
 
     /**
@@ -30,7 +34,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->postRepo->lists();
+        $posts = $this->postRepository->frontendPaginate();
 
         return view('posts.index', compact('posts'));
     }
@@ -43,10 +47,10 @@ class PostController extends Controller
      */
     public function show($slug)
     {
-        $post = $this->postRepo->getBySlug($slug);
+        $post = $this->postRepository->getBySlug($slug);
 
-        $previous = $this->postRepo->previous($post);
-        $next = $this->postRepo->next($post);
+        $previous = $this->postRepository->previous($post);
+        $next = $this->postRepository->next($post);
 
         event(new PostViewEvent($post->id));
 

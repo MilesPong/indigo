@@ -1,0 +1,15 @@
+.menu-on-large {
+    position: absolute;
+    left: -20%;
+}
+
+.sidenav {
+    li {
+        ul.collapsible {
+            li a.collapsible-header {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
+        }
+    }
+}

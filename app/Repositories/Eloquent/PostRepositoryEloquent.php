@@ -2,50 +2,58 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Post as PostResource;
+use App\Models\Category;
 use App\Models\Content;
 use App\Models\Post;
-use App\Repositories\Contracts\CacheableInterface;
+use App\Models\Tag;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\FieldsHandler;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
-use App\Repositories\Eloquent\Traits\Cacheable;
 use App\Scopes\PublishedScope;
-use Carbon\Carbon;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class PostRepositoryEloquent
  * @package App\Repositories\Eloquent
  */
-class PostRepositoryEloquent extends BaseRepository implements PostRepository, CacheableInterface
+class PostRepositoryEloquent extends BaseRepository implements PostRepository
 {
-    use Slugable;
-    use Cacheable;
-    use FieldsHandler;
-
+    use Slugable, FieldsHandler;
     /**
-     * @var TagRepository
+     * @var \App\Repositories\Contracts\TagRepository
      */
-    protected $tagRepo;
-
+    protected $tagRepository;
     /**
-     * @var mixed
+     * @var \Illuminate\Database\Eloquent\Model
      */
     protected $contentModel;
 
     /**
      * PostRepositoryEloquent constructor.
-     * @param Container $app
-     * @param TagRepository $tagRepo
+     * @param \Illuminate\Container\Container $app
+     * @param \App\Repositories\Contracts\TagRepository $tagRepository
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function __construct(Container $app, TagRepository $tagRepo)
+    public function __construct(Container $app, TagRepository $tagRepository)
     {
         parent::__construct($app);
-        $this->tagRepo = $tagRepo;
+
+        $this->tagRepository = $tagRepository;
         $this->contentModel = $this->app->make($this->contentModel());
+    }
+
+    /**
+     *
+     */
+    public function boot()
+    {
+        parent::boot();
     }
 
     /**
@@ -57,17 +65,11 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
     }
 
     /**
-     *
+     * @return null|string
      */
-    public function scopeBoot()
+    public function resource()
     {
-        parent::scopeBoot();
-
-        // TODO to be optimized
-        // Session middleware is called after ServiceProvider binding, so can't set method boot in constructor
-        if (isAdmin()) {
-            $this->model = $this->model->withoutGlobalScope(PublishedScope::class);
-        }
+        return PostResource::class;
     }
 
     /**
@@ -80,18 +82,29 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
 
     /**
      * @param array $attributes
-     * @return Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     * @throws \Exception
+     * @throws \Throwable
      */
-    public function createPost(array $attributes)
+    public function create(array $attributes)
     {
         $attributes = $this->preHandleData($attributes);
 
-        // TODO use transaction
-        $this->model = request()->user()->posts()->create(array_merge($attributes, [
-            'content_id' => $this->contentModel->create($attributes)->id,
-        ]));
+        // Reference: Illuminate\Database\Eloquent\Relations\HasOneOrMany@create to allow "mass assign" attributes.
+        $model = DB::transaction(function () use ($attributes) {
+            return tap($this->getNewModelInstance($attributes), function (Model $instance) use ($attributes) {
+                // TODO how to decouple 'field_name' and logic?
+                $instance->setAttribute('content_id', $this->contentModel->create($attributes)->getKey());
+                $instance->setAttribute('user_id', Auth::id());
 
-        return $this->syncTags(data_get($attributes, 'tag', []));
+                $instance->save();
+
+                $this->syncTags($instance, array_get($attributes, 'tag', []));
+            });
+        });
+
+        return $this->parseResult($model);
     }
 
     /**
@@ -100,141 +113,240 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository, C
      */
     protected function preHandleData(array $attributes)
     {
-        $attributes = $this->autoSlug($attributes, 'title');
+        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['title']);
 
-        foreach ($attributes as $field => $value) {
-            if (method_exists($this, $method = 'handle' . ucfirst(camel_case($field)))) {
-                array_set($attributes, $field, call_user_func_array([$this, $method], [$value]));
+        foreach ($attributes as $field => &$value) {
+            if (method_exists($this, $method = 'handle' . studly_case($field))) {
+                // Note that the parameters for call_user_func() are not passed by reference.
+                $value = call_user_func([$this, $method], $value);
             }
         }
-
-        $attributes = $this->handleImg($attributes);
-
-        // TODO excerpt should be html purifier
 
         return $attributes;
     }
 
     /**
+     * @param \App\Models\Post|\Illuminate\Database\Eloquent\Model $model
      * @param array $tags
-     * @throws RepositoryException
+     * @return mixed
      */
-    protected function syncTags(array $tags)
+    protected function syncTags($model, array $tags = [])
     {
-        if (!$this->model->exists) {
-            throw new RepositoryException('Model is not exist');
-        }
-
         $ids = [];
 
-        if (empty($tags)) {
-            return $this->model->tags()->sync($ids);
-        }
-
         foreach ($tags as $tagName) {
-            $tag = $this->tagRepo->firstOrCreate([
-                'name' => $tagName,
+            $tag = $this->tagRepository->firstOrCreate([
+                'name' => strtolower($tagName),
                 'slug' => str_slug($tagName)
             ]);
             array_push($ids, $tag->id);
         }
 
-        return $this->model->tags()->sync($ids);
+        return $model->tags()->sync($ids);
     }
 
     /**
      * @param array $attributes
      * @param $id
-     * @return \Illuminate\Database\Eloquent\Collection|Model
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     * @throws \Exception
+     * @throws \Throwable
      */
-    public function updatePost(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
         $attributes = $this->preHandleData($attributes);
 
-        // TODO use transaction
-        $this->model = $this->update(array_except($attributes, 'slug'), $id);
+        // Oops...
+        $model = DB::transaction(function () use ($attributes, $id) {
+            return tap($this->tempDisableApiResource(function () use ($attributes, $id) {
+                return parent::update($attributes, $id);
+            }), function (Post $instance) use ($attributes) {
+                $instance->content()->update($attributes);
 
-        $this->model->content()->update($attributes);
-
-        return $this->syncTags(data_get($attributes, 'tag', []));
-    }
-
-    /**
-     * Fetch posts data of home page with pagination.
-     *
-     * Alert: It's not optimized without cache support,
-     * so just only use this while with cache enabled.
-     *
-     * @param null $perPage
-     * @return mixed
-     */
-    public function lists($perPage = null)
-    {
-        $perPage = $perPage ?: $this->getDefaultPerPage();
-
-        // Second layer cache
-        $pagination = $this->paginate($perPage, ['slug']);
-
-        $items = $pagination->getCollection()->map(function ($post) {
-            // First layer cache
-            return $this->getBySlug($post->slug);
+                $this->syncTags($instance, array_get($attributes, 'tag', []));
+            });
         });
 
-        return $pagination->setCollection($items);
-    }
-
-    /**
-     * Get a single post.
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function retrieve($id)
-    {
-        return $this->with(['author', 'category', 'tags'])->find($id);
+        return $this->parseResult($model);
     }
 
     /**
      * @param $slug
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function getBySlug($slug)
     {
-        return $this->with(['author', 'category', 'tags'])->findBy('slug', $slug);
+        return $this->with($this->relationships())->findBy('slug', $slug);
+    }
+
+    // /**
+    //  * Fetch posts data of home page with pagination.
+    //  *
+    //  * Alert: It's not optimized without cache support,
+    //  * so just only use this while with cache enabled.
+    //  *
+    //  * @param null $perPage
+    //  * @return mixed
+    //  */
+    // public function lists($perPage = null)
+    // {
+    //     $perPage = $perPage ?: $this->getDefaultPerPage();
+    //
+    //     // Second layer cache
+    //     $pagination = $this->paginate($perPage, ['slug']);
+    //
+    //     $items = $pagination->getCollection()->map(function ($post) {
+    //         // First layer cache
+    //         return $this->getBySlug($post->slug);
+    //     });
+    //
+    //     return $pagination->setCollection($items);
+    // }
+
+    /**
+     * @return array
+     */
+    protected function relationships()
+    {
+        return ['author', 'category', 'tags'];
     }
 
     /**
-     * @param $model
+     * @param \App\Models\Post $model
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function previous($model)
+    public function previous(Post $model)
     {
-        return $this->scopeQuery(function ($query) use ($model) {
-            return $query->previous($model->id, ['title', 'slug']);
-        })->first();
+        return $this->parseResult($this->scopeQuery(function ($query) use ($model) {
+            return $query->previous($model, ['title', 'slug']);
+        })->first());
     }
 
     /**
-     * @param $model
+     * @param \App\Models\Post $model
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function next($model)
+    public function next(Post $model)
     {
-        return $this->scopeQuery(function ($query) use ($model) {
-            return $query->next($model->id, ['title', 'slug']);
-        })->first();
+        return $this->parseResult($this->scopeQuery(function ($query) use ($model) {
+            return $query->next($model, ['title', 'slug']);
+        })->first());
     }
 
     /**
      * @param int $limit
      * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function hot($limit = 5)
     {
         // TODO cache support
-        return $this->skipCache()->scopeQuery(function ($query) use ($limit) {
+        return $this->parseResult($this->scopeQuery(function ($query) use ($limit) {
             return $query->hot($limit, ['slug', 'title', 'view_count']);
-        })->all();
+        })->findAll());
     }
 
+    /**
+     * @param \App\Models\Category $category
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function paginateOfCategory(Category $category)
+    {
+        return $this->paginateOfPostRelated($category);
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param string $relation
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    protected function paginateOfPostRelated(Model $model, $relation = 'posts')
+    {
+        if (method_exists($model, $relation)) {
+            $paginator = $model->$relation()
+                ->with($this->relationships())
+                ->latestPublished()
+                ->paginate($this->getDefaultPerPage());
+
+            return $this->parseResult($paginator);
+        }
+
+        throw new RepositoryException("Current model " . get_class($model) . " doesn't have relationship of '{$relation}'.");
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultPerPage()
+    {
+        return config('blog.posts.per_page');
+    }
+
+    /**
+     * @param \App\Models\Tag $tag
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function paginateOfTag(Tag $tag)
+    {
+        return $this->paginateOfPostRelated($tag);
+    }
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function frontendPaginate($perPage = null, $columns = ['*'])
+    {
+        return $this->with($this->relationships())->latestPublished()->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+    }
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function paginate($perPage = null, $columns = ['*'])
+    {
+        return parent::paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+    }
+
+    /**
+     * @param string $column
+     * @return $this
+     */
+    public function latestPublished($column = 'published_at')
+    {
+        return $this->orderBy($column, 'desc');
+    }
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function backendPaginate($perPage = null, $columns = ['*'])
+    {
+        return $this->with(['category', 'author'])->orderBy('id', 'desc')->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+    }
+
+    /**
+     * @return $this
+     */
+    public function adminMode()
+    {
+        $this->model = $this->model->withoutGlobalScope(PublishedScope::class);
+
+        return $this;
+    }
 }

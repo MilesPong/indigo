@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUpdatePostRequest extends FormRequest
 {
@@ -25,20 +26,20 @@ class StoreUpdatePostRequest extends FormRequest
     {
         $rules = [
             'title' => 'required',
-            'description' => 'max:100',
+            'description' => 'required|max:100',
             'category_id' => 'required|exists:categories,id',
             'slug' => 'unique:posts',
             'body' => 'required',
-            'excerpt' => 'required',
-            'feature_img' => 'required_without:feature_img_file|url',
-            'feature_img_file' => 'required_without:feature_img|image|max:2048'
+            'feature_img' => 'required',
         ];
 
         switch ($this->method()) {
             case "PUT":
             case "PATCH":
                 $rules = array_merge($rules, [
-                    'slug' => 'unique:posts,slug,' . $this->route('post')
+                    'slug' => [
+                        Rule::unique('posts')->ignore($this->route('post'))
+                    ]
                 ]);
                 break;
             case "POST":
@@ -49,18 +50,13 @@ class StoreUpdatePostRequest extends FormRequest
     }
 
     /**
+     * TODO to figure out rules of empty input
      * Prepare the data for validation.
      *
      * @return void
      */
     protected function prepareForValidation()
     {
-        $fields = ['feature_img', 'feature_img_file'];
 
-        foreach ($fields as $field) {
-            if (!$this->has($field)) {
-                $this->replace($this->except($field));
-            }
-        }
     }
 }
