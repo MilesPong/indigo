@@ -6,6 +6,7 @@ use App\Presenters\PostPresenter;
 use App\Scopes\PublishedScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Indigo\Contracts\Markdownable;
 use Indigo\Tools\MarkDownParser;
 use Laracasts\Presenter\PresentableTrait;
@@ -186,5 +187,15 @@ class Post extends Model implements Markdownable
     public function content()
     {
         return $this->belongsTo(Content::class);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFeatureImgUrlAttribute()
+    {
+        $value = $this->getAttribute('feature_img');
+
+        return starts_with($value, ['https://', 'http://']) ? $value : Storage::url($value);
     }
 }

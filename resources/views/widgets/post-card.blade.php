@@ -2,7 +2,7 @@
 
     <div class="card hoverable">
         <div class="card-image">
-            <img src="{{ $post->feature_img }}">
+            <img src="{{ $post->feature_img_url }}">
             <a class="btn-floating btn-large halfway-fab waves-effect waves-light materialize-red lighten-2"
                href="{{ route('articles.show', $post->slug) }}">
                 <i class="material-icons">more_horiz</i>
