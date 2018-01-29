@@ -1,0 +1,42 @@
+.widget-sidebar {
+    &.widget-category {
+
+    }
+
+    &.widget-hot {
+
+    }
+
+    &.widget-search {
+        .row {
+            margin-bottom: 0;
+        }
+
+        .input-field {
+            width: 100%;
+        }
+    }
+
+    &.widget-tag {
+        .tag-content {
+            padding: 10px;
+        }
+
+        .tag-badge {
+            padding: 3px 7px;
+            font-size: 12px;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+    }
+
+    &.widget-post-card {
+        .card-content {
+            padding-bottom: 0;
+
+            .meta-list ul {
+                justify-content: start;
+            }
+        }
+    }
+}

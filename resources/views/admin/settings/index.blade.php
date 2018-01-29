@@ -1,17 +1,23 @@
 @extends('admin.layouts.app')
 
+@section('title')
+    Settings | @parent
+@endsection
+
 @section('content')
-    <a href="{{ route('admin.settings.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
 
-    <div class="row">
-        <div class="col-xs-12">
-
-            <div class="box box-default">
-                <div class="box-body">
-                    @include('admin.settings._list')
-                </div>
-            </div>
-        </div>
-    </div>
+    @component('admin.components.table', [
+        'paginator' => $settings,
+        'columns' => [
+            'id' => 'ID',
+            'key' => 'Key',
+            'value' => 'Value',
+            'tag' => 'Tag'
+        ],
+        'hrefCreate' => route('admin.settings.create'),
+        'hrefEdit' => route('admin.settings.edit', ':id'),
+        'hrefDestroy' => route('admin.settings.destroy', ':id'),
+    ])
+    @endcomponent
 
 @endsection

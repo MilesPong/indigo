@@ -15,15 +15,15 @@ class TagsComposer
     /**
      * @var TagRepository
      */
-    protected $tagRepo;
+    protected $tagRepository;
 
     /**
      * TagsComposer constructor.
-     * @param TagRepository $tagRepo
+     * @param TagRepository $tagRepository
      */
-    public function __construct(TagRepository $tagRepo)
+    public function __construct(TagRepository $tagRepository)
     {
-        $this->tagRepo = $tagRepo;
+        $this->tagRepository = $tagRepository;
     }
 
     /**
@@ -31,7 +31,7 @@ class TagsComposer
      */
     public function compose(View $view)
     {
-        $tags = $this->tagRepo->allWithPostCount();
+        $tags = $this->tagRepository->getResultsHavePosts();
 
         $view->with('tags', $tags);
     }

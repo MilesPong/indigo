@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Role as RoleResource;
 use App\Models\Role;
 use App\Repositories\Contracts\RoleRepository;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class RoleRepositoryEloquent
@@ -21,70 +21,55 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     }
 
     /**
-     * Create role
-     *
+     * @return null|string
+     */
+    public function resource()
+    {
+        return RoleResource::class;
+    }
+
+    /**
      * @param array $attributes
      * @return mixed|null
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function createRole(array $attributes)
+    public function create(array $attributes)
     {
-        $this->model = $this->create($attributes);
+        $model = $this->tempDisableApiResource(function () use ($attributes) {
+            return parent::create($attributes);
+        });
 
-        return $this->syncPermissions(array_get($attributes, 'permission'));
+        $this->syncPermissions($model, array_get($attributes, 'permission'));
+
+        return $this->parseResult($model);
     }
 
     /**
      * Sync role's permissions
      *
+     * @param $model
      * @param $permissionIds
      * @return mixed|null
      */
-    protected function syncPermissions($permissionIds)
+    protected function syncPermissions($model, $permissionIds)
     {
-        if (!$this->model->exists) {
-            return null;
-        }
-
-        $permission = call_user_func([$this->model, 'perms']);
-
-        return call_user_func_array([$permission, 'sync'], [$permissionIds]);
+        return $model->perms()->sync($permissionIds);
     }
 
     /**
-     * Update Role
-     *
      * @param array $attributes
      * @param $id
      * @return mixed|null
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function updateRole(array $attributes, $id)
+    public function update(array $attributes, $id)
     {
-        $this->model = $this->update($attributes, $id);
+        $model = $this->tempDisableApiResource(function () use ($attributes, $id) {
+            return parent::update($attributes, $id);
+        });
 
-        return $this->syncPermissions(array_get($attributes, 'permission'));
-    }
+        $this->syncPermissions($model, array_get($attributes, 'permission'));
 
-    /**
-     * Get role's permissions ids
-     *
-     * @param $value
-     * @param bool $toArray
-     * @return mixed
-     */
-    public function getPermissionIds($value, $toArray = true)
-    {
-        if ($value instanceof Model) {
-            $this->model = $value;
-        } else {
-            $this->model = $this->find($value);
-        }
-
-        $permIds = $this->model->perms()->get()->pluck('pivot.permission_id');
-
-        if ($toArray) {
-            return $permIds->toArray();
-        }
-
-        return $permIds;
+        return $this->parseResult($model);
     }
 }

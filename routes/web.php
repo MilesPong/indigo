@@ -16,7 +16,7 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Auth::routes();
 
 Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'dashboard', 'as' => 'admin.'], function () {
-    Route::get('/', 'DashboardController@index')->name('dashboard.index');
+    Route::get('/', 'DashboardController@index')->name('home');
 
     Route::resource('roles', 'RoleController');
     Route::resource('permissions', 'PermissionController');
@@ -27,9 +27,13 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::post('posts/{id}/force-delete', 'PostController@forceDelete')->name('posts.force-delete');
     Route::resource('posts', 'PostController');
 
-    Route::post('auto-slug', 'DashboardController@autoSlug')->name('auto-slug');
-
     Route::resource('settings', 'SettingController', ['except' => ['show']]);
+
+    // Helpers
+    Route::group(['prefix' => 'helpers', 'namespace' => 'Helpers', 'as' => 'helpers.'], function () {
+        Route::post('slug', 'SlugController@translate')->name('slug.translate');
+        Route::post('image', 'UploadController@uploadImage')->name('upload.image');
+    });
 });
 
 Route::group(['namespace' => 'Frontend'], function () {

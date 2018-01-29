@@ -1,15 +1,73 @@
-
-// Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
-
 // Variables
 @import "variables";
 
 // Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~materialize-css/sass/materialize.scss";
 
-// Ionicons
-@import "node_modules/ionicons/dist/scss/ionicons.scss";
+[v-cloak] { display: none; }
 
-// Font awesome
-@import "node_modules/font-awesome/scss/font-awesome.scss";
+html, body {
+  height: 100%;
+}
+
+// Sticky Footer
+body div#app {
+  display: flex;
+  display: -webkit-flex;
+  min-height: 100%;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+// Fixed sidenav
+main, footer {
+  padding-left: 300px;
+}
+
+// Sidenav
+.sidenav {
+  li {
+    ul.collapsible {
+      li a.collapsible-header {
+        padding-left: 32px;
+        padding-right: 32px;
+      }
+    }
+  }
+}
+
+// Remove page footer padding
+footer.page-footer {
+  padding-top: 0;
+}
+
+// Med and down screen
+@media only screen and (max-width : 992px) {
+  main, footer {
+    padding-left: 0;
+  }
+}
+
+// Large screen
+@media only screen and (min-width: 993px) {
+  .sidenav {
+    top: 64px;
+    z-index: 996;
+  }
+
+  .container {
+    width: 96%;
+  }
+
+  .brand-logo {
+    margin-left: 32px;
+  }
+}
+
+// FAB
+.fixed-action-btn {
+  bottom: 64px;
+}

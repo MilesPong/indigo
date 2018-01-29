@@ -8,9 +8,11 @@
 Homestead.json
 Homestead.yaml
 npm-debug.log
+yarn-error.log
 .env
 .phpstorm.meta.php
 _ide_helper.php
+_ide_helper_models.php
 /storage/debugbar
 
 /public/css
@@ -19,3 +21,6 @@ _ide_helper.php
 /public/img
 /public/plugins
 /public/mix-manifest.json
+
+/public/frontend
+/public/backend

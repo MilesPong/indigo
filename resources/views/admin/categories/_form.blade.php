@@ -1,23 +1,14 @@
-{{ csrf_field() }}
-
-<!-- text input -->
-<div class="form-group">
-    <label>Name</label>
-    <input type="text" class="form-control to-be-slug" placeholder="Category Name" name="name" value="{{ old('name', $category->name) }}">
-</div>
-
-<div class="form-group">
-    <label>Description</label>
-    <input type="text" class="form-control" placeholder="Description" name="description" value="{{ old('description', $category->description) }}">
-</div>
-
-<div class="form-group">
-    <label>Slug</label>
-    <input type="text" class="form-control" placeholder="Slug" name="slug" id="slug" value="{{ old('slug', $category->slug) }}">
-</div>
-
-<div class="form-group">
-    <button class="btn btn-primary pull-right" type="submit">
-        {{ isset($category->id) ? 'Save' : 'Submit' }}
-    </button>
+<div class="row">
+    <div class="input-field col s12 m6">
+        <input id="name" type="text" class="validate" name="name" value="{{ $category->name ?? null }}">
+        <label for="name">Name</label>
+    </div>
+    <div class="input-field col s12 m6">
+        <input id="slug" type="text" class="validate" name="slug" value="{{ $category->slug ?? null }}">
+        <label for="slug">Slug</label>
+    </div>
+    <div class="input-field col s12">
+        <input id="description" type="text" class="validate" name="description" value="{{ $category->description ?? null }}">
+        <label for="description">Description</label>
+    </div>
 </div>

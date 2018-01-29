@@ -3,23 +3,34 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Repositories\Contracts\CategoryRepository;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Repositories\Contracts\PostRepository;
 
-class CategoryController extends Controller
+/**
+ * Class CategoryController
+ * @package App\Http\Controllers\Frontend
+ */
+class CategoryController extends FrontendController
 {
     /**
-     * @var CategoryRepository
+     * @var \App\Repositories\Contracts\CategoryRepository
      */
-    protected $cateRepo;
+    protected $categoryRepository;
+    /**
+     * @var \App\Repositories\Contracts\PostRepository
+     */
+    protected $postRepository;
 
     /**
      * CategoryController constructor.
-     * @param $cateRepo
+     * @param \App\Repositories\Contracts\CategoryRepository $categoryRepository
+     * @param \App\Repositories\Contracts\PostRepository $postRepository
      */
-    public function __construct(CategoryRepository $cateRepo)
+    public function __construct(CategoryRepository $categoryRepository, PostRepository $postRepository)
     {
-        $this->cateRepo = $cateRepo;
+        $this->categoryRepository = $categoryRepository;
+        $this->postRepository = $postRepository;
+
+        $this->disableApiResource($this->categoryRepository, $this->postRepository);
     }
 
     /**
@@ -28,7 +39,9 @@ class CategoryController extends Controller
      */
     public function show($slug)
     {
-        list($category, $posts) = $this->cateRepo->getWithPosts($slug);
+        $category = $this->categoryRepository->getBySlug($slug);
+
+        $posts = $this->postRepository->paginateOfCategory($category);
 
         return view('categories.show', compact('posts', 'category'));
     }

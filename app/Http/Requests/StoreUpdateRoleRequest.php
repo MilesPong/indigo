@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUpdateRoleRequest extends FormRequest
 {
@@ -36,7 +37,11 @@ class StoreUpdateRoleRequest extends FormRequest
             case 'PUT':
             case 'PATCH':
                 return array_merge($rules, [
-                    'name' => 'required|max:20|unique:roles,name,' . $this->route('role')
+                    'name' => [
+                        'required',
+                        'max:20',
+                        Rule::unique('roles')->ignore($this->route('role'))
+                    ]
                 ]);
             default:
         }

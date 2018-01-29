@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Permission;
 use App\Repositories\Contracts\PermissionRepository;
+use App\Http\Resources\Permission as PermissionResource;
 
 /**
  * Class PermissionRepositoryEloquent
@@ -17,5 +18,13 @@ class PermissionRepositoryEloquent extends BaseRepository implements PermissionR
     public function model()
     {
         return Permission::class;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function resource()
+    {
+        return PermissionResource::class;
     }
 }

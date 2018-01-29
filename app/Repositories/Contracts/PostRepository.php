@@ -2,58 +2,70 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\Tag;
+use App\Repositories\Contracts\Helpers\SlugableInterface;
+use App\Repositories\Contracts\Repository as RepositoryInterface;
+
 /**
  * Interface PostRepository
  * @package App\Repositories\Contracts
  */
-interface PostRepository extends RepositoryInterface
+interface PostRepository extends RepositoryInterface, SlugableInterface
 {
     /**
-     * @param array $attributes
+     * @param \App\Models\Post $model
      * @return mixed
      */
-    public function createPost(array $attributes);
+    public function previous(Post $model);
 
     /**
-     * @param array $attributes
-     * @param $id
+     * @param \App\Models\Post $model
      * @return mixed
      */
-    public function updatePost(array $attributes, $id);
-
-    /**
-     * @param null $perPage
-     * @return mixed
-     */
-    public function lists($perPage = null);
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function retrieve($id);
-
-    /**
-     * @param $slug
-     * @return mixed
-     */
-    public function getBySlug($slug);
-
-    /**
-     * @param $model
-     * @return mixed
-     */
-    public function previous($model);
-
-    /**
-     * @param $model
-     * @return mixed
-     */
-    public function next($model);
+    public function next(Post $model);
 
     /**
      * @param int $limit
      * @return mixed
      */
     public function hot($limit = 5);
+
+    /**
+     * @param \App\Models\Category $category
+     * @return mixed
+     */
+    public function paginateOfCategory(Category $category);
+
+    /**
+     * @param \App\Models\Tag $tag
+     * @return mixed
+     */
+    public function paginateOfTag(Tag $tag);
+
+    /**
+     * @param string $column
+     * @return $this
+     */
+    public function latestPublished($column = 'published_at');
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     */
+    public function frontendPaginate($perPage = null, $columns = ['*']);
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @return mixed
+     */
+    public function backendPaginate($perPage = null, $columns = ['*']);
+
+    /**
+     * @return mixed
+     */
+    public function adminMode();
 }

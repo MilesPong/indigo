@@ -11,6 +11,34 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## 0.4.0 - 2018-01-29
+### Added
+- Multiple mix support
+- Materialize-css views in dashboard
+- Vue support
+- BackendController
+- API resources(new feature in L5.5)
+- Criteria support of Repository
+
+### Changed
+- Upgrade to L5.5
+- Update materialize-css to latest 'next' version
+- NPM packages
+- Route names
+- PHPDoc with full qualified namespace
+- Refactor Repository and concrete
+- FormRequest
+- Refactor Repository(`4c87f6e`)
+- MarkDownParser
+- Upgrade composer packages
+
+### Removed
+- AdminLTE views
+- Unnecessary fields of Post
+
+### Fixed
+- Fix previous and next post bug
+
 ## 0.3.0 - 2017-12-10
 ### Added
 - Visitor history and base counter. See branch `counter` and `visitor`
@@ -27,7 +55,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Side navigation bar style
 
 ### Fixed
-- Fix Postable retrieve data bug (`890c082`)
+- Fix HasPost retrieve data bug (`890c082`)
 
 ## 0.2.0 - 2017-06-15
 ### Added

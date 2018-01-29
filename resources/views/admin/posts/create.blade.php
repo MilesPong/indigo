@@ -1,26 +1,18 @@
 @extends('admin.layouts.app')
 
-@inject('post', 'App\Models\Post')
+@section('title')
+    Posts | @parent
+@endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <!-- general form elements disabled -->
-            <div class="box box-warning">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Post Info</h3>
-                </div>
-                <!-- /.box-header -->
-                <form role="form" action="{{ route('admin.posts.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
-                    <div class="box-body">
-                        @include('admin.posts._form')
-                    </div>
-                    <!-- /.box-body -->
-                @stack('box-footer')
-                <!-- /.box-footer -->
-                </form>
-            </div>
-            <!-- /.box -->
-        </div>
-    </div>
+
+    @component('admin.components.form_create', [
+        'formAction' => route('admin.posts.store'),
+        'redirectUrl' => route('admin.posts.index')
+    ])
+
+        @include('admin.posts._form')
+
+    @endcomponent
+
 @endsection

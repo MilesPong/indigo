@@ -15,6 +15,6 @@ class TagObserver extends BaseObserver
      */
     public function updated(Tag $tag)
     {
-        $this->cacheHelper->flushEntity($tag);
+
     }
 }

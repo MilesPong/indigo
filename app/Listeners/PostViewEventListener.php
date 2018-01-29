@@ -3,9 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\PostViewEvent;
-use App\Services\PostViewCounter;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Indigo\Post\PostViewCounter;
 
 /**
  * Class PostViewEventListener
@@ -14,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class PostViewEventListener
 {
     /**
-     * @var PostViewCounter
+     * @var \Indigo\Post\PostViewCounter
      */
     protected $counter;
 
@@ -30,7 +28,7 @@ class PostViewEventListener
     /**
      * Handle the event.
      *
-     * @param  PostViewEvent  $event
+     * @param  PostViewEvent $event
      * @return void
      */
     public function handle(PostViewEvent $event)

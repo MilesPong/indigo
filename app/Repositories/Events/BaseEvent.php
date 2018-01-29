@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Events;
 
-use App\Repositories\Contracts\RepositoryInterface;
+use App\Repositories\Contracts\Repository;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,7 +17,7 @@ abstract class BaseEvent
     protected $model;
 
     /**
-     * @var RepositoryInterface
+     * @var Repository
      */
     protected $repository;
 
@@ -31,7 +31,7 @@ abstract class BaseEvent
      * @param $repository
      * @param $model
      */
-    public function __construct(RepositoryInterface $repository, Model $model)
+    public function __construct(Repository $repository, Model $model)
     {
         $this->model = $model;
         $this->repository = $repository;
@@ -46,7 +46,7 @@ abstract class BaseEvent
     }
 
     /**
-     * @return RepositoryInterface
+     * @return Repository
      */
     public function getRepository()
     {

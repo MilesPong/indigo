@@ -1,23 +1,14 @@
-{{ csrf_field() }}
-
-<!-- text input -->
-<div class="form-group">
-    <label>Name</label>
-    <input type="text" class="form-control to-be-slug" placeholder="Tag Name" name="name" value="{{ old('name', $tag->name) }}">
-</div>
-
-<div class="form-group">
-    <label>Description</label>
-    <input type="text" class="form-control" placeholder="Description" name="description" value="{{ old('description', $tag->description) }}">
-</div>
-
-<div class="form-group">
-    <label>Slug</label>
-    <input type="text" class="form-control" placeholder="Slug" id="slug" name="slug" value="{{ old('slug', $tag->slug) }}">
-</div>
-
-<div class="form-group">
-    <button class="btn btn-primary pull-right" type="submit">
-        {{ isset($tag->id) ? 'Save' : 'Submit' }}
-    </button>
+<div class="row">
+    <div class="input-field col s12 m6">
+        <input id="name" type="text" class="validate" name="name" value="{{ $tag->name ?? null }}">
+        <label for="name">Name</label>
+    </div>
+    <div class="input-field col s12 m6">
+        <input id="slug" type="text" class="validate" name="slug" value="{{ $tag->slug ?? null }}">
+        <label for="slug">Slug</label>
+    </div>
+    <div class="input-field col s12">
+        <input id="description" type="text" class="validate" name="description" value="{{ $tag->description ?? null }}">
+        <label for="description">Description</label>
+    </div>
 </div>

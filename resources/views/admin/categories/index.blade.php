@@ -1,17 +1,23 @@
 @extends('admin.layouts.app')
 
+@section('title')
+    Categories | @parent
+@endsection
+
 @section('content')
-    <a href="{{ route('admin.categories.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
 
-    <div class="row">
-        <div class="col-xs-12">
-
-            <div class="box box-default">
-                <div class="box-body">
-                    @include('admin.categories._list')
-                </div>
-            </div>
-        </div>
-    </div>
+    @component('admin.components.table', [
+        'paginator' => $categories,
+        'columns' => [
+            'name' => 'Name',
+            'description' => 'Description',
+            'slug' => 'Slug'
+        ],
+        'hrefCreate' => route('admin.categories.create'),
+        'hrefShow' => route('admin.categories.show', ':id'),
+        'hrefEdit' => route('admin.categories.edit', ':id'),
+        'hrefDestroy' => route('admin.categories.destroy', ':id'),
+    ])
+    @endcomponent
 
 @endsection

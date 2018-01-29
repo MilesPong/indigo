@@ -6,8 +6,9 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "fideloper/proxy": "~3.3",
+        "doctrine/dbal": "~2.3",
         "erusev/parsedown": "^1.6",
+        "fideloper/proxy": "~3.3",
         "jellybool/translug": "^2.0",
         "jenssegers/agent": "^2.5",
         "laracasts/presenter": "^0.2.1",
@@ -24,15 +25,18 @@
         "barryvdh/laravel-debugbar": "^3.1",
         "barryvdh/laravel-ide-helper": "^2.3",
         "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~6.0"
+        "mockery/mockery": "~1.0",
+        "phpunit/phpunit": "~6.0",
+        "symfony/thanks": "^1.0"
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database/seeds",
+            "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Indigo\\": "app/Indigo"
         },
         "files": [
             "app/helpers.php"
@@ -62,6 +66,7 @@
         ],
         "post-update-cmd": [
             "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:models --dir='app/Models' --nowrite",
             "@php artisan ide-helper:meta"
         ]
     },

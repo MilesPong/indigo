@@ -14,15 +14,20 @@ class CategoriesComposer
     /**
      * @var CategoryRepository
      */
-    protected $cateRepo;
+    protected $cateRepository;
+
+    /**
+     * @var
+     */
+    protected $categories;
 
     /**
      * CategoriesComposer constructor.
-     * @param CategoryRepository $cateRepo
+     * @param CategoryRepository $cateRepository
      */
-    public function __construct(CategoryRepository $cateRepo)
+    public function __construct(CategoryRepository $cateRepository)
     {
-        $this->cateRepo = $cateRepo;
+        $this->cateRepository = $cateRepository;
     }
 
     /**
@@ -30,8 +35,10 @@ class CategoriesComposer
      */
     public function compose(View $view)
     {
-        $categories = $this->cateRepo->allWithPostCount();
+        if (!$this->categories) {
+            $this->categories = $this->cateRepository->getResultsHavePosts();
+        }
 
-        $view->with('categories', $categories);
+        $view->with('categories', $this->categories);
     }
 }

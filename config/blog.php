@@ -8,10 +8,10 @@ return [
         'timeout' => 3600, // 1h
         'key' => 'post_viewed',
     ],
-    'cache' => [
-        'enable' => env('ENABLE_DATA_CACHE', true),
-        'minutes' => 60,
-    ],
+    // 'cache' => [
+    //     'enable' => env('ENABLE_DATA_CACHE', true),
+    //     'minutes' => 60,
+    // ],
     'posts' => [
         'per_page' => 5,
     ],
@@ -25,6 +25,11 @@ return [
         'driver' => env('COMMENT_DRIVER', 'null'), // Supported: "null", "disqus"
         'disqus' => [
             'short_name' => env('DISQUS_SHORT_NAME'),
+        ]
+    ],
+    'repository' => [
+        'pagination' => [
+            'per_page' => env('REPOSITORY_DEFAULT_PER_PAGE', 15)
         ]
     ]
 ];

@@ -1,17 +1,24 @@
 @extends('admin.layouts.app')
 
+@section('title')
+    Users | @parent
+@endsection
+
 @section('content')
-    <a href="{{ route('admin.users.create') }}" class="btn btn-lg btn-primary btn-flat" style="margin-bottom: 15px;">Add New</a>
 
-    <div class="row">
-        <div class="col-xs-12">
-
-            <div class="box box-default">
-                <div class="box-body">
-                    @include('admin.users._list')
-                </div>
-            </div>
-        </div>
-    </div>
+    @component('admin.components.table', [
+        'paginator' => $users,
+        'columns' => [
+            'name' => 'Name',
+            'email' => 'Email',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At'
+        ],
+        'hrefCreate' => route('admin.users.create'),
+        'hrefShow' => route('admin.users.show', ':id'),
+        'hrefEdit' => route('admin.users.edit', ':id'),
+        'hrefDestroy' => route('admin.users.destroy', ':id'),
+    ])
+    @endcomponent
 
 @endsection

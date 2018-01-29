@@ -1,148 +1,207 @@
-{{ csrf_field() }}
-
-<!-- text input -->
-<div class="form-group">
-    <label for="title" class="col-sm-2 control-label">Title</label>
-
-    <div class="col-sm-10">
-        <input type="text" class="form-control to-be-slug" name="title" id="title" placeholder="Title" value="{{ old('title', $post->title) }}">
+<div class="row">
+    <div class="input-field col s12 m6">
+        <input id="title" type="text" class="validate" name="title" value="{{ $post->title ?? null }}">
+        <label for="title">Title</label>
     </div>
-</div>
-
-<div class="form-group">
-    <label for="description" class="col-sm-2 control-label">Description</label>
-
-    <div class="col-sm-10">
-        <input type="text" class="form-control" name="description" id="description" placeholder="Description" value="{{ old('description', $post->description) }}">
+    <div class="input-field col s12 m6">
+        <input id="slug" type="text" class="validate" name="slug" value="{{ $post->slug ?? null }}" @if(isset($post->id))readonly="readonly"@endif>
+        <label id="slug-label" for="slug">Slug</label>
     </div>
-</div>
 
-<div class="form-group">
-    <label for="slug" class="col-sm-2 control-label">Slug</label>
-
-    <div class="col-sm-10">
-        <input type="text" class="form-control" name="slug" id="slug" placeholder="Slug" value="{{ old('slug', $post->slug) }}" @if(isset($post->id))disabled="disabled"@endif>
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="category_id" class="col-sm-2 control-label">Category</label>
-    <div class="col-sm-10">
-        <select id="category_id" class="form-control select2 category-selected" name="category_id">
-            @foreach($categories as $category)
+    <div class="input-field col s12 m6">
+        @component('admin.components.select', [
+            'name' => 'category_id',
+            'label' => 'Category',
+            'selected' => isset($post) ? $post->category_id : null
+        ])
+            @foreach(App\Models\Category::all() as $category)
                 <option value="{{ $category->id }}">{{ $category->name }}</option>
             @endforeach
-        </select>
+        @endcomponent
     </div>
-</div>
 
-<div class="form-group">
-    <label for="tag" class="col-sm-2 control-label">Tags</label>
-    <div class="col-sm-10">
-        <select id="tag" name="tag[]" class="form-control select2 tags-selected" multiple="multiple" data-placeholder="Select Tag(s)">
-            @foreach($tags as $tag)
+    {{-- TODO dynamic add tags --}}
+    <div class="input-field col s12 m6">
+        @component('admin.components.select', [
+            'name' => 'tag',
+            'label' => 'Tags',
+            'isMultiple' => true,
+            'selected' => isset($post) ? $post->tags->pluck('name')->toArray() : null
+        ])
+            @foreach(App\Models\Tag::all() as $tag)
                 <option value="{{ $tag->name }}">{{ $tag->name }}</option>
             @endforeach
-        </select>
+        @endcomponent
+    </div>
+
+    <div class="input-field col s12">
+        <textarea id="description" class="materialize-textarea" type="text" name="description">{{ $post->description ?? null }}</textarea>
+        <label for="description">Description</label>
+    </div>
+
+    {{-- TODO show image --}}
+    <div class="input-field col s8">
+        <input id="feature_img" placeholder="e.g. https://example.org/one.jpg" type="text" class="validate" name="feature_img" value="{{ $post->feature_img ?? null }}">
+        <label for="feature_img">Feature Image</label>
+    </div>
+
+    <div class="input-field file-field col s4">
+        <div class="btn">
+            <span>Upload</span>
+            <input id="file-upload" type="file" accept="image/*">
+        </div>
+        <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+        </div>
+    </div>
+
+    <div class="input-field col s12 body-field">
+        <textarea id="body" class="materialize-textarea" type="text" name="body">{{ isset($post->id) ? $post->rawContent : null }}</textarea>
+        <label id="body-label" for="body">Content</label>
+    </div>
+
+    <div class="input-field col s6">
+        <input id="published_date" type="hidden" class="datepicker">
+        {{--<label for="published_date">Published Date</label>--}}
+    </div>
+
+    <div class="input-field col s6">
+        <input id="published_time" type="hidden" class="timepicker">
+        {{--<label for="published_time">Published Time</label>--}}
+    </div>
+
+    <div class="input-field col s12">
+        <input type="text" name="published_at" id="published_at" value="{{ isset($post->id) ? $post->published_at->toDatetimeString() : null }}" readonly>
+        <label id="published_at-label" for="published_at">Published At</label>
+    </div>
+
+    <div class="input-field col s12">
+        <div class="switch">
+            <label>
+                Publish
+                <input type="checkbox" name="is_draft" id="is_draft" @if($post->is_draft ?? false)checked="checked"@endif>
+                <span class="lever"></span>
+                Draft
+            </label>
+        </div>
     </div>
 </div>
-
-<div class="form-group">
-    <label for="feature_img" class="col-sm-2 control-label">Feature image</label>
-    <div class="col-sm-5">
-        <input type="text" name="feature_img" id="feature_img" class="form-control" placeholder="e.g. http://example.org/one.jpg" value="{{ old('feature_img', $post->feature_img) }}">
-    </div>
-    <div class="col-sm-5">
-        <input type="file" name="feature_img_file" accept="image/*" class="btn btn-success">
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="excerpt" class="col-sm-2 control-label">Excerpt</label>
-    <div class="col-sm-10">
-        <textarea name="excerpt" id="excerpt" rows="3">{{ old('excerpt', $post->excerpt) }}</textarea>
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="mdeditor" class="col-sm-2 control-label">Content</label>
-
-    <div class="col-sm-10">
-        <textarea id="mdeditor" name="body">{{ old('body') ?: (isset($post->id) ? $post->rawContent : null) }}</textarea>
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="published_at" class="col-sm-2 control-label">Published At</label>
-
-    <div class='col-sm-10'>
-        <input type='text' class="form-control" name="published_at" id="published_at" placeholder="Published At" value="{{ $post->present()->publishedTime }}"/>
-    </div>
-</div>
-
-<div class="form-group">
-    <div class="col-sm-2 control-label">Draft</div>
-
-    <div class="col-sm-10">
-        <input type="checkbox" name="is_draft" id="is_draft" @if(old('is_draft', $post->is_draft))checked="checked"@endif>
-        <label for="is_draft">Is Draft</label>
-    </div>
-</div>
-
-@push('box-footer')
-<div class="box-footer">
-    <button class="btn btn-primary btn-lg btn-flag pull-right" type="submit">
-        {{ isset($post->id) ? 'Save' : 'Submit' }}
-    </button>
-</div>
-@endpush
 
 @push('css')
-<link rel="stylesheet" href="{{ asset('plugins/select2/select2.min.css') }}">
-<link rel="stylesheet" href="{{ asset('css/simplemde.min.css') }}">
-<link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('plugins/iCheck/all.css') }}">
-<style>
-    .editor-toolbar.fullscreen,
-    .CodeMirror-fullscreen,
-    .editor-preview-side {
-        z-index: 2000
-    }
-
-    textarea[name=excerpt] {
-        width: 100%;
-    }
-</style>
+    <link rel="stylesheet" href="{{ asset('css/simplemde.min.css') }}">
+    <style>
+        .file-path {
+            display: none;
+        }
+        .editor-toolbar {
+            margin-top: 15px;
+        }
+        .body-field .CodeMirror-fullscreen {
+            top: 110px;
+        }
+        .body-field .fullscreen {
+            margin-top: 64px;
+        }
+        @media only screen and (min-width: 993px) {
+            .body-field .CodeMirror-fullscreen, .body-field .fullscreen {
+                margin-left: 300px;
+            }
+        }
+    </style>
 @endpush
 
 @push('js')
-<script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
-<script src="{{ asset('js/simplemde.min.js') }}"></script>
-<script src="{{ asset('js/moment.min.js') }}"></script>
-<script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
-<script src="{{ asset('plugins/iCheck/icheck.min.js') }}"></script>
-<script>
-    $(function () {
-        var simplemde = new SimpleMDE({element: $("#mdeditor")[0]});
+    <script src="{{ asset('js/simplemde.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('#description').trigger('autoresize');
 
-        $(".category-selected").select2().val([{{ old('category_id', isset($post->category_id) ? $post->category_id : null)}}]).trigger('change');
+            /*
+            * TODO
+            * 1. use axios
+            * 2. result feedback
+            * */
+            $('#title').blur(e => {
+                let text = e.target.value;
+                if (!text || $('#slug').val()) {
+                    return;
+                }
+                $.post('{{ route("admin.helpers.slug.translate") }}', {text})
+                    .done(data => {
+                        $('#slug').val(data.slug);
+                        $('#slug-label').addClass('active');
+                    })
+                    .fail((jqXHR, textStatus, errorThrown) => {
+                        // Log the error to the console
+                        console.error(
+                            "The following error occurred: "+
+                            textStatus, errorThrown
+                        );
+                    })
+            });
 
-        $(".tags-selected").select2({tags:true}).val([{!! $post->present()->selectedTags !!}]).trigger('change');
+            /*
+            * TODO
+            * 1. use axios
+            * 2. uploading feedback
+            * 3. result feedback
+            * */
+            $('#file-upload').change(e => {
+                let fd = new FormData();
+                fd.append('image', e.target.files[0]);
 
-        $('#published_at').datetimepicker();
+                $.ajax({
+                    url: '{{ route("admin.helpers.upload.image") }}',
+                    type: 'POST',
+                    data: fd,
+                    processData: false,
+                    contentType: false
+                }).done(data => {
+                    console.log(data);
+                    $('#feature_img').val(data.path);
+                }).fail((jqXHR, textStatus, errorThrown) => {
+                    // Log the error to the console
+                    console.error(
+                        "The following error occurred: "+
+                        textStatus, errorThrown
+                    );
+                    swal(
+                        'Oops...',
+                        'Something went wrong!',
+                        'error'
+                    )
+                })
+            });
 
-        $('#is_draft').each(function(){
-            var self = $(this),
-                label = self.next(),
-                label_text = label.text();
+            $('#body-label').addClass('active');
 
-            label.remove();
-            self.iCheck({
-                checkboxClass: 'icheckbox_line-blue',
-                radioClass: 'iradio_line-blue',
-                insert: '<div class="icheck_line-icon"></div>' + label_text
+            $('#published_at').click(() => {
+                dateInstance.open()
+            });
+
+            $('#published_time').change((e) => {
+                $('#published_at').val($('#published_date').val() + ' ' + e.target.value);
+                $('#published_at-label').addClass('active');
             });
         });
-    });
-</script>
+
+        let simplemde = new SimpleMDE({ element: document.getElementById("body") });
+
+        // TODO temporarily fixed empty form body string when first submit
+        simplemde.codemirror.on("change", function(){
+            $('#body').val(simplemde.value());
+        });
+
+        let timeInstance = M.Timepicker.init(document.querySelector('.timepicker'));
+
+        let dateInstance = M.Datepicker.init(document.querySelector('.datepicker'), {
+            format: 'yyyy-mm-dd',
+            onClose: () => {
+                if ($('#published_date').val()) {
+                    // TODO will-change memory exhausted?
+                    timeInstance.open();
+                }
+            }
+        });
+    </script>
 @endpush

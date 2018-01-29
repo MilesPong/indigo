@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUpdatePermissionRequest extends FormRequest
 {
@@ -35,7 +36,11 @@ class StoreUpdatePermissionRequest extends FormRequest
             case "PUT":
             case "PATCH":
                 return array_merge($rules, [
-                    'name' => 'required|max:20|unique:permissions,name,' . $this->route('permission')
+                    'name' => [
+                        'required',
+                        'max:20',
+                        Rule::unique('permissions')->ignore($this->route('permission'))
+                    ]
                 ]);
             default:
         }

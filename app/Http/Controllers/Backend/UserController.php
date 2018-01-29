@@ -5,30 +5,28 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Requests\StoreUpdateUserRequest;
 use App\Repositories\Contracts\RoleRepository;
 use App\Repositories\Contracts\UserRepository;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class UserController extends Controller
+class UserController extends BackendController
 {
     /**
      * @var UserRepository
      */
-    protected $userRepo;
+    protected $userRepository;
 
     /**
      * @var RoleRepository
      */
-    protected $roleRepo;
+    protected $roleRepository;
 
     /**
      * UserController constructor.
-     * @param UserRepository $userRepo
-     * @param RoleRepository $roleRepo
+     * @param UserRepository $userRepository
+     * @param RoleRepository $roleRepository
      */
-    public function __construct(UserRepository $userRepo, RoleRepository $roleRepo)
+    public function __construct(UserRepository $userRepository, RoleRepository $roleRepository)
     {
-        $this->userRepo = $userRepo;
-        $this->roleRepo = $roleRepo;
+        $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     /**
@@ -38,7 +36,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userRepo->paginate();
+        $users = $this->userRepository->paginate();
 
         return view('admin.users.index', compact('users'));
     }
@@ -50,22 +48,20 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = $this->roleRepo->all();
-
-        return view('admin.users.create', compact('roles'));
+        return view('admin.users.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  StoreUpdateUserRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUpdateUserRequest $request)
     {
-        $this->userRepo->createUser($request->all());
+        $user = $this->userRepository->create($request->all());
 
-        return redirect()->route('admin.users.index')->withSuccess('Create user successfully!');
+        return $this->successCreated($user);
     }
 
     /**
@@ -76,7 +72,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = $this->userRepo->find($id);
+        $user = $this->userRepository->find($id);
 
         return response($user);
     }
@@ -89,13 +85,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->userRepo->find($id);
+        $user = $this->userRepository->with('roles')->find($id);
 
-        $userRoles = $this->userRepo->getRoleIds($user);
-
-        $roles = $this->roleRepo->all();
-
-        return view('admin.users.edit', compact('user', 'userRoles', 'roles'));
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -103,25 +95,25 @@ class UserController extends Controller
      *
      * @param  StoreUpdateUserRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StoreUpdateUserRequest $request, $id)
     {
-        $this->userRepo->updateUser($request->all(), $id);
+        $user = $this->userRepository->update($request->all(), $id);
 
-        return redirect()->route('admin.users.index')->withSuccess('Update user successfully!');
+        return $this->successCreated($user);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        $this->userRepo->delete($id);
+        $this->userRepository->delete($id);
 
-        return redirect()->route('admin.users.index')->withSuccess('Delete user successfully!');
+        return $this->successDeleted();
     }
 }
