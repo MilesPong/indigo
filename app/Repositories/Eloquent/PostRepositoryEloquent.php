@@ -285,7 +285,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function getDefaultPerPage()
     {
-        return config('blog.posts.per_page');
+        return config('indigo.posts.per_page');
     }
 
     /**

@@ -46,6 +46,6 @@ class VisitorMiddleware
      */
     protected function allowLog()
     {
-        return config('blog.log.visitor', false);
+        return config('indigo.log.visitor', false);
     }
 }
