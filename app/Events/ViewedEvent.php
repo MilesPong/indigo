@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Indigo\Contracts\Viewable;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,25 +12,25 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 /**
- * Class PostViewEvent
+ * Class ViewedEvent
  * @package App\Events
  */
-class PostViewEvent
+class ViewedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * @var
+     * @var \App\Indigo\Contracts\Viewable
      */
-    public $postId;
+    public $viewable;
 
     /**
-     * PostViewEvent constructor.
-     * @param $postId
+     * ViewedEvent constructor.
+     * @param \App\Indigo\Contracts\Viewable $viewable
      */
-    public function __construct($postId)
+    public function __construct(Viewable $viewable)
     {
-        $this->postId = $postId;
+        $this->viewable = $viewable;
     }
 
     /**

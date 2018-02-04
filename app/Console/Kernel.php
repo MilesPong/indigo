@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Console\Commands\SavePostViewCount;
+use App\Console\Commands\SaveCounter;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,7 +14,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        SavePostViewCount::class
     ];
 
     /**
@@ -27,7 +26,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('view_count:save')->hourly()->appendOutputTo(storage_path() . '/logs/cron.log');
+        $schedule->command(SaveCounter::class)->hourly()->appendOutputTo(storage_path() . '/logs/counter.log');
     }
 
     /**
