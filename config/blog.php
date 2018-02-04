@@ -8,10 +8,6 @@ return [
         'timeout' => 3600, // 1h
         'key' => 'post_viewed',
     ],
-    // 'cache' => [
-    //     'enable' => env('ENABLE_DATA_CACHE', true),
-    //     'minutes' => 60,
-    // ],
     'posts' => [
         'per_page' => 5,
     ],
