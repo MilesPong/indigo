@@ -27,6 +27,9 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command(SaveCounter::class)->hourly()->appendOutputTo(storage_path() . '/logs/counter.log');
+        $schedule->command('backup:clean')->dailyAt('01:00');
+        $schedule->command('backup:run')->dailyAt('02:00');
+        $schedule->command('backup:monitor')->twiceMonthly();
     }
 
     /**
