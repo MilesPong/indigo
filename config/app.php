@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         \App\Providers\CounterServiceProvider::class,
+        \App\Providers\GoogleDriveServiceProvider::class,
 
         // Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         // Zizaco\Entrust\EntrustServiceProvider::class,
