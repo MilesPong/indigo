@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
+use App\Indigo\FlysystemAdapter\GoogleDriveAdapter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
