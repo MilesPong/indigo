@@ -40,9 +40,102 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function has($path)
     {
-        $path = $this->pathToId($path);
+        return $this->callParentMethod($path);
+    }
 
-        return $path ? parent::has($path) : false;
+    /**
+     * @param $humanPath
+     * @return array|bool|null
+     */
+    protected function callParentMethod($humanPath)
+    {
+        $method = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
+
+        return ($fileId = $this->pathToId($humanPath)) ? parent::{$method}($fileId) : false;
+    }
+
+    /**
+     * Read a file.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function read($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
+     * Read a file as a stream.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function readStream($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
+     * Get all the meta data of a file or directory.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function getMetadata($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
+     * Get all the meta data of a file or directory.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function getSize($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
+     * Get the mimetype of a file.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function getMimetype($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
+     * Get the timestamp of a file.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function getTimestamp($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
+     * Get the visibility of a file.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function getVisibility($path)
+    {
+        return $this->callParentMethod($path);
     }
 
     /**
