@@ -11,23 +11,25 @@ use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter as BaseGoogleDriveAdapter;
 class GoogleDriveAdapter extends BaseGoogleDriveAdapter
 {
     /**
-     * A multidimensional array to store human_path with file_id.
-     * e.g.
-     * [
-     *  root => [
-     *   foo/bar/file => foo_file_id/bar_file_id/file_id
-     *  ]
-     * ]
+     * An array to store human_path with file_id.
+     *
+     * e.g. foo/bar/file => foo_file_id/bar_file_id/file_id
      *
      * @var array
      */
     protected $pathMap = [];
     /**
-     * A multidimensional array to store list contents.
+     * An array to store all list contents.
      *
      * @var array
      */
     protected $contents = [];
+    /**
+     * Determine if path map is created.
+     *
+     * @var bool
+     */
+    protected $isPathMapCreated = false;
 
     /**
      * Check whether a file exists.
@@ -49,40 +51,41 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function pathToId($humanPath)
     {
-        return $this->getPathMap('', true)[$humanPath] ?? false;
+        return $this->getPathMap()[$humanPath] ?? false;
     }
 
     /**
-     * @param string $dirname
-     * @param bool $recursive
+     * @param bool $force
+     * @return array|mixed
+     */
+    public function getPathMap($force = false)
+    {
+        return (!$this->isPathMapCreated || $force) ? tap($this->createPathMap(), function () {
+            $this->pathMapCreated();
+        }) : $this->pathMap;
+    }
+
+    /**
+     * @param $data
+     * @return $this
+     */
+    protected function setPathMap($data)
+    {
+        $this->pathMap = $data;
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
-    public function getPathMap($dirname = '', $recursive = false)
+    protected function createPathMap()
     {
-        return $this->pathMap[$this->formatDirname($dirname)] ?? $this->createPathMap($dirname, $recursive);
-    }
+        $listContents = $this->retrieveAllListContents();
 
-    /**
-     * @param $dirname
-     * @return string
-     */
-    public function formatDirname($dirname)
-    {
-        return $dirname ?: 'default';
-    }
+        $dirMap = $this->generateDirMap($listContents);
 
-    /**
-     * @param string $dirname
-     * @param bool $recursive
-     * @return mixed
-     */
-    private function createPathMap($dirname = '', $recursive = false)
-    {
-        $this->initializePathMap($dirname);
-
-        $listContents = $this->retrieveListsContents($dirname, $recursive);
-
-        $dirMap = $this->prepareMap($listContents);
+        $data = [];
 
         foreach ($listContents as $meta) {
             $pathArray = explode('/', $meta['path']);
@@ -95,31 +98,30 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
             $basename = $this->formatBaseName($meta['filename'], $meta['extension']);
             $humanPath = ltrim(implode('/', $humanDirArray) . '/' . $basename, '/');
 
-            $this->setPathMap($dirname, $humanPath, $meta['path']);
+            $data[$humanPath] = $meta['path'];
         }
 
-        return $this->getPathMap($dirname);
+        return tap($data, function ($data) {
+            $this->setPathMap($data);
+        });
     }
 
     /**
-     * @param $dirname
-     */
-    private function initializePathMap($dirname)
-    {
-        $this->pathMap[$this->formatDirname($dirname)] = [];
-    }
-
-    /**
-     * @param string $dirname
-     * @param bool $recursive
      * @return mixed
      */
-    public function retrieveListsContents($dirname = '', $recursive = false)
+    public function retrieveAllListContents()
     {
-        return $this->contents[$this->formatDirname($dirname)] ?? tap($this->originListContents($dirname, $recursive),
-                function ($data) use ($dirname) {
-                    $this->setListContents($dirname, $data);
-                });
+        return $this->contents ?: tap($this->allListContents(), function ($data) {
+            $this->setListContents($data);
+        });
+    }
+
+    /**
+     * @return mixed
+     */
+    public function allListContents()
+    {
+        return $this->originListContents('', true);
     }
 
     /**
@@ -133,19 +135,18 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     }
 
     /**
-     * @param $dirname
      * @param $data
      */
-    private function setListContents($dirname, $data)
+    protected function setListContents($data)
     {
-        $this->contents[$this->formatDirname($dirname)] = $data;
+        $this->contents = $data;
     }
 
     /**
      * @param $listContents
      * @return array
      */
-    private function prepareMap($listContents)
+    private function generateDirMap($listContents)
     {
         $map = [];
 
@@ -177,13 +178,11 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     }
 
     /**
-     * @param $dirname
-     * @param $humanPath
-     * @param $fileId
+     * @param bool $status
      */
-    private function setPathMap($dirname, $humanPath, $fileId)
+    protected function pathMapCreated($status = true)
     {
-        $this->pathMap[$this->formatDirname($dirname)][$humanPath] = $fileId;
+        $this->isPathMapCreated = $status;
     }
 
     /**
@@ -196,24 +195,55 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function listContents($dirname = '', $recursive = false)
     {
-        return $this->humanContents($dirname, $recursive);
+        return $this->humanListContents($dirname, $recursive);
     }
 
     /**
-     * @param string $dirname
+     * @param string $directory
      * @param bool $recursive
      * @return array
      */
-    public function humanContents($dirname = '', $recursive = false)
+    public function humanListContents($directory = '', $recursive = false)
     {
-        $listContents = $this->retrieveListsContents($dirname, $recursive);
+        $listContents = $this->filter($this->retrieveAllListContents(), $directory, $recursive);
 
-        $reversedPathMap = array_flip($this->getPathMap($dirname, $recursive));
+        $reversedPathMap = array_flip($this->getPathMap());
 
         return array_map(function ($meta) use ($reversedPathMap) {
             $meta['path'] = $reversedPathMap[$meta['path']];
 
             return $meta;
         }, $listContents);
+    }
+
+    /**
+     * @param $contents
+     * @param $directory
+     * @param bool $recursive
+     * @return array
+     */
+    private function filter($contents, $directory, $recursive = false)
+    {
+        $directoryLength = strlen($directory);
+
+        $reversedPathMap = array_flip($this->getPathMap());
+
+        return array_filter($contents,
+            function ($meta) use ($recursive, $directory, $directoryLength, $reversedPathMap) {
+                $humanPath = $reversedPathMap[$meta['path']];
+
+                if ($directoryLength == 0) {
+                    // Base 'root' folder
+                    return $recursive ? true : (substr_count($humanPath, '/') == 0 ? true : false);
+                }
+
+                if (substr($humanPath, 0, $directoryLength) === (string)$directory) {
+                    $separatorCount = substr_count(substr($humanPath, $directoryLength), '/');
+
+                    return (!$recursive && ($separatorCount == 1)) || ($recursive && $separatorCount != 0);
+                }
+
+                return false;
+            });
     }
 }
