@@ -91,42 +91,6 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     }
 
     /**
-     * Get all the meta data of a file or directory.
-     *
-     * @param string $path
-     *
-     * @return array|false
-     */
-    public function getSize($path)
-    {
-        return $this->callParentMethod($path);
-    }
-
-    /**
-     * Get the mimetype of a file.
-     *
-     * @param string $path
-     *
-     * @return array|false
-     */
-    public function getMimetype($path)
-    {
-        return $this->callParentMethod($path);
-    }
-
-    /**
-     * Get the timestamp of a file.
-     *
-     * @param string $path
-     *
-     * @return array|false
-     */
-    public function getTimestamp($path)
-    {
-        return $this->callParentMethod($path);
-    }
-
-    /**
      * Get the visibility of a file.
      *
      * @param string $path
