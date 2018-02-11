@@ -3,6 +3,7 @@
 namespace App\Indigo\FlysystemAdapter;
 
 use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter as BaseGoogleDriveAdapter;
+use League\Flysystem\Config;
 
 /**
  * Class GoogleDriveAdapter
@@ -32,29 +33,6 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     protected $isPathMapCreated = false;
 
     /**
-     * Check whether a file exists.
-     *
-     * @param string $path
-     *
-     * @return array|bool|null
-     */
-    public function has($path)
-    {
-        return $this->callParentMethod($path);
-    }
-
-    /**
-     * @param $humanPath
-     * @return array|bool|null
-     */
-    protected function callParentMethod($humanPath)
-    {
-        $method = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
-
-        return ($fileId = $this->pathToId($humanPath)) ? parent::{$method}($fileId) : false;
-    }
-
-    /**
      * Read a file.
      *
      * @param string $path
@@ -67,39 +45,15 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     }
 
     /**
-     * Read a file as a stream.
-     *
-     * @param string $path
-     *
-     * @return array|false
+     * @param $humanPath
+     * @param array $args
+     * @return array|bool|null
      */
-    public function readStream($path)
+    protected function callParentMethod($humanPath, ...$args)
     {
-        return $this->callParentMethod($path);
-    }
+        $method = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
 
-    /**
-     * Get all the meta data of a file or directory.
-     *
-     * @param string $path
-     *
-     * @return array|false
-     */
-    public function getMetadata($path)
-    {
-        return $this->callParentMethod($path);
-    }
-
-    /**
-     * Get the visibility of a file.
-     *
-     * @param string $path
-     *
-     * @return array|false
-     */
-    public function getVisibility($path)
-    {
-        return $this->callParentMethod($path);
+        return ($fileId = $this->pathToId($humanPath)) ? parent::{$method}($fileId, ...$args) : false;
     }
 
     /**
@@ -243,6 +197,42 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     }
 
     /**
+     * Read a file as a stream.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function readStream($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
+     * Get all the meta data of a file or directory.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function getMetadata($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
+     * Get the visibility of a file.
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function getVisibility($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
      * List contents of a directory.
      *
      * @param string $dirname
@@ -302,5 +292,146 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
 
                 return false;
             });
+    }
+
+    /**
+     * Write a new file.
+     *
+     * @param string $path
+     * @param string $contents
+     * @param Config $config
+     *            Config object
+     *
+     * @return array|false false on failure file meta data on success
+     */
+    public function write($path, $contents, Config $config)
+    {
+        if ($this->has($path)) {
+            // e.g. file_id_1/file_id_2
+            return $this->updateContent($path, $contents, $config);
+        }
+
+        return $this->createContent($path, $contents, $config);
+    }
+
+    /**
+     * Check whether a file exists.
+     *
+     * @param string $path
+     *
+     * @return array|bool|null
+     */
+    public function has($path)
+    {
+        return $this->callParentMethod($path);
+    }
+
+    /**
+     * @param $humanPath
+     * @param $contents
+     * @param $config
+     * @return array|false
+     */
+    private function updateContent($humanPath, $contents, $config)
+    {
+        return parent::write($this->pathToId($humanPath), $contents, $config);
+    }
+
+    /**
+     * @param $humanPath
+     * @param $contents
+     * @param $config
+     * @return array|false
+     */
+    private function createContent($humanPath, $contents, $config)
+    {
+        $path = $this->getNewFilename($humanPath);
+
+        return parent::write($path, $contents, $config);
+    }
+
+    /**
+     * @param $humanPath
+     * @return string
+     */
+    public function getNewFilename($humanPath): string
+    {
+        if (($offset = strrpos($humanPath, '/')) !== false) {
+            // e.g. file_id_1/foo.txt
+            $path = $this->pathToId(substr($humanPath, 0, $offset)) . '/' . substr($humanPath, $offset + 1);
+        } else {
+            // e.g. foo.txt
+            $path = $humanPath;
+        }
+        return $path;
+    }
+
+    /**
+     * Rename a file.
+     *
+     * @param string $from
+     * @param string $to
+     *
+     * @return bool
+     */
+    public function rename($from, $to)
+    {
+        return parent::rename($this->pathToId($from), $this->getNewFilename($to));
+    }
+
+    /**
+     * Copy a file.
+     *
+     * @param string $from
+     * @param string $to
+     *
+     * @return bool
+     */
+    public function copy($from, $to)
+    {
+        return parent::copy($this->pathToId($from), $this->getNewFilename($to));
+    }
+
+    /**
+     * Delete a file.
+     *
+     * @param string $humanPath
+     *
+     * @return bool
+     */
+    public function delete($humanPath)
+    {
+        return $this->callParentMethod($humanPath);
+    }
+
+    /**
+     * Create a directory.
+     *
+     * @param string $dirname
+     *            directory name
+     * @param Config $config
+     *
+     * @return array|false
+     */
+    public function createDir($dirname, Config $config)
+    {
+        if ($this->has($dirname)) {
+            return false;
+        }
+
+        return parent::createDir($this->getNewFilename($dirname), $config);
+    }
+
+    /**
+     * Set the visibility for a file.
+     *
+     * @param string $humanPath
+     * @param string $visibility
+     *
+     * @return array|false file meta data
+     */
+    public function setVisibility($humanPath, $visibility)
+    {
+        return $this->callParentMethod($humanPath, $visibility);
     }
 }
