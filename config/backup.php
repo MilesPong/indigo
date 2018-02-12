@@ -64,6 +64,7 @@ return [
              */
             'disks' => [
                 'local',
+                'google'
             ],
         ],
     ],
@@ -78,12 +79,12 @@ return [
     'notifications' => [
 
         'notifications' => [
-            \Spatie\Backup\Notifications\Notifications\BackupHasFailed::class         => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFound::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\CleanupHasFailed::class        => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessful::class     => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFound::class   => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessful::class    => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\BackupHasFailed::class         => ['mail', 'slack'],
+            \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFound::class => ['mail', 'slack'],
+            \Spatie\Backup\Notifications\Notifications\CleanupHasFailed::class        => ['mail', 'slack'],
+            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessful::class     => ['slack'],
+            \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFound::class   => ['slack'],
+            \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessful::class    => ['slack'],
         ],
 
         /*
@@ -97,12 +98,12 @@ return [
         ],
 
         'slack' => [
-            'webhook_url' => '',
+            'webhook_url' => env('SLACK_MSG_URL'),
 
             /*
              * If this is set to null the default channel of the webhook will be used.
              */
-            'channel' => null,
+            'channel' => env('SLACK_MSG_CHANNEL'),
         ],
     ],
 
@@ -114,7 +115,7 @@ return [
     'monitorBackups' => [
         [
             'name' => config('app.name'),
-            'disks' => ['local'],
+            'disks' => ['local', 'google'],
             'newestBackupsShouldNotBeOlderThanDays' => 1,
             'storageUsedMayNotBeHigherThanMegabytes' => 5000,
         ],
