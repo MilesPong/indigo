@@ -2,8 +2,10 @@
 
 namespace App\Indigo\FlysystemAdapter;
 
+use Exception;
 use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter as BaseGoogleDriveAdapter;
 use League\Flysystem\Config;
+use League\Flysystem\FileNotFoundException;
 
 /**
  * Class GoogleDriveAdapter
@@ -12,13 +14,33 @@ use League\Flysystem\Config;
 class GoogleDriveAdapter extends BaseGoogleDriveAdapter
 {
     /**
+     *
+     */
+    const TYPE_ALL = 'all';
+    /**
+     *
+     */
+    const TYPE_FILE = 'file';
+    /**
+     *
+     */
+    const TYPE_DIR = 'dir';
+    /**
      * An array to store human_path with file_id.
      *
      * e.g. foo/bar/file => foo_file_id/bar_file_id/file_id
      *
      * @var array
      */
-    protected $pathMap = [];
+    protected $filePathMap = [];
+    /**
+     * An array to store human_path with file_id.
+     *
+     * e.g. foo/bar/file => foo_file_id/bar_file_id
+     *
+     * @var array
+     */
+    protected $dirPathMap = [];
     /**
      * An array to store all list contents.
      *
@@ -41,50 +63,56 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function read($path)
     {
-        return $this->callParentMethod($path);
+        return $this->parsePathAndCallParent($path, self::TYPE_FILE);
     }
 
     /**
      * @param $humanPath
+     * @param string $type
      * @param array $args
      * @return array|bool|null
      */
-    protected function callParentMethod($humanPath, ...$args)
+    protected function parsePathAndCallParent($humanPath, $type = self::TYPE_ALL, ...$args)
     {
         $method = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
 
-        return ($fileId = $this->pathToId($humanPath)) ? parent::{$method}($fileId, ...$args) : false;
+        return ($fileId = $this->pathToId($humanPath, $type)) ? parent::{$method}($fileId, ...$args) : false;
     }
 
     /**
      * @param $humanPath
+     * @param string $type
      * @return bool
      */
-    public function pathToId($humanPath)
+    public function pathToId($humanPath, $type = self::TYPE_ALL)
     {
-        return $this->getPathMap()[$humanPath] ?? false;
+        return $this->getPathMap($type)[$humanPath] ?? false;
     }
 
     /**
+     * @param string $type
      * @param bool $force
      * @return array|mixed
      */
-    public function getPathMap($force = false)
+    public function getPathMap($type = self::TYPE_ALL, $force = false)
     {
-        return (!$this->isPathMapCreated || $force) ? tap($this->createPathMap(), function () {
-            $this->pathMapCreated();
-        }) : $this->pathMap;
-    }
+        if (!$this->isPathMapCreated || $force) {
+            list($dirPathMap, $filePathMap) = $this->createPathMap();
+        } else {
+            $dirPathMap = $this->getDirPathMap();
+            $filePathMap = $this->getFilePathMap();
+        }
 
-    /**
-     * @param $data
-     * @return $this
-     */
-    protected function setPathMap($data)
-    {
-        $this->pathMap = $data;
+        switch ($type) {
+            case self::TYPE_ALL:
+                return array_merge($dirPathMap, $filePathMap);
+            case self::TYPE_FILE:
+                return $filePathMap;
+            case self::TYPE_DIR:
+                return $dirPathMap;
+        }
 
-        return $this;
+        return [];
     }
 
     /**
@@ -96,7 +124,8 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
 
         $dirMap = $this->generateDirMap($listContents);
 
-        $data = [];
+        $dirPathMap = [];
+        $filePathMap = [];
 
         foreach ($listContents as $meta) {
             $pathArray = explode('/', $meta['path']);
@@ -109,11 +138,17 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
             $basename = $this->formatBaseName($meta['filename'], $meta['extension']);
             $humanPath = ltrim(implode('/', $humanDirArray) . '/' . $basename, '/');
 
-            $data[$humanPath] = $meta['path'];
+            if ($meta['type'] == self::TYPE_FILE) {
+                $filePathMap[$humanPath] = $meta['path'];
+            } else {
+                $dirPathMap[$humanPath] = $meta['path'];
+            }
         }
 
-        return tap($data, function ($data) {
-            $this->setPathMap($data);
+        return tap([$dirPathMap, $filePathMap], function () use ($dirPathMap, $filePathMap) {
+            $this->setDirPathMap($dirPathMap);
+            $this->setFilePathMap($filePathMap);
+            $this->pathMapCreated();
         });
     }
 
@@ -189,11 +224,43 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     }
 
     /**
+     * @param array $data
+     */
+    private function setDirPathMap(array $data)
+    {
+        $this->dirPathMap = $data;
+    }
+
+    /**
+     * @param array $data
+     */
+    private function setFilePathMap(array $data)
+    {
+        $this->filePathMap = $data;
+    }
+
+    /**
      * @param bool $status
      */
     protected function pathMapCreated($status = true)
     {
         $this->isPathMapCreated = $status;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDirPathMap(): array
+    {
+        return $this->dirPathMap;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilePathMap(): array
+    {
+        return $this->filePathMap;
     }
 
     /**
@@ -205,7 +272,7 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function readStream($path)
     {
-        return $this->callParentMethod($path);
+        return $this->parsePathAndCallParent($path, self::TYPE_FILE);
     }
 
     /**
@@ -217,7 +284,7 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function getMetadata($path)
     {
-        return $this->callParentMethod($path);
+        return $this->parsePathAndCallParent($path);
     }
 
     /**
@@ -229,7 +296,7 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function getVisibility($path)
     {
-        return $this->callParentMethod($path);
+        return $this->parsePathAndCallParent($path);
     }
 
     /**
@@ -303,10 +370,17 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      *            Config object
      *
      * @return array|false false on failure file meta data on success
+     * @throws \Exception
      */
     public function write($path, $contents, Config $config)
     {
-        if ($this->has($path)) {
+        // Since there no distinction between file and dir, so must check type
+        // before write or update a file.
+        if ($this->existsDir($path)) {
+            throw new Exception("$path is a directory");
+        }
+
+        if ($this->existsFile($path)) {
             // e.g. file_id_1/file_id_2
             return $this->updateContent($path, $contents, $config);
         }
@@ -315,15 +389,21 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     }
 
     /**
-     * Check whether a file exists.
-     *
-     * @param string $path
-     *
-     * @return array|bool|null
+     * @param $humanPath
+     * @return bool
      */
-    public function has($path)
+    private function existsDir($humanPath)
     {
-        return $this->callParentMethod($path);
+        return array_key_exists($humanPath, $this->getDirPathMap());
+    }
+
+    /**
+     * @param $humanPath
+     * @return bool
+     */
+    private function existsFile($humanPath)
+    {
+        return array_key_exists($humanPath, $this->getFilePathMap());
     }
 
     /**
@@ -334,7 +414,7 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     private function updateContent($humanPath, $contents, $config)
     {
-        return parent::write($this->pathToId($humanPath), $contents, $config);
+        return parent::write($this->pathToId($humanPath, self::TYPE_FILE), $contents, $config);
     }
 
     /**
@@ -356,14 +436,29 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function getNewFilename($humanPath): string
     {
+        // TODO foo_exists/bar_not_exists/file will be not created.
         if (($offset = strrpos($humanPath, '/')) !== false) {
             // e.g. file_id_1/foo.txt
-            $path = $this->pathToId(substr($humanPath, 0, $offset)) . '/' . substr($humanPath, $offset + 1);
+            $path = $this->pathToId(substr($humanPath, 0, $offset), self::TYPE_DIR) . '/' . substr($humanPath,
+                    $offset + 1);
         } else {
             // e.g. foo.txt
             $path = $humanPath;
         }
         return $path;
+    }
+
+    /**
+     * Check whether a file or a directory exists.
+     *
+     * @param string $path
+     *
+     * @param string $type
+     * @return array|bool|null
+     */
+    public function has($path, $type = self::TYPE_ALL)
+    {
+        return $this->parsePathAndCallParent($path, $type);
     }
 
     /**
@@ -393,15 +488,45 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     }
 
     /**
-     * Delete a file.
+     * Delete a directory.
      *
-     * @param string $humanPath
+     * @param string $dirname
      *
      * @return bool
+     * @throws \League\Flysystem\FileNotFoundException
      */
-    public function delete($humanPath)
+    public function deleteDir($dirname)
     {
-        return $this->callParentMethod($humanPath);
+        return $this->delete($dirname, self::TYPE_DIR);
+    }
+
+    /**
+     * Delete a file (or a directory).
+     *
+     * @param string $humanPath
+     * @param string $type
+     * @return bool
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    public function delete($humanPath, $type = self::TYPE_FILE)
+    {
+        $this->assertPresent($humanPath, $type);
+
+        return $this->parsePathAndCallParent($humanPath, $type);
+    }
+
+    /**
+     * @param $humanPath
+     * @param $type
+     * @return void
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    protected function assertPresent($humanPath, $type)
+    {
+        if ((($type == self::TYPE_FILE) && !$this->existsFile($humanPath))
+            || (($type == self::TYPE_DIR) && !$this->existsDir($humanPath))) {
+            throw new FileNotFoundException($humanPath);
+        }
     }
 
     /**
@@ -415,10 +540,13 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function createDir($dirname, Config $config)
     {
-        if ($this->has($dirname)) {
+        // Since there no distinction between file and dir, we prevent from
+        // creating the same name of dir(file) by default.
+        if ($this->existsDir($dirname) || $this->existsFile($dirname)) {
             return false;
         }
 
+        // TODO create parent dir recursively, maybe google api is supported?
         return parent::createDir($this->getNewFilename($dirname), $config);
     }
 
@@ -432,6 +560,6 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      */
     public function setVisibility($humanPath, $visibility)
     {
-        return $this->callParentMethod($humanPath, $visibility);
+        return $this->parsePathAndCallParent($humanPath, self::TYPE_ALL, $visibility);
     }
 }
