@@ -422,6 +422,7 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      * @param $contents
      * @param $config
      * @return array|false
+     * @throws \Exception
      */
     private function createContent($humanPath, $contents, $config)
     {
@@ -433,14 +434,18 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
     /**
      * @param $humanPath
      * @return string
+     * @throws \Exception
      */
     public function getNewFilename($humanPath): string
     {
-        // TODO foo_exists/bar_not_exists/file will be not created.
         if (($offset = strrpos($humanPath, '/')) !== false) {
+            $dirPath = substr($humanPath, 0, $offset);
+            if (!$dirId = $this->pathToId($dirPath, self::TYPE_DIR)) {
+                // TODO foo_exists/bar_not_exists/file will be not created.
+                throw new Exception("Directory {$dirPath} is not existing, please create it at first.");
+            }
             // e.g. file_id_1/foo.txt
-            $path = $this->pathToId(substr($humanPath, 0, $offset), self::TYPE_DIR) . '/' . substr($humanPath,
-                    $offset + 1);
+            $path = $dirId . '/' . substr($humanPath, $offset + 1);
         } else {
             // e.g. foo.txt
             $path = $humanPath;
@@ -468,6 +473,7 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      * @param string $to
      *
      * @return bool
+     * @throws \Exception
      */
     public function rename($from, $to)
     {
@@ -481,6 +487,7 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      * @param string $to
      *
      * @return bool
+     * @throws \Exception
      */
     public function copy($from, $to)
     {
@@ -537,6 +544,7 @@ class GoogleDriveAdapter extends BaseGoogleDriveAdapter
      * @param Config $config
      *
      * @return array|false
+     * @throws \Exception
      */
     public function createDir($dirname, Config $config)
     {
