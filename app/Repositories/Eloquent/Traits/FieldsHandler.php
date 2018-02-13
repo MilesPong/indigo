@@ -26,6 +26,8 @@ trait FieldsHandler
      */
     public function handleIsDraft($value)
     {
+        // TODO when switch to 'publish', this attribute is not contained in the post data. Should be fix in
+        // frontend and update this method.
         return empty($value) ? Post::IS_NOT_DRAFT : Post::IS_DRAFT;
     }
 

@@ -10,9 +10,9 @@ use App\Models\Tag;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\FieldsHandler;
+use App\Repositories\Eloquent\Traits\HasPublishedStatus;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
-use App\Scopes\PublishedScope;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\DB;
  */
 class PostRepositoryEloquent extends BaseRepository implements PostRepository
 {
-    use Slugable, FieldsHandler;
+    use Slugable, FieldsHandler, HasPublishedStatus;
     /**
      * @var \App\Repositories\Contracts\TagRepository
      */
@@ -331,15 +331,5 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     public function backendPaginate($perPage = null, $columns = ['*'])
     {
         return $this->with(['category', 'author'])->orderBy('id', 'desc')->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
-    }
-
-    /**
-     * @return $this
-     */
-    public function adminMode()
-    {
-        $this->model = $this->model->withoutGlobalScope(PublishedScope::class);
-
-        return $this;
     }
 }

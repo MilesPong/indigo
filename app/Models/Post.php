@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Indigo\Contracts\HasPublishedTime;
 use App\Indigo\Contracts\Viewable as ViewableContract;
 use App\Presenters\PostPresenter;
 use App\Scopes\PublishedScope;
@@ -16,7 +17,7 @@ use Laracasts\Presenter\PresentableTrait;
  * Class Post
  * @package App\Models
  */
-class Post extends Model implements Markdownable, ViewableContract
+class Post extends Model implements Markdownable, ViewableContract, HasPublishedTime
 {
     use PresentableTrait, SoftDeletes, Viewable;
     /**

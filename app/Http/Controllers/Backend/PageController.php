@@ -24,6 +24,8 @@ class PageController extends BackendController
     public function __construct(PageRepository $pageRepository)
     {
         $this->pageRepository = $pageRepository;
+
+        $this->pageRepository->ignorePublishedStatusMode();
     }
 
     /**
