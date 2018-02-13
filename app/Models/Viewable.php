@@ -10,6 +10,7 @@ trait Viewable
 {
     /**
      * @return string
+     * @see \App\Indigo\Contracts\Viewable::getCountField()
      */
     public function getCountField()
     {
@@ -18,6 +19,7 @@ trait Viewable
 
     /**
      * @return mixed
+     * @see \App\Indigo\Contracts\Viewable::getIdentifier()
      */
     public function getIdentifier()
     {

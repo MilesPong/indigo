@@ -24,6 +24,7 @@ trait HasCriteria
      * @param $criteria
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
+     * @see \App\Repositories\Contracts\Helpers\HasCriteriaInterface::pushCriteria()
      */
     public function pushCriteria($criteria)
     {
@@ -55,6 +56,7 @@ trait HasCriteria
     /**
      * @param $criteria
      * @return mixed
+     * @see \App\Repositories\Contracts\Helpers\HasCriteriaInterface::popCriteria()
      */
     public function popCriteria($criteria)
     {
@@ -73,6 +75,7 @@ trait HasCriteria
     /**
      * @param bool $status
      * @return mixed
+     * @see \App\Repositories\Contracts\Helpers\HasCriteriaInterface::skipCriteria()
      */
     public function skipCriteria($status = true)
     {
@@ -85,6 +88,7 @@ trait HasCriteria
      * @param $criteria
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
+     * @see \App\Repositories\Contracts\Helpers\HasCriteriaInterface::useCriteria()
      */
     public function useCriteria($criteria)
     {
@@ -97,6 +101,7 @@ trait HasCriteria
 
     /**
      * @return mixed
+     * @see \App\Repositories\Contracts\Helpers\HasCriteriaInterface::applyCriteria()
      */
     public function applyCriteria()
     {
@@ -115,6 +120,7 @@ trait HasCriteria
 
     /**
      * @return array
+     * @see \App\Repositories\Contracts\Helpers\HasCriteriaInterface::getCriteria()
      */
     public function getCriteria()
     {
@@ -123,6 +129,7 @@ trait HasCriteria
 
     /**
      * @return $this
+     * @see \App\Repositories\Contracts\Helpers\HasCriteriaInterface::resetCriteria()
      */
     public function resetCriteria()
     {
