@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Indigo\Contracts\Viewable as ViewableContract;
+use App\Scopes\PublishedScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Indigo\Contracts\Markdownable;
@@ -36,6 +37,18 @@ class Page extends Model implements Markdownable, ViewableContract
     protected $casts = [
         'is_draft' => 'boolean'
     ];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new PublishedScope);
+    }
 
     /**
      * @return string

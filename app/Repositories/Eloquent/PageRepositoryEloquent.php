@@ -6,6 +6,7 @@ use App\Models\Content;
 use App\Models\Page;
 use App\Repositories\Contracts\PageRepository;
 use App\Repositories\Eloquent\Traits\FieldsHandler;
+use App\Repositories\Eloquent\Traits\HasPublishedStatus;
 use App\Repositories\Eloquent\Traits\Slugable;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\DB;
  */
 class PageRepositoryEloquent extends BaseRepository implements PageRepository
 {
-    use Slugable, FieldsHandler;
+    use Slugable, FieldsHandler, HasPublishedStatus;
     /**
      * @var \Illuminate\Database\Eloquent\Model
      */

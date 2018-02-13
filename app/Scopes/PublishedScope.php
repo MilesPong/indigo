@@ -2,6 +2,7 @@
 
 namespace App\Scopes;
 
+use App\Indigo\Contracts\HasPublishedTime;
 use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,7 +22,10 @@ class PublishedScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('published_at', '<=', Carbon::now()->toDateTimeString())
-            ->where('is_draft', '=', Post::IS_NOT_DRAFT);
+        if ($model instanceof HasPublishedTime) {
+            $builder = $builder->where('published_at', '<=', Carbon::now()->toDateTimeString());
+        }
+
+        $builder->where('is_draft', '=', Post::IS_NOT_DRAFT);
     }
 }
