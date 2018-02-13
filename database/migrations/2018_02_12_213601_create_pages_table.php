@@ -19,7 +19,7 @@ class CreatePagesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('title');
             $table->string('description')->nullable();
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->integer('content_id')->unsigned()->index();
             $table->foreign('content_id')->references('id')->on('contents');
             $table->integer('view_count')->unsigned()->default(0);
