@@ -34,6 +34,11 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
         Route::post('slug', 'SlugController@translate')->name('slug.translate');
         Route::post('image', 'UploadController@uploadImage')->name('upload.image');
     });
+
+    // Page
+    Route::post('pages/{id}/restore', 'PageController@restore')->name('pages.restore');
+    Route::post('pages/{id}/force-delete', 'PageController@forceDelete')->name('pages.force-delete');
+    Route::resource('pages', 'PageController');
 });
 
 Route::group(['namespace' => 'Frontend'], function () {
@@ -42,4 +47,7 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::resource('articles', 'PostController', ['only' => ['show'], 'middleware' => 'visitor']);
     Route::resource('categories', 'CategoryController', ['only' => ['show']]);
     Route::resource('tags', 'TagController', ['only' => ['show']]);
+
+    // Page
+    Route::get('{slug}', 'PageController@show')->name('pages.show');
 });

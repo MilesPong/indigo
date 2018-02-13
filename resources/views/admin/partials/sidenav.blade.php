@@ -40,5 +40,6 @@
     <li><a href="{{ route('admin.categories.index') }}" class="waves-effect waves-teal"><i class="material-icons">library_books</i>Categories</a></li>
     <li><a href="{{ route('admin.tags.index') }}" class="waves-effect waves-teal"><i class="material-icons">loyalty</i>Tags</a></li>
     <li><a href="{{ route('admin.posts.index') }}" class="waves-effect waves-teal"><i class="material-icons">insert_drive_file</i>Posts</a></li>
+    <li><a href="{{ route('admin.pages.index') }}" class="waves-effect waves-teal"><i class="material-icons">note</i>Pages</a></li>
     <li><a href="{{ route('admin.settings.index') }}" class="waves-effect waves-teal"><i class="material-icons">settings</i>Settings</a></li>
 </ul>

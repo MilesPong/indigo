@@ -51,6 +51,10 @@
         .card-panel {
             padding-bottom: 0;
 
+            &.page-panel {
+                padding-bottom: 24px !important;
+            }
+
             .post-content {
                 img {
                     max-width: 100%;

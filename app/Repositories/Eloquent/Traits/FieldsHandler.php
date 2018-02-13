@@ -28,4 +28,20 @@ trait FieldsHandler
     {
         return empty($value) ? Post::IS_NOT_DRAFT : Post::IS_DRAFT;
     }
+
+    /**
+     * @param array $attributes
+     * @return array
+     */
+    public function handle(array $attributes)
+    {
+        foreach ($attributes as $field => &$value) {
+            if (method_exists($this, $method = 'handle' . studly_case($field))) {
+                // Note that the parameters for call_user_func() are not passed by reference.
+                $value = call_user_func([$this, $method], $value);
+            }
+        }
+
+        return $attributes;
+    }
 }
