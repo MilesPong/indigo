@@ -38,7 +38,7 @@
     <li><div class="divider"></div></li>
     {{--<li><a class="subheader">Subheader</a></li>--}}
     <li><a href="#!" class="waves-effect waves-teal"><i class="material-icons">cloud</i>Blog Introduce</a></li>
-    <li><a class="waves-effect waves-teal" href="#!"><i class="material-icons">person</i>About</a></li>
+    <li><a class="waves-effect waves-teal" href="{{ route('pages.show', 'about') }}"><i class="material-icons">person</i>About</a></li>
     <li><a class="waves-effect waves-teal" href="https://github.com/MilesPong"><i class="material-icons">code</i>Github</a></li>
 
 </ul>

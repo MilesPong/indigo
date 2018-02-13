@@ -18,7 +18,7 @@
                     </a>
                 </li>
 
-                <li><a class="waves-effect waves-light" href="#!">About</a></li>
+                <li><a class="waves-effect waves-light" href="{{ route('pages.show', 'about') }}">About</a></li>
                 <li><a class="waves-effect waves-light" href="https://github.com/MilesPong">Github</a></li>
             </ul>
 
