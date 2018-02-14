@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Http\Resources\Page as PageResource;
 use App\Models\Content;
 use App\Models\Page;
 use App\Repositories\Contracts\PageRepository;
@@ -40,17 +41,25 @@ class PageRepositoryEloquent extends BaseRepository implements PageRepository
     /**
      * @return string
      */
-    public function model()
+    public function contentModel()
     {
-        return Page::class;
+        return Content::class;
+    }
+
+    /**
+     * @return null
+     */
+    public function resource()
+    {
+        return PageResource::class;
     }
 
     /**
      * @return string
      */
-    public function contentModel()
+    public function model()
     {
-        return Content::class;
+        return Page::class;
     }
 
     /**
@@ -76,6 +85,17 @@ class PageRepositoryEloquent extends BaseRepository implements PageRepository
     }
 
     /**
+     * @param array $attributes
+     * @return array
+     */
+    protected function preHandleData(array $attributes)
+    {
+        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['title']);
+
+        return $this->handle($attributes);
+    }
+
+    /**
      * @param null $perPage
      * @param array $columns
      * @return mixed
@@ -86,17 +106,6 @@ class PageRepositoryEloquent extends BaseRepository implements PageRepository
         $this->with('author');
 
         return parent::paginate($perPage, $columns);
-    }
-
-    /**
-     * @param array $attributes
-     * @return array
-     */
-    protected function preHandleData(array $attributes)
-    {
-        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['title']);
-
-        return $this->handle($attributes);
     }
 
     /**
