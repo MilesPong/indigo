@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Traits\DraftFix;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class StoreUpdatePostRequest extends FormRequest
 {
+    use DraftFix;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -50,13 +53,12 @@ class StoreUpdatePostRequest extends FormRequest
     }
 
     /**
-     * TODO to figure out rules of empty input
      * Prepare the data for validation.
      *
      * @return void
      */
     protected function prepareForValidation()
     {
-
+        $this->fixDraftInput();
     }
 }

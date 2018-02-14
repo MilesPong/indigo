@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Traits\DraftFix;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -11,6 +12,8 @@ use Illuminate\Validation\Rule;
  */
 class StoreUpdatePageRequest extends FormRequest
 {
+    use DraftFix;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -48,5 +51,15 @@ class StoreUpdatePageRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->fixDraftInput();
     }
 }
