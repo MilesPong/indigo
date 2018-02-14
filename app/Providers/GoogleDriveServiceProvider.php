@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Indigo\FlysystemAdapter\GoogleDriveAdapter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use Indigo\FlysystemAdapter\GoogleDriveAdapter;
 use League\Flysystem\Filesystem;
 
 class GoogleDriveServiceProvider extends ServiceProvider

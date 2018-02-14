@@ -2,36 +2,19 @@
 
 namespace App\Models;
 
-use App\Indigo\Contracts\HasPublishedTime;
-use App\Indigo\Contracts\Viewable as ViewableContract;
 use App\Presenters\PostPresenter;
-use App\Scopes\PublishedScope;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
-use Indigo\Contracts\Markdownable;
-use Indigo\Tools\MarkDownParser;
+use Indigo\Contracts\HasPublishedTime;
+use Indigo\Models\Article as ArticleModel;
 use Laracasts\Presenter\PresentableTrait;
 
 /**
  * Class Post
  * @package App\Models
  */
-class Post extends Model implements Markdownable, ViewableContract, HasPublishedTime
+class Post extends ArticleModel implements HasPublishedTime
 {
-    use PresentableTrait, SoftDeletes, Viewable;
-    /**
-     * Is draft status
-     */
-    const IS_DRAFT = 1;
-    /**
-     * Is not draft status
-     */
-    const IS_NOT_DRAFT = 0;
-    /**
-     * Cache key prefix of post's content
-     */
-    const CONTENT_CACHE_KEY_PREFIX = 'contents:';
+    use PresentableTrait;
     /**
      * @var string
      */
@@ -53,24 +36,6 @@ class Post extends Model implements Markdownable, ViewableContract, HasPublished
      * @var array
      */
     protected $dates = ['published_at', 'deleted_at'];
-    /**
-     * @var array
-     */
-    protected $casts = [
-        'is_draft' => 'boolean'
-    ];
-
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope(new PublishedScope);
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -94,24 +59,6 @@ class Post extends Model implements Markdownable, ViewableContract, HasPublished
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable');
-    }
-
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public function getConst($name)
-    {
-        return constant("self::{$name}");
-    }
-
-    /**
-     * @return string
-     */
-    public function getContentAttribute()
-    {
-        // TODO cache
-        return MarkDownParser::md2html($this);
     }
 
     /**
@@ -165,14 +112,6 @@ class Post extends Model implements Markdownable, ViewableContract, HasPublished
     public function scopeLatestPublished($query)
     {
         return $query->orderByDesc('published_at');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMarkdownContent()
-    {
-        return $this->getRawContentAttribute();
     }
 
     /**

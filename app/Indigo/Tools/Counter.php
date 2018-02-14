@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Indigo\Tools;
+namespace Indigo\Tools;
 
-use App\Indigo\Contracts\Counter as CounterContract;
-use App\Indigo\Contracts\Viewable;
+use Indigo\Contracts\Counter as CounterContract;
+use Indigo\Contracts\Viewable;
 
 /**
  * Class Counter
@@ -44,7 +44,7 @@ class Counter implements CounterContract
     }
 
     /**
-     * @param \App\Indigo\Contracts\Viewable $viewable
+     * @param \Indigo\Contracts\Viewable $viewable
      * @param int $value
      * @return int|bool
      */
@@ -58,7 +58,7 @@ class Counter implements CounterContract
     }
 
     /**
-     * @param \App\Indigo\Contracts\Viewable $viewable
+     * @param \Indigo\Contracts\Viewable $viewable
      * @param int $default
      * @return int
      */
@@ -74,7 +74,7 @@ class Counter implements CounterContract
     }
 
     /**
-     * @param \App\Indigo\Contracts\Viewable $viewable
+     * @param \Indigo\Contracts\Viewable $viewable
      * @return array
      */
     protected function parser(Viewable $viewable)
@@ -86,7 +86,7 @@ class Counter implements CounterContract
     }
 
     /**
-     * @param \App\Indigo\Contracts\Viewable $viewable
+     * @param \Indigo\Contracts\Viewable $viewable
      * @return string
      */
     protected function getKey(Viewable $viewable)
@@ -116,7 +116,7 @@ class Counter implements CounterContract
     }
 
     /**
-     * @param \App\Indigo\Contracts\Viewable|string $viewable
+     * @param \Indigo\Contracts\Viewable|string $viewable
      * @return mixed
      */
     public function getAll($viewable)
@@ -164,7 +164,7 @@ class Counter implements CounterContract
     }
 
     /**
-     * @param \App\Indigo\Contracts\Viewable $viewable
+     * @param \Indigo\Contracts\Viewable $viewable
      * @param $value
      */
     public function put(Viewable $viewable, $value)
@@ -181,7 +181,7 @@ class Counter implements CounterContract
     }
 
     /**
-     * @param \App\Indigo\Contracts\Viewable $viewable
+     * @param \Indigo\Contracts\Viewable $viewable
      */
     public function reset(Viewable $viewable)
     {
@@ -189,7 +189,7 @@ class Counter implements CounterContract
     }
 
     /**
-     * @param \App\Indigo\Contracts\Viewable|string $viewable
+     * @param \Indigo\Contracts\Viewable|string $viewable
      * @return bool
      */
     public function resetAll($viewable)

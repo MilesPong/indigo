@@ -33,7 +33,7 @@
 
                     {{-- TODO when use api, content should be parse first, use transformer or parse markdown before store--}}
                     <div id="post-content" class="flow-text post-content">
-                        {!! $post->content !!}
+                        {!! $post->htmlContent !!}
                     </div>
 
                     <div class="post-content-tag">
