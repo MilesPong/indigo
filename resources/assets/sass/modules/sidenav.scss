@@ -1,6 +1,9 @@
-.menu-on-large {
-    position: absolute;
-    left: -20%;
+nav a.sidenav-trigger {
+    &.menu-on-large {
+        position: absolute;
+        left: -20%;
+        display: block;
+    }
 }
 
 .sidenav {

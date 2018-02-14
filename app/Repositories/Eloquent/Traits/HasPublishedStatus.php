@@ -11,6 +11,7 @@ use App\Scopes\PublishedScope;
 trait HasPublishedStatus
 {
     /**
+     * @see \App\Repositories\Contracts\Helpers\HasPublishedStatus::ignorePublishedStatusMode()
      * @return $this
      */
     public function ignorePublishedStatusMode()

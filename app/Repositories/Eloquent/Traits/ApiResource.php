@@ -72,6 +72,7 @@ trait ApiResource
     /**
      * @param bool $switch
      * @return $this
+     * @see \App\Repositories\Contracts\Helpers\ApiResourceInterface::useResource()
      */
     public function useResource($switch = true)
     {

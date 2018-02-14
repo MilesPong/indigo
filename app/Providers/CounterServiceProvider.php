@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Indigo\Tools\Counter;
 use Barryvdh\Debugbar\ServiceProvider;
+use Indigo\Tools\Counter;
 
 /**
  * Class CounterServiceProvider
@@ -23,7 +23,7 @@ class CounterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(\App\Indigo\Contracts\Counter::class, function ($app) {
+        $this->app->singleton(\Indigo\Contracts\Counter::class, function ($app) {
             $config = $this->getConfig();
             return new Counter($app, $config['cache_store']);
         });

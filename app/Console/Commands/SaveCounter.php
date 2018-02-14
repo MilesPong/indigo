@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Indigo\Contracts\Counter;
-use App\Indigo\Contracts\Viewable;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
+use Indigo\Contracts\Counter;
+use Indigo\Contracts\Viewable;
 
 /**
  * Class SaveCounter
@@ -28,7 +28,7 @@ class SaveCounter extends Command
      */
     protected $description = 'Save posts view count into database and flush cache';
     /**
-     * @var \App\Indigo\Contracts\Counter
+     * @var \Indigo\Contracts\Counter
      */
     private $counter;
     /**
@@ -39,7 +39,7 @@ class SaveCounter extends Command
     /**
      * Create a new command instance.
      *
-     * @param \App\Indigo\Contracts\Counter $counter
+     * @param \Indigo\Contracts\Counter $counter
      */
     public function __construct(Counter $counter)
     {
@@ -114,7 +114,7 @@ class SaveCounter extends Command
     }
 
     /**
-     * @param \App\Indigo\Contracts\Viewable|\Illuminate\Database\Eloquent\Model $viewable
+     * @param \Indigo\Contracts\Viewable|\Illuminate\Database\Eloquent\Model $viewable
      * @param array $data
      */
     private function updateCount($viewable, array $data = [])

@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ViewedEvent;
-use App\Indigo\Contracts\Counter;
+use Indigo\Contracts\Counter;
 
 /**
  * Class ViewedEventListener
@@ -12,13 +12,13 @@ use App\Indigo\Contracts\Counter;
 class ViewedEventListener
 {
     /**
-     * @var \App\Indigo\Contracts\Counter
+     * @var \Indigo\Contracts\Counter
      */
     protected $counter;
 
     /**
      * ViewedEventListener constructor.
-     * @param \App\Indigo\Contracts\Counter $counter
+     * @param \Indigo\Contracts\Counter $counter
      */
     public function __construct(Counter $counter)
     {

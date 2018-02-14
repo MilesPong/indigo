@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indigo\FlysystemAdapter;
+namespace Indigo\FlysystemAdapter;
 
 use Exception;
 use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter as BaseGoogleDriveAdapter;

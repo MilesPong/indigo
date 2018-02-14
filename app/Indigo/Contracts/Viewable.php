@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indigo\Contracts;
+namespace Indigo\Contracts;
 
 /**
  * Interface Viewable

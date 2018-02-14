@@ -12,7 +12,7 @@ class PagesTableSeeder extends Seeder
     public function run()
     {
         factory(\App\Models\Page::class)->create([
-            'title' => 'about',
+            'title' => 'About',
             'slug' => 'about',
             'is_draft' => false,
             'deleted_at' => null

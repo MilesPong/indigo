@@ -63,6 +63,7 @@ trait Slugable
      * @param $slug
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
+     * @see \App\Repositories\Contracts\Helpers\SlugableInterface::getBySlug()
      */
     public function getBySlug($slug)
     {
