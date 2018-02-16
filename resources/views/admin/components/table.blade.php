@@ -51,7 +51,7 @@
 
 {{-- Pagination --}}
 <div class="center-align">
-    {{ $paginator->links('vendor.pagination.materialize') }}
+    {{ $paginator->appends(request()->query())->links('vendor.pagination.materialize') }}
 </div>
 
 {{-- FAB --}}

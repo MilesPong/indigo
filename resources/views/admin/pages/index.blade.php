@@ -28,7 +28,7 @@
                 @if($showTrash)
                     <li><a class="btn-floating green" href="{{ route('admin.pages.index') }}"><i class="material-icons">playlist_add_check</i></a></li>
                 @else
-                    <li><a class="btn-floating yellow darken-1" href="{{ route('admin.pages.index', 'trash') }}"><i class="material-icons">delete_sweep</i></a></li>
+                    <li><a class="btn-floating yellow darken-1" href="{{ route('admin.pages.index', ['trash' => 'true']) }}"><i class="material-icons">delete_sweep</i></a></li>
                 @endif
             </ul>
         @endslot
