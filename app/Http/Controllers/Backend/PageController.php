@@ -36,14 +36,24 @@ class PageController extends BackendController
      */
     public function index(Request $request)
     {
-        // TODO to be refactor
-        if ($request->has('trash')) {
-            $this->pageRepository->onlyTrashed();
-        }
+        $showTrash = $this->determineIfWantTrash($request);
 
         $pages = $this->pageRepository->paginate();
 
-        return view('admin.pages.index', compact('pages'));
+        return view('admin.pages.index', compact('pages', 'showTrash'));
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return bool
+     */
+    protected function determineIfWantTrash($request)
+    {
+        return tap($request->has('trash'), function ($isTrash) {
+            if ($isTrash) {
+                $this->pageRepository->onlyTrashed();
+            }
+        });
     }
 
     /**

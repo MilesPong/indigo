@@ -24,7 +24,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
     Route::resource('categories', 'CategoryController');
     Route::resource('tags', 'TagController');
     Route::post('posts/{id}/restore', 'PostController@restore')->name('posts.restore');
-    Route::post('posts/{id}/force-delete', 'PostController@forceDelete')->name('posts.force-delete');
+    Route::delete('posts/{id}/force-delete', 'PostController@forceDelete')->name('posts.force-delete');
     Route::resource('posts', 'PostController');
 
     Route::resource('settings', 'SettingController', ['except' => ['show']]);
@@ -37,7 +37,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
 
     // Page
     Route::post('pages/{id}/restore', 'PageController@restore')->name('pages.restore');
-    Route::post('pages/{id}/force-delete', 'PageController@forceDelete')->name('pages.force-delete');
+    Route::delete('pages/{id}/force-delete', 'PageController@forceDelete')->name('pages.force-delete');
     Route::resource('pages', 'PageController');
 });
 

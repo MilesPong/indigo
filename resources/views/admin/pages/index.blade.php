@@ -19,7 +19,19 @@
         'hrefShow' => route('admin.pages.show', [':id', 'from' => 'admin']),
         'hrefEdit' => route('admin.pages.edit', ':id'),
         'hrefDestroy' => route('admin.pages.destroy', ':id'),
+        'hrefForceDelete' => route('admin.pages.force-delete', ':id'),
+        'hrefRestore' => route('admin.pages.restore', ':id'),
+        'showTrash' => $showTrash ?? false
     ])
+        @slot('fab')
+            <ul>
+                @if($showTrash)
+                    <li><a class="btn-floating green" href="{{ route('admin.pages.index') }}"><i class="material-icons">playlist_add_check</i></a></li>
+                @else
+                    <li><a class="btn-floating yellow darken-1" href="{{ route('admin.pages.index', 'trash') }}"><i class="material-icons">delete_sweep</i></a></li>
+                @endif
+            </ul>
+        @endslot
     @endcomponent
 
 @endsection

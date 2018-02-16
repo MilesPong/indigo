@@ -52,13 +52,24 @@ class PostController extends BackendController
      */
     public function index(Request $request)
     {
-        if ($request->has('trash')) {
-            $this->postRepository->onlyTrashed();
-        }
+        $showTrash = $this->determineIfWantTrash($request);
 
         $posts = $this->postRepository->backendPaginate();
 
-        return view('admin.posts.index', compact('posts'));
+        return view('admin.posts.index', compact('posts', 'showTrash'));
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return bool
+     */
+    protected function determineIfWantTrash($request)
+    {
+        return tap($request->has('trash'), function ($isTrash) {
+            if ($isTrash) {
+                $this->postRepository->onlyTrashed();
+            }
+        });
     }
 
     /**
