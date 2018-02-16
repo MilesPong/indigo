@@ -166,12 +166,13 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
     /**
      * @param $slug
+     * @param string $field
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function getBySlug($slug)
+    public function getBySlug($slug, $field = 'slug')
     {
-        return $this->with($this->relationships())->findBy('slug', $slug);
+        return $this->with($this->relationships())->findBy($field, $slug);
     }
 
     // /**

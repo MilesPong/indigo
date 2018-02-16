@@ -10,7 +10,8 @@ interface SlugableInterface
 {
     /**
      * @param $slug
+     * @param string $field
      * @return mixed
      */
-    public function getBySlug($slug);
+    public function getBySlug($slug, $field = 'slug');
 }

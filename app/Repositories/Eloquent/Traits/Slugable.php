@@ -11,6 +11,18 @@ use Carbon\Carbon;
 trait Slugable
 {
     /**
+     * @param $slug
+     * @param string $field
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     * @see \App\Repositories\Contracts\Helpers\SlugableInterface::getBySlug()
+     */
+    public function getBySlug($slug, $field = 'slug')
+    {
+        return $this->findBy($field, $slug);
+    }
+
+    /**
      * Auto create slug if request slug is null
      *
      * @param $slug
@@ -57,16 +69,5 @@ trait Slugable
     protected function uniqueChar()
     {
         return Carbon::now()->timestamp;
-    }
-
-    /**
-     * @param $slug
-     * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
-     * @see \App\Repositories\Contracts\Helpers\SlugableInterface::getBySlug()
-     */
-    public function getBySlug($slug)
-    {
-        return $this->findBy('slug', $slug);
     }
 }
