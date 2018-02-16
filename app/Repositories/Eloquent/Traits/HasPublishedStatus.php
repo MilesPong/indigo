@@ -20,4 +20,13 @@ trait HasPublishedStatus
 
         return $this;
     }
+
+    /**
+     * @return bool
+     * @see \App\Repositories\Contracts\Helpers\HasPublishedStatus::wantIgnorePublishedStatus()
+     */
+    public function wantIgnorePublishedStatus()
+    {
+        return request()->query('from') === 'admin';
+    }
 }

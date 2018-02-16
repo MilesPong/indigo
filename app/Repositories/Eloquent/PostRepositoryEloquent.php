@@ -24,7 +24,10 @@ use Illuminate\Support\Facades\DB;
  */
 class PostRepositoryEloquent extends BaseRepository implements PostRepository
 {
-    use Slugable, FieldsHandler, HasPublishedStatus;
+    use FieldsHandler, HasPublishedStatus, Slugable {
+        getBySlug as slugableGetBySlug;
+    }
+
     /**
      * @var \App\Repositories\Contracts\TagRepository
      */
@@ -172,7 +175,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function getBySlug($slug, $field = 'slug')
     {
-        return $this->with($this->relationships())->findBy($field, $slug);
+        $this->with($this->relationships());
+
+        return $this->slugableGetBySlug($slug, $field);
     }
 
     // /**

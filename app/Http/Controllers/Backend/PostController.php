@@ -87,14 +87,15 @@ class PostController extends BackendController
     /**
      * Display the specified resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $slug = $this->postRepository->getSlug($id);
 
-        return redirect()->route('articles.show', $slug);
+        return redirect()->route('articles.show', array_merge([$slug], $request->query()));
     }
 
     /**

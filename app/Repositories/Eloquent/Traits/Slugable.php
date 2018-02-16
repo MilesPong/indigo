@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent\Traits;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Trait Slugable
@@ -19,7 +20,19 @@ trait Slugable
      */
     public function getBySlug($slug, $field = 'slug')
     {
+        $this->ifShouldIgnorePublishedStatus();
+
         return $this->findBy($field, $slug);
+    }
+
+    /**
+     * @return void
+     */
+    protected function ifShouldIgnorePublishedStatus()
+    {
+        if ($this->wantIgnorePublishedStatus() && Auth::check()) {
+            $this->ignorePublishedStatusMode();
+        }
     }
 
     /**

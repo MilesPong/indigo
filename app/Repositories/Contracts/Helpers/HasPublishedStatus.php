@@ -8,4 +8,9 @@ interface HasPublishedStatus
      * @return mixed
      */
     public function ignorePublishedStatusMode();
+
+    /**
+     * @return bool
+     */
+    public function wantIgnorePublishedStatus();
 }

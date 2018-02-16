@@ -16,7 +16,7 @@
             'created_at' => 'Created At'
         ],
         'hrefCreate' => route('admin.pages.create'),
-        'hrefShow' => route('admin.pages.show', ':id'),
+        'hrefShow' => route('admin.pages.show', [':id', 'from' => 'admin']),
         'hrefEdit' => route('admin.pages.edit', ':id'),
         'hrefDestroy' => route('admin.pages.destroy', ':id'),
     ])
