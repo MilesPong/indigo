@@ -3,13 +3,14 @@
 namespace App\Listeners;
 
 use App\Events\ViewedEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Indigo\Contracts\Counter;
 
 /**
  * Class ViewedEventListener
  * @package App\Listeners
  */
-class ViewedEventListener
+class ViewedEventListener implements ShouldQueue
 {
     /**
      * @var \Indigo\Contracts\Counter
