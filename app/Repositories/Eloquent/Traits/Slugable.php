@@ -70,4 +70,16 @@ trait Slugable
     {
         return Carbon::now()->timestamp;
     }
+
+    /**
+     * @param $id
+     * @return string
+     * @see \App\Repositories\Contracts\Helpers\SlugableInterface::getSlug()
+     */
+    public function getSlug($id)
+    {
+        $column = 'slug';
+
+        return $this->useResource(false)->find($id, [$column])->getAttribute($column);
+    }
 }

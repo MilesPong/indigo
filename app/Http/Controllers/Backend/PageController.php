@@ -77,9 +77,9 @@ class PageController extends BackendController
      */
     public function show($id)
     {
-        $page = $this->pageRepository->find($id);
+        $slug = $this->pageRepository->getSlug($id);
 
-        return response($page);
+        return redirect()->route('pages.show', $slug);
     }
 
     /**

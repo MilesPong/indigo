@@ -92,9 +92,9 @@ class PostController extends BackendController
      */
     public function show($id)
     {
-        $post = $this->postRepository->find($id);
+        $slug = $this->postRepository->getSlug($id);
 
-        return response($post);
+        return redirect()->route('articles.show', $slug);
     }
 
     /**
