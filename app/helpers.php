@@ -13,12 +13,12 @@ if (!function_exists('markdownContent')) {
     {
         $imgUrl = random_img_url();
         $content =
-            "$faker->realText \n\r " .
-            "## $faker->sentence \n\r " .
-            "![$faker->word]($imgUrl) \n\r " .
-            "> $faker->sentence \n\r " .
-            "### $faker->sentence \n\r " .
-            "$faker->paragraph \n\r " .
+            "$faker->realText \n\r" .
+            "## $faker->sentence \n\r" .
+            "![$faker->word]($imgUrl) \n\r" .
+            "> $faker->sentence \n\r" .
+            "### $faker->sentence \n\r" .
+            "$faker->paragraph \n\r" .
             "[$faker->sentence](#)";
         return $content;
     }
