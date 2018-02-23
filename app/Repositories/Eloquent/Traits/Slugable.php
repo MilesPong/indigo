@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent\Traits;
 
+use App\Repositories\Contracts\Helpers\HasPublishedStatus;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +31,7 @@ trait Slugable
      */
     protected function ifShouldIgnorePublishedStatus()
     {
-        if ($this->wantIgnorePublishedStatus() && Auth::check()) {
+        if ($this instanceof HasPublishedStatus && $this->wantIgnorePublishedStatus() && Auth::check()) {
             $this->ignorePublishedStatusMode();
         }
     }
