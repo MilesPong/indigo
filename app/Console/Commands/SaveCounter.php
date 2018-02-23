@@ -136,7 +136,7 @@ class SaveCounter extends Command
      */
     private function success($className, $tableData)
     {
-        $this->info("{$className} save count successfully at " . Carbon::now()->toDateTimeString());
+        $this->info("Save count of {$className} successfully at " . Carbon::now()->toDateTimeString());
         $this->table(['ID', 'Increment'], $tableData);
     }
 
