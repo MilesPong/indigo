@@ -14,7 +14,7 @@ trait Slugable
     /**
      * @param $slug
      * @param string $field
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Model|static|string
      * @throws \App\Repositories\Exceptions\RepositoryException
      * @see \App\Repositories\Contracts\Helpers\SlugableInterface::getBySlug()
      */

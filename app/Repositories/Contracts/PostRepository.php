@@ -64,4 +64,11 @@ interface PostRepository extends RepositoryInterface, SlugableInterface, HasPubl
      * @return mixed
      */
     public function backendPaginate($perPage = null, $columns = ['*']);
+
+    /**
+     * @param $slug
+     * @param bool $copyright
+     * @return string
+     */
+    public function markdown($slug, $copyright = true);
 }

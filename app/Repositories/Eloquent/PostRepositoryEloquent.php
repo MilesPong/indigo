@@ -17,6 +17,7 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Indigo\Contracts\Markdownable;
 
 /**
  * Class PostRepositoryEloquent
@@ -27,7 +28,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     use FieldsHandler, HasPublishedStatus, Slugable {
         getBySlug as slugableGetBySlug;
     }
-
     /**
      * @var \App\Repositories\Contracts\TagRepository
      */
@@ -52,19 +52,19 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     *
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
-
-    /**
      * @return string
      */
     public function contentModel()
     {
         return Content::class;
+    }
+
+    /**
+     *
+     */
+    public function boot()
+    {
+        parent::boot();
     }
 
     /**
@@ -305,7 +305,8 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function frontendPaginate($perPage = null, $columns = ['*'])
     {
-        return $this->with($this->relationships())->latestPublished()->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+        return $this->with($this->relationships())->latestPublished()->paginate($perPage ?: $this->getDefaultPerPage(),
+            $columns);
     }
 
     /**
@@ -336,6 +337,37 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function backendPaginate($perPage = null, $columns = ['*'])
     {
-        return $this->with(['category', 'author'])->orderBy('id', 'desc')->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+        return $this->with(['category', 'author'])->orderBy('id',
+            'desc')->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+    }
+
+    /**
+     * @param $slug
+     * @param bool $copyright
+     * @return string
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function markdown($slug, $copyright = true)
+    {
+        $markdownable = $this->useResource(false)->slugableGetBySlug($slug);
+
+        if (!$markdownable instanceof Markdownable) {
+            throw new RepositoryException("class " . (object)$markdownable . " is not an instance of " . get_class(Markdownable::class));
+        }
+
+        $content = $markdownable->getMarkdownContent();
+
+        return $copyright ? $this->prependCopyright($content, route('articles.show', $slug)) : $content;
+    }
+
+    /**
+     * @param $content
+     * @param $permalink
+     * @return string
+     */
+    protected function prependCopyright($content, $permalink)
+    {
+        // TODO i18n
+        return $content . PHP_EOL . PHP_EOL . sprintf("原文链接：[%s](%s)", $permalink, $permalink);
     }
 }

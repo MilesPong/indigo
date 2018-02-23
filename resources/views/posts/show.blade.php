@@ -49,6 +49,7 @@
             <div class="col s12 post-copyright">
                 <div class="card-panel grey lighten-3">
                     <blockquote class="">
+                        <p><strong>原始内容：</strong><a href="{{ route('articles.markdown', $post->slug) }}">Markdown 版本</a></p>
                         <p><strong>版权声明：</strong>由 <strong>{{ $post->author->name }}</strong> 创作，使用
                             <a href="http://creativecommons.org/licenses/by/4.0/deed.zh"><img src="https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square" alt="License: CC BY-SA 4.0"></a>
                             创作共享协议，<a href="http://creativecommons.org/licenses/by/4.0/deed.zh">相关说明</a>

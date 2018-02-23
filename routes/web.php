@@ -44,6 +44,8 @@ Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'das
 Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/', 'PostController@index')->name('home');
 
+    // Markdown request
+    Route::get('articles/{slug}.md', 'PostController@markdown')->name('articles.markdown');
     Route::resource('articles', 'PostController', ['only' => ['show'], 'middleware' => 'visitor']);
     Route::resource('categories', 'CategoryController', ['only' => ['show']]);
     Route::resource('tags', 'TagController', ['only' => ['show']]);

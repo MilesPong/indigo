@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Events\ViewedEvent;
 use App\Repositories\Contracts\PostRepository;
+use Illuminate\Support\Facades\Response;
 
 /**
  * Class PostController
@@ -55,5 +56,16 @@ class PostController extends FrontendController
         event(new ViewedEvent($post));
 
         return view('posts.show', compact('post', 'previous', 'next'));
+    }
+
+    /**
+     * @param $slug
+     * @return \Illuminate\Http\Response
+     */
+    public function markdown($slug)
+    {
+        $markdown = $this->postRepository->markdown($slug);
+
+        return Response::make($markdown)->header('Content-Type', 'text/plain');
     }
 }
