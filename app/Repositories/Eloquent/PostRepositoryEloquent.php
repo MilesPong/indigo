@@ -11,13 +11,14 @@ use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\FieldsHandler;
 use App\Repositories\Eloquent\Traits\HasPublishedStatus;
+use App\Repositories\Eloquent\Traits\MarkdownHelper;
 use App\Repositories\Eloquent\Traits\Slugable;
 use App\Repositories\Exceptions\RepositoryException;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Indigo\Contracts\Markdownable;
+use Indigo\Models\Article;
 
 /**
  * Class PostRepositoryEloquent
@@ -25,7 +26,7 @@ use Indigo\Contracts\Markdownable;
  */
 class PostRepositoryEloquent extends BaseRepository implements PostRepository
 {
-    use FieldsHandler, HasPublishedStatus, Slugable {
+    use FieldsHandler, HasPublishedStatus, MarkdownHelper, Slugable {
         getBySlug as slugableGetBySlug;
     }
     /**
@@ -349,25 +350,12 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function markdown($slug, $copyright = true)
     {
-        $markdownable = $this->useResource(false)->slugableGetBySlug($slug);
+        $model = $this->useResource(false)->slugableGetBySlug($slug);
 
-        if (!$markdownable instanceof Markdownable) {
-            throw new RepositoryException("class " . (object)$markdownable . " is not an instance of " . get_class(Markdownable::class));
+        if (!$model instanceof Article) {
+            throw new RepositoryException("class " . (object)$model . " is not an instance of " . get_class(Article::class));
         }
 
-        $content = $markdownable->getMarkdownContent();
-
-        return $copyright ? $this->prependCopyright($content, route('articles.show', $slug)) : $content;
-    }
-
-    /**
-     * @param $content
-     * @param $permalink
-     * @return string
-     */
-    protected function prependCopyright($content, $permalink)
-    {
-        // TODO i18n
-        return $content . PHP_EOL . PHP_EOL . sprintf("原文链接：[%s](%s)", $permalink, $permalink);
+        return $this->getCompleteMarkdown($model, $copyright);
     }
 }

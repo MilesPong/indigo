@@ -49,4 +49,20 @@ class Page extends ArticleModel
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPermalink()
+    {
+        return route('pages.show', $this->getAttribute('slug'));
+    }
 }

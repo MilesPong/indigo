@@ -139,4 +139,12 @@ class Post extends ArticleModel implements HasPublishedTime
 
         return starts_with($value, ['https://', 'http://']) ? $value : Storage::url($value);
     }
+
+    /**
+     * @return string
+     */
+    public function getPermalink()
+    {
+        return route('articles.show', $this->getAttribute('slug'));
+    }
 }

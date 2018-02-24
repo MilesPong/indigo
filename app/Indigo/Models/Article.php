@@ -53,6 +53,27 @@ abstract class Article extends Model implements Markdownable, Viewable
     /**
      * @return string
      */
+    abstract public function getPermalink();
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getAttribute('title');
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getAttribute('description');
+    }
+
+    /**
+     * @return string
+     */
     public function getCountField()
     {
         return 'view_count';
