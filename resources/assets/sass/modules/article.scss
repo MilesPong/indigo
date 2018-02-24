@@ -44,12 +44,34 @@
 // Post related
 .post-main {
     padding-top: 1rem;
+    font-size: 16px;
+    line-height: 1.8;
 
-    .post-desc {
+    h1,h2,h3,h4,h5,h6 {
+        font-weight: 500;
+    }
 
+    h2 {
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid #eaecef;
+    }
+
+    .post-desc, .post-copyright {
+        blockquote {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
     }
 
     .post-body {
+        ul {
+            margin-left: 25px;
+
+            li {
+                list-style-type: initial;
+            }
+        }
+
         .card-panel {
             padding-bottom: 0;
 
@@ -90,7 +112,10 @@
     }
 
     .post-copyright {
-
+        .card-panel {
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
     }
 
     .post-pre-next {

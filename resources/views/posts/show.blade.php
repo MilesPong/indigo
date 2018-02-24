@@ -11,7 +11,7 @@
     @component('components.header')
         <div class="center white-text">
             <div class="row">
-                <h2>{{ $post->title }}</h2>
+                <h1>{{ $post->title }}</h1>
             </div>
             <div class="row">
                 @include('partials.post-meta')
@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col s12 post-desc">
                 <div class="card-panel teal">
-                    <blockquote class="white-text flow-text">
+                    <blockquote class="white-text">
                         {{ $post->description }}
                     </blockquote>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="card-panel">
 
                     {{-- TODO when use api, content should be parse first, use transformer or parse markdown before store--}}
-                    <div id="post-content" class="flow-text post-content">
+                    <div id="post-content" class="post-content">
                         {!! $post->htmlContent !!}
                     </div>
 

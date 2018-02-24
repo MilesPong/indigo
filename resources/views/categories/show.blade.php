@@ -11,7 +11,7 @@
     @component('components.header')
         <div class="center white-text">
             <div class="row">
-                <h2>Category: {{ $category->name }}</h2>
+                <h1>Category: {{ $category->name }}</h1>
                 <p class="flow-text">{{ $category->description }}</p>
             </div>
         </div>
