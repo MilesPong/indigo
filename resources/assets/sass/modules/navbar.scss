@@ -1,0 +1,13 @@
+nav {
+    .brand-logo {
+        font-size: 1.6rem;
+    }
+
+    a.sidenav-trigger {
+        &.menu-on-large {
+            position: absolute;
+            left: -20%;
+            display: block;
+        }
+    }
+}

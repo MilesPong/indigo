@@ -1,11 +1,3 @@
-nav a.sidenav-trigger {
-    &.menu-on-large {
-        position: absolute;
-        left: -20%;
-        display: block;
-    }
-}
-
 .sidenav {
     li {
         ul.collapsible {
