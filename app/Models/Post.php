@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Indigo\Contracts\HasPublishedTime;
 use Indigo\Models\Article as ArticleModel;
 use Laracasts\Presenter\PresentableTrait;
+use Laravel\Scout\Searchable;
 
 /**
  * Class Post
@@ -14,7 +15,7 @@ use Laracasts\Presenter\PresentableTrait;
  */
 class Post extends ArticleModel implements HasPublishedTime
 {
-    use PresentableTrait;
+    use PresentableTrait, Searchable;
     /**
      * @var string
      */
@@ -146,5 +147,18 @@ class Post extends ArticleModel implements HasPublishedTime
     public function getPermalink()
     {
         return route('articles.show', $this->getAttribute('slug'));
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return array_merge($this->toArray(), [
+            // Equal to $this->html_content
+            'content' => strip_tags($this->getAttribute('html_content'))
+        ]);
     }
 }
