@@ -15,7 +15,7 @@
 
     @include('partials.favicon')
 
-    <title>@section('title'){{ config('app.name', 'Laravel') }}@show</title>
+    <title>@section('title'){{ setting('title', config('app.name', 'Laravel')) }}@show</title>
 
     <meta name="keywords" content="@section('keywords'){{ setting('keywords') }}@show">
     <meta name="description" content="@section('description'){{ setting('description') }}@show">

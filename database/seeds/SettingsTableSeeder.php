@@ -12,6 +12,12 @@ class SettingsTableSeeder extends Seeder
     public function run()
     {
         factory(\App\Models\Setting::class)->create([
+            'key' => 'title',
+            'value' => "Miles' Blog",
+            'tag' => 'website'
+        ]);
+
+        factory(\App\Models\Setting::class)->create([
             'key' => 'keywords',
             'value' => 'miles,milespong,laravel,blog',
             'tag' => 'seo'
