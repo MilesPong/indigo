@@ -14,7 +14,7 @@
                 <h1>{{ $post->title }}</h1>
             </div>
             <div class="row">
-                @include('partials.post-meta')
+                @include('partials.post-meta', ['toolTip' => true])
             </div>
         </div>
     @endcomponent

@@ -46,3 +46,6 @@ M.Sidenav.init(document.querySelector('.sidenav'));
 
 // Collapsible in side navigation bar
 M.Collapsible.init(document.querySelector('.collapsible'));
+
+// Tool tipped
+M.Tooltip.init(document.querySelector('.tooltipped'));

@@ -1,7 +1,14 @@
 <div class="meta-list">
     <ul>
         <li>
-            <i class="material-icons">date_range</i>{{ $post->published_at->diffForHumans() }}
+            <i class="material-icons">date_range</i>
+            @if(empty($toolTip))
+                {{ $post->published_at->diffForHumans() }}
+            @else
+                <a class="tooltipped" data-tooltip="{{ $post->published_at->toDatetimeString() }}">
+                    {{ $post->published_at->diffForHumans() }}
+                </a>
+            @endif
         </li>
         <li>
             <i class="material-icons">person_pin</i>{{ $post->author->name }}
