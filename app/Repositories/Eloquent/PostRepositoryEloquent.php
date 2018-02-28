@@ -13,6 +13,7 @@ use App\Repositories\Eloquent\Traits\FieldsHandler;
 use App\Repositories\Eloquent\Traits\HasPublishedStatus;
 use App\Repositories\Eloquent\Traits\MarkdownHelper;
 use App\Repositories\Eloquent\Traits\Slugable;
+use App\Repositories\Events\RepositoryEntityUpdated;
 use App\Repositories\Exceptions\RepositoryException;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
@@ -156,12 +157,19 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         // Oops...
         $model = DB::transaction(function () use ($attributes, $id) {
-            return tap($this->tempDisableApiResource(function () use ($attributes, $id) {
-                return parent::update($attributes, $id);
-            }), function (Post $instance) use ($attributes) {
-                $instance->content()->update($attributes);
+            $instance = $this->tempDisableApiResource(function () use ($id) {
+                return $this->find($id);
+            });
 
-                $this->syncTags($instance, array_get($attributes, 'tag', []));
+            /** @var \App\Models\Post $instance */
+            $instance->content()->update($attributes);
+
+            $this->syncTags($instance, array_get($attributes, 'tag', []));
+
+            $instance->update($attributes);
+
+            return tap($instance, function ($model) {
+                event(new RepositoryEntityUpdated($this, $model));
             });
         });
 
