@@ -18,7 +18,8 @@
     </div>
     <div class="footer-copyright">
         <div class="container">
-            © 2018 <a class="grey-text text-lighten-4" href="https://immiles.com">Miles</a>. All rights reserved.
+            © 2018 <a class="grey-text text-lighten-4" href="https://immiles.com">Miles</a>. All rights reserved. <a
+                        href="{{ route('feeds.main') }}" class="white-text"><i class="material-icons feed">rss_feed</i></a>
             <a href="https://opensource.org/licenses/MIT" class="right grey-text text-lighten-4">MIT License</a>
         </div>
     </div>
