@@ -8,12 +8,14 @@ use Indigo\Contracts\HasPublishedTime;
 use Indigo\Models\Article as ArticleModel;
 use Laracasts\Presenter\PresentableTrait;
 use Laravel\Scout\Searchable;
+use Spatie\Feed\Feedable;
+use Spatie\Feed\FeedItem;
 
 /**
  * Class Post
  * @package App\Models
  */
-class Post extends ArticleModel implements HasPublishedTime
+class Post extends ArticleModel implements HasPublishedTime, Feedable
 {
     use PresentableTrait, Searchable;
     /**
@@ -159,6 +161,21 @@ class Post extends ArticleModel implements HasPublishedTime
         return array_merge($this->toArray(), [
             // Equal to $this->html_content
             'content' => strip_tags($this->getAttribute('html_content'))
+        ]);
+    }
+
+    /**
+     * @return array|\Spatie\Feed\FeedItem
+     */
+    public function toFeedItem()
+    {
+        return FeedItem::create([
+            'id' => $this->slug,
+            'title' => $this->title,
+            'summary' => $this->description,
+            'updated' => $this->published_at,
+            'link' => route('articles.show', $this->slug),
+            'author' => $this->author->name,
         ]);
     }
 }

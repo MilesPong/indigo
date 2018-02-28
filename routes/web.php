@@ -15,6 +15,8 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->m
 
 Auth::routes();
 
+Route::feeds();
+
 Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'dashboard', 'as' => 'admin.'], function () {
     Route::get('/', 'DashboardController@index')->name('home');
 

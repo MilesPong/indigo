@@ -383,4 +383,23 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         return $paginator->setCollection($items);
     }
+
+    /**
+     * @return mixed
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function getFeedItems()
+    {
+        if (func_num_args() > 0) {
+            $count = func_get_arg(0);
+        }
+
+        $self = $this->useResource(false)->with(['author'])->latestPublished();
+
+        if (empty($count)) {
+            return $self->findAll();
+        }
+
+        return $self->getModelInstance()->take($count)->get();
+    }
 }

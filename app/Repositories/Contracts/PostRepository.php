@@ -77,4 +77,9 @@ interface PostRepository extends RepositoryInterface, SlugableInterface, HasPubl
      * @return mixed
      */
     public function search($text);
+
+    /**
+     * @return mixed
+     */
+    public function getFeedItems();
 }

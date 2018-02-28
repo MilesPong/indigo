@@ -29,6 +29,8 @@
     {{--@yield('css')--}}
     @stack('css')
 
+    @include('feed::links')
+
 </head>
 <body>
     <div id="app" v-cloak>
