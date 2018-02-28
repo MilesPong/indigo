@@ -385,8 +385,9 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
+     * TODO cache support
+     *
      * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
      */
     public function getFeedItems()
     {
@@ -394,12 +395,12 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
             $count = func_get_arg(0);
         }
 
-        $self = $this->useResource(false)->with(['author'])->latestPublished();
+        $self = $this->useResource(false)->with(['author', 'content'])->latestPublished();
 
         if (empty($count)) {
-            return $self->findAll();
+            return $self->model->get();
         }
 
-        return $self->getModelInstance()->take($count)->get();
+        return $self->model->take($count)->get();
     }
 }

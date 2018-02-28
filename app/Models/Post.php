@@ -172,7 +172,7 @@ class Post extends ArticleModel implements HasPublishedTime, Feedable
         return FeedItem::create([
             'id' => $this->slug,
             'title' => $this->title,
-            'summary' => $this->description,
+            'summary' => $this->getHtmlContentAttribute(),
             'updated' => $this->published_at,
             'link' => route('articles.show', $this->slug),
             'author' => $this->author->name,
