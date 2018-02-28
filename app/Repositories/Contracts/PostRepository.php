@@ -71,4 +71,10 @@ interface PostRepository extends RepositoryInterface, SlugableInterface, HasPubl
      * @return string
      */
     public function markdown($slug, $copyright = true);
+
+    /**
+     * @param string $text
+     * @return mixed
+     */
+    public function search($text);
 }

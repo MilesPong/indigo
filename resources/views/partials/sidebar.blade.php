@@ -1,6 +1,6 @@
-<div class="section">
-    @include('widgets.search')
-</div>
+{{--<div class="section">--}}
+    {{--@include('widgets.search')--}}
+{{--</div>--}}
 
 <div class="section">
     @include('widgets.hot')

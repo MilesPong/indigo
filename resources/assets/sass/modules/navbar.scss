@@ -10,4 +10,18 @@ nav {
             display: block;
         }
     }
+
+    .input-field {
+        input[type="search"] {
+            border: 1px solid white !important;
+            border-radius: 0.6rem;
+            width: 180px;
+            line-height: 42px;
+            margin-top: 11px;
+        }
+
+        label i, input[type="search"] ~ .material-icons {
+            line-height: 42px;
+        }
+    }
 }

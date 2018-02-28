@@ -358,4 +358,21 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         return $this->getCompleteMarkdown($model, $copyright);
     }
+
+    /**
+     * @param string $text
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function search($text)
+    {
+        /** @var \Laravel\Scout\Builder $scoutBuilder */
+        $scoutBuilder = call_user_func([$this->model, 'search'], $text);
+
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $paginator */
+        $paginator = $scoutBuilder->paginate($this->getDefaultPerPage());
+
+        $items = call_user_func([$paginator->getCollection(), 'load'], $this->relationships());
+
+        return $paginator->setCollection($items);
+    }
 }

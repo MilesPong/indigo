@@ -10,6 +10,18 @@
 
             <a href="/" class="brand-logo"><i class="material-icons hide-on-small-and-down">home</i>Miles' Blog</a>
             <ul class="right hide-on-med-and-down">
+
+                <li>
+                    <!-- Search bar -->
+                    <form action="{{ route('search') }}">
+                        <div class="input-field">
+                            <input id="search" type="search" name="q" required>
+                            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                            <i class="material-icons">close</i>
+                        </div>
+                    </form>
+                </li>
+
                 <!-- Dropdown Trigger -->
                 <li>
                     <a class="dropdown-trigger" href="#!" data-target="cate-dropdown">
