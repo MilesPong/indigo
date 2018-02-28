@@ -50,6 +50,9 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::resource('categories', 'CategoryController', ['only' => ['show']]);
     Route::resource('tags', 'TagController', ['only' => ['show']]);
 
+    // Search
+    Route::get('search', 'HomeController@search')->name('search');
+
     // Page
     Route::get('{slug}', 'PageController@show')->name('pages.show');
 });
