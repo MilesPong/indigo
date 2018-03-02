@@ -82,4 +82,9 @@ interface PostRepository extends RepositoryInterface, SlugableInterface, HasPubl
      * @return mixed
      */
     public function getFeedItems();
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function archives();
 }

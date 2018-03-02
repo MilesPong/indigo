@@ -49,3 +49,8 @@ M.Collapsible.init(document.querySelector('.collapsible'));
 
 // Tool tipped
 M.Tooltip.init(document.querySelector('.tooltipped'));
+
+// Collapsible in archives page
+M.Collapsible.init(document.querySelectorAll('.collapsible.expandable'), {
+    accordion: false
+});

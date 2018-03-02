@@ -55,6 +55,9 @@ Route::group(['namespace' => 'Frontend'], function () {
     // Search
     Route::get('search', 'HomeController@search')->name('search');
 
+    // Archives
+    Route::get('archives', 'PostController@archives')->name('archives');
+
     // Page
     Route::get('{slug}', 'PageController@show')->name('pages.show');
 });
