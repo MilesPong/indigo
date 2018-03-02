@@ -403,4 +403,27 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         return $self->model->take($count)->get();
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function archives()
+    {
+        $collection = $this->useResource(false)
+            ->latestPublished()
+            ->findAll(['title', 'slug', 'published_at']);
+
+        /** @var \Illuminate\Database\Eloquent\Collection|static[] $collection */
+        return $collection->groupBy([
+            function ($post) {
+                /** @var \App\Models\Post $post */
+                return $post->published_at->year;
+            },
+            function ($post) {
+                /** @var \App\Models\Post $post */
+                return $post->published_at->formatLocalized('%B');
+            }
+        ]);
+    }
 }

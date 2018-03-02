@@ -68,4 +68,14 @@ class PostController extends FrontendController
 
         return Response::make($markdown)->header('Content-Type', 'text/plain');
     }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function archives()
+    {
+        $archives = $this->postRepository->archives();
+
+        return view('posts.archives', compact('archives'));
+    }
 }
