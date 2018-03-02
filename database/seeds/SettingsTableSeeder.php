@@ -29,6 +29,12 @@ class SettingsTableSeeder extends Seeder
             'tag' => 'seo'
         ]);
 
+        factory(\App\Models\Setting::class)->create([
+            'key' => 'heading',
+            'value' => 'Just Keep Learning',
+            'tag' => 'website'
+        ]);
+
         factory(\App\Models\Setting::class, 5)->create();
     }
 }
