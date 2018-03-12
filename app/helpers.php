@@ -13,12 +13,12 @@ if (!function_exists('markdownContent')) {
     {
         $imgUrl = random_img_url();
         $content =
-            "$faker->realText \n\r " .
-            "## $faker->sentence \n\r " .
-            "![$faker->word]($imgUrl) \n\r " .
-            "> $faker->sentence \n\r " .
-            "### $faker->sentence \n\r " .
-            "$faker->paragraph \n\r " .
+            "$faker->realText \n\r" .
+            "## $faker->sentence \n\r" .
+            "![$faker->word]($imgUrl) \n\r" .
+            "> $faker->sentence \n\r" .
+            "### $faker->sentence \n\r" .
+            "$faker->paragraph \n\r" .
             "[$faker->sentence](#)";
         return $content;
     }
@@ -87,11 +87,12 @@ if (!function_exists('isAdmin')) {
 if (!function_exists('setting')) {
     /**
      * @param $key
+     * @param mixed $default
      * @return mixed
      */
-    function setting($key)
+    function setting($key, $default = null)
     {
-        return array_get(app('settings'), $key);
+        return array_get(app('settings'), $key, $default);
     }
 }
 

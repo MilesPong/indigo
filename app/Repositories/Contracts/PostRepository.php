@@ -5,6 +5,7 @@ namespace App\Repositories\Contracts;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Repositories\Contracts\Helpers\HasPublishedStatus;
 use App\Repositories\Contracts\Helpers\SlugableInterface;
 use App\Repositories\Contracts\Repository as RepositoryInterface;
 
@@ -12,7 +13,7 @@ use App\Repositories\Contracts\Repository as RepositoryInterface;
  * Interface PostRepository
  * @package App\Repositories\Contracts
  */
-interface PostRepository extends RepositoryInterface, SlugableInterface
+interface PostRepository extends RepositoryInterface, SlugableInterface, HasPublishedStatus
 {
     /**
      * @param \App\Models\Post $model
@@ -65,7 +66,25 @@ interface PostRepository extends RepositoryInterface, SlugableInterface
     public function backendPaginate($perPage = null, $columns = ['*']);
 
     /**
+     * @param $slug
+     * @param bool $copyright
+     * @return string
+     */
+    public function markdown($slug, $copyright = true);
+
+    /**
+     * @param string $text
      * @return mixed
      */
-    public function adminMode();
+    public function search($text);
+
+    /**
+     * @return mixed
+     */
+    public function getFeedItems();
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function archives();
 }

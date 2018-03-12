@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "algolia/algoliasearch-client-php": "^1.25",
         "doctrine/dbal": "~2.3",
         "erusev/parsedown": "^1.6",
         "fideloper/proxy": "~3.3",
@@ -13,10 +14,14 @@
         "jenssegers/agent": "^2.5",
         "laracasts/presenter": "^0.2.1",
         "laravel/framework": "5.5.*",
+        "laravel/scout": "^4.0",
         "laravel/tinker": "~1.0",
         "league/html-to-markdown": "^4.4",
+        "nao-pon/flysystem-google-drive": "^1.1",
         "predis/predis": "^1.1",
         "rap2hpoutre/laravel-log-viewer": "^0.10.0",
+        "spatie/laravel-backup": "^5.1",
+        "spatie/laravel-feed": "^2.0",
         "thomaswelton/laravel-gravatar": "^1.1",
         "zizaco/entrust": "^1.8"
     },

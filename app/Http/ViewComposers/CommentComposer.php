@@ -17,12 +17,12 @@ class CommentComposer
      */
     public function compose(View $view)
     {
-        $commentDriver = config('blog.comment.driver');
+        $commentDriver = config('indigo.comment.driver');
 
         // Disqus
         if (($commentDriver == 'disqus')) {
 
-            if (!$shortName = config('blog.comment.disqus.short_name')) {
+            if (!$shortName = config('indigo.comment.disqus.short_name')) {
                 throw new \Exception('Please set disqus short name.');
             }
 

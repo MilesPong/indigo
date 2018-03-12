@@ -2,16 +2,17 @@
 
 return [
     'counter' => [
-        'strict_mode' => env('COUNT_STRICT_MODE', false),
-        'cache_key' => 'post_viewed_count:',
-        // require strict_mode to be set
-        'timeout' => 3600, // 1h
-        'key' => 'post_viewed',
+        /*
+        |--------------------------------------------------------------------------
+        | Default Cache Store of Counter
+        |--------------------------------------------------------------------------
+        |
+        | With referenced to cache.php
+        | Set "null" to use cache's default store.
+        |
+        */
+        'cache_store' => env('COUNTER_DEFAULT_STORE', null)
     ],
-    // 'cache' => [
-    //     'enable' => env('ENABLE_DATA_CACHE', true),
-    //     'minutes' => 60,
-    // ],
     'posts' => [
         'per_page' => 5,
     ],

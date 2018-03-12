@@ -194,7 +194,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function getDefaultPerPage()
     {
-        return config('blog.repository.pagination.per_page');
+        return config('indigo.repository.pagination.per_page');
     }
 
     /**
@@ -422,7 +422,7 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function getModelInstance()
     {

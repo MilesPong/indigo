@@ -39,8 +39,8 @@
             }
         },
         mounted () {
-            this.setDefaultSelected()
-            M.Select.init(document.querySelector(`#${this.elemId}`))
+            this.setDefaultSelected();
+            M.FormSelect.init(document.querySelector(`#${this.elemId}`))
         },
         methods: {
             setDefaultSelected () {

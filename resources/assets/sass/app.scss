@@ -1,16 +1,19 @@
 // Variables
 @import "variables";
-
 // Bootstrap
 @import "~materialize-css/sass/materialize.scss";
-
 @import "modules/prism.css";
 @import "modules/article.scss";
 @import "modules/widget.scss";
+@import "modules/navbar.scss";
 @import "modules/sidenav.scss";
+@import "modules/footer.scss";
 @import "modules/auth.scss";
+@import "modules/archives.scss";
 
-[v-cloak] { display: none; }
+[v-cloak] {
+  display: none;
+}
 
 html, body {
   height: 100%;
@@ -26,4 +29,33 @@ body div#app {
 
 main {
   flex: 1 0 auto;
+}
+
+@media #{$small-and-down} {
+  .container {
+    width: 96%;
+  }
+}
+
+code:not([class]) {
+  padding: .1em .25em;
+  border: solid 1px rgba(51, 51, 51, 0.12);
+  border-radius: .3em;
+  background: #f5f2f0;
+  font-family: 'Inconsolata', Monaco, Consolas, 'Andale Mono', monospace;
+  line-height: 1.3;
+  color: black;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+  position: relative;
+  font-size: 1.1rem;
 }

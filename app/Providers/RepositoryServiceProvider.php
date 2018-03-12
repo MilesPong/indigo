@@ -22,6 +22,7 @@ class RepositoryServiceProvider extends ServiceProvider
         \App\Repositories\Contracts\PostRepository::class => \App\Repositories\Eloquent\PostRepositoryEloquent::class,
         \App\Repositories\Contracts\VisitorRepository::class => \App\Repositories\Eloquent\VisitorRepositoryEloquent::class,
         \App\Repositories\Contracts\SettingRepository::class => \App\Repositories\Eloquent\SettingRepositoryEloquent::class,
+        \App\Repositories\Contracts\PageRepository::class => \App\Repositories\Eloquent\PageRepositoryEloquent::class,
     ];
 
     /**

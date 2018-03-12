@@ -11,6 +11,7 @@ trait HasPost
     /**
      * @param array $columns
      * @return mixed
+     * @see \App\Repositories\Contracts\Helpers\HasPostInterface::getResultsHavePosts()
      */
     public function getResultsHavePosts($columns = ['*'])
     {

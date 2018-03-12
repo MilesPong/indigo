@@ -20,7 +20,7 @@
 
             <div class="divider"></div>
 
-            <blockquote class="flow-text">{{ $post->description }}</blockquote>
+            <blockquote class="">{{ $post->description }}</blockquote>
 
         </div>
 

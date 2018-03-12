@@ -42,7 +42,7 @@ class PostController extends BackendController
         $this->categoryRepository = $categoryRepository;
         $this->tagRepository = $tagRepository;
 
-        $this->postRepository->adminMode();
+        $this->postRepository->ignorePublishedStatusMode();
     }
 
     /**
@@ -52,13 +52,24 @@ class PostController extends BackendController
      */
     public function index(Request $request)
     {
-        if ($request->has('trash')) {
-            $this->postRepository->onlyTrashed();
-        }
+        $showTrash = $this->determineIfWantTrash($request);
 
         $posts = $this->postRepository->backendPaginate();
 
-        return view('admin.posts.index', compact('posts'));
+        return view('admin.posts.index', compact('posts', 'showTrash'));
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return bool
+     */
+    protected function determineIfWantTrash($request)
+    {
+        return tap($request->has('trash'), function ($isTrash) {
+            if ($isTrash) {
+                $this->postRepository->onlyTrashed();
+            }
+        });
     }
 
     /**
@@ -87,14 +98,15 @@ class PostController extends BackendController
     /**
      * Display the specified resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $post = $this->postRepository->find($id);
+        $slug = $this->postRepository->getSlug($id);
 
-        return response($post);
+        return redirect()->route('articles.show', array_merge([$slug], $request->query()));
     }
 
     /**

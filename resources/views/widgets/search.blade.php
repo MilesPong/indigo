@@ -1,11 +1,11 @@
 <div class="widget-sidebar widget-search">
     <div class="card-panel teal">
 
-        <form action="">
+        <form action="{{ route('search') }}">
             <div class="row">
                 <div class="col s9">
                     <div class="input-field white-text left">
-                        <input type="text" id="keyword" name="keyword">
+                        <input type="text" id="keyword" name="q" class="white-text">
                         <label class="white-text" for="keyword">Search</label>
                     </div>
                 </div>

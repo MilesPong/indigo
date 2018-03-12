@@ -10,13 +10,16 @@ use App\Models\Tag;
 use App\Repositories\Contracts\PostRepository;
 use App\Repositories\Contracts\TagRepository;
 use App\Repositories\Eloquent\Traits\FieldsHandler;
+use App\Repositories\Eloquent\Traits\HasPublishedStatus;
+use App\Repositories\Eloquent\Traits\MarkdownHelper;
 use App\Repositories\Eloquent\Traits\Slugable;
+use App\Repositories\Events\RepositoryEntityUpdated;
 use App\Repositories\Exceptions\RepositoryException;
-use App\Scopes\PublishedScope;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Indigo\Models\Article;
 
 /**
  * Class PostRepositoryEloquent
@@ -24,7 +27,9 @@ use Illuminate\Support\Facades\DB;
  */
 class PostRepositoryEloquent extends BaseRepository implements PostRepository
 {
-    use Slugable, FieldsHandler;
+    use FieldsHandler, HasPublishedStatus, MarkdownHelper, Slugable {
+        getBySlug as slugableGetBySlug;
+    }
     /**
      * @var \App\Repositories\Contracts\TagRepository
      */
@@ -49,19 +54,19 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     }
 
     /**
-     *
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
-
-    /**
      * @return string
      */
     public function contentModel()
     {
         return Content::class;
+    }
+
+    /**
+     *
+     */
+    public function boot()
+    {
+        parent::boot();
     }
 
     /**
@@ -115,14 +120,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
     {
         $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['title']);
 
-        foreach ($attributes as $field => &$value) {
-            if (method_exists($this, $method = 'handle' . studly_case($field))) {
-                // Note that the parameters for call_user_func() are not passed by reference.
-                $value = call_user_func([$this, $method], $value);
-            }
-        }
-
-        return $attributes;
+        return $this->handle($attributes);
     }
 
     /**
@@ -159,12 +157,19 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
         // Oops...
         $model = DB::transaction(function () use ($attributes, $id) {
-            return tap($this->tempDisableApiResource(function () use ($attributes, $id) {
-                return parent::update($attributes, $id);
-            }), function (Post $instance) use ($attributes) {
-                $instance->content()->update($attributes);
+            $instance = $this->tempDisableApiResource(function () use ($id) {
+                return $this->find($id);
+            });
 
-                $this->syncTags($instance, array_get($attributes, 'tag', []));
+            /** @var \App\Models\Post $instance */
+            $instance->content()->update($attributes);
+
+            $this->syncTags($instance, array_get($attributes, 'tag', []));
+
+            $instance->update($attributes);
+
+            return tap($instance, function ($model) {
+                event(new RepositoryEntityUpdated($this, $model));
             });
         });
 
@@ -173,12 +178,15 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
 
     /**
      * @param $slug
+     * @param string $field
      * @return mixed
      * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function getBySlug($slug)
+    public function getBySlug($slug, $field = 'slug')
     {
-        return $this->with($this->relationships())->findBy('slug', $slug);
+        $this->with($this->relationships());
+
+        return $this->slugableGetBySlug($slug, $field);
     }
 
     // /**
@@ -285,7 +293,7 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function getDefaultPerPage()
     {
-        return config('blog.posts.per_page');
+        return config('indigo.posts.per_page');
     }
 
     /**
@@ -306,7 +314,8 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function frontendPaginate($perPage = null, $columns = ['*'])
     {
-        return $this->with($this->relationships())->latestPublished()->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+        return $this->with($this->relationships())->latestPublished()->paginate($perPage ?: $this->getDefaultPerPage(),
+            $columns);
     }
 
     /**
@@ -337,16 +346,84 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     public function backendPaginate($perPage = null, $columns = ['*'])
     {
-        return $this->with(['category', 'author'])->orderBy('id', 'desc')->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
+        return $this->with(['category', 'author'])->orderBy('id',
+            'desc')->paginate($perPage ?: $this->getDefaultPerPage(), $columns);
     }
 
     /**
-     * @return $this
+     * @param $slug
+     * @param bool $copyright
+     * @return string
+     * @throws \App\Repositories\Exceptions\RepositoryException
      */
-    public function adminMode()
+    public function markdown($slug, $copyright = true)
     {
-        $this->model = $this->model->withoutGlobalScope(PublishedScope::class);
+        $model = $this->useResource(false)->slugableGetBySlug($slug);
 
-        return $this;
+        if (!$model instanceof Article) {
+            throw new RepositoryException("class " . (object)$model . " is not an instance of " . get_class(Article::class));
+        }
+
+        return $this->getCompleteMarkdown($model, $copyright);
+    }
+
+    /**
+     * @param string $text
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function search($text)
+    {
+        /** @var \Laravel\Scout\Builder $scoutBuilder */
+        $scoutBuilder = call_user_func([$this->model, 'search'], $text);
+
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $paginator */
+        $paginator = $scoutBuilder->paginate($this->getDefaultPerPage());
+
+        $items = call_user_func([$paginator->getCollection(), 'load'], $this->relationships());
+
+        return $paginator->setCollection($items);
+    }
+
+    /**
+     * TODO cache support
+     *
+     * @return mixed
+     */
+    public function getFeedItems()
+    {
+        if (func_num_args() > 0) {
+            $count = func_get_arg(0);
+        }
+
+        $self = $this->useResource(false)->with(['author', 'content'])->latestPublished();
+
+        if (empty($count)) {
+            return $self->model->get();
+        }
+
+        return $self->model->take($count)->get();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function archives()
+    {
+        $collection = $this->useResource(false)
+            ->latestPublished()
+            ->findAll(['title', 'slug', 'published_at']);
+
+        /** @var \Illuminate\Database\Eloquent\Collection|static[] $collection */
+        return $collection->groupBy([
+            function ($post) {
+                /** @var \App\Models\Post $post */
+                return $post->published_at->year;
+            },
+            function ($post) {
+                /** @var \App\Models\Post $post */
+                return $post->published_at->formatLocalized('%B');
+            }
+        ]);
     }
 }

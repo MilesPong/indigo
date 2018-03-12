@@ -1,0 +1,31 @@
+nav {
+    .brand-logo {
+        font-size: 1.6rem;
+    }
+
+    a.sidenav-trigger {
+        &.menu-on-large {
+            position: absolute;
+            left: -20%;
+            display: block;
+        }
+    }
+
+    .input-field {
+        input[type="search"] {
+            border: 1px solid white !important;
+            border-radius: 0.6rem;
+            width: 180px;
+            line-height: 42px;
+            margin-top: 11px;
+        }
+
+        label i, input[type="search"] ~ .material-icons {
+            line-height: 42px;
+        }
+    }
+
+    form {
+        margin-right: 5px;
+    }
+}

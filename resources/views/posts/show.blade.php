@@ -11,10 +11,10 @@
     @component('components.header')
         <div class="center white-text">
             <div class="row">
-                <h2>{{ $post->title }}</h2>
+                <h1>{{ $post->title }}</h1>
             </div>
             <div class="row">
-                @include('partials.post-meta')
+                @include('partials.post-meta', ['toolTip' => true])
             </div>
         </div>
     @endcomponent
@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col s12 post-desc">
                 <div class="card-panel teal">
-                    <blockquote class="white-text flow-text">
+                    <blockquote class="white-text">
                         {{ $post->description }}
                     </blockquote>
                 </div>
@@ -32,8 +32,8 @@
                 <div class="card-panel">
 
                     {{-- TODO when use api, content should be parse first, use transformer or parse markdown before store--}}
-                    <div id="post-content" class="flow-text post-content">
-                        {!! $post->content !!}
+                    <div id="post-content" class="post-content">
+                        {!! $post->htmlContent !!}
                     </div>
 
                     <div class="post-content-tag">
@@ -49,8 +49,9 @@
             <div class="col s12 post-copyright">
                 <div class="card-panel grey lighten-3">
                     <blockquote class="">
+                        <p><strong>原始内容：</strong><a href="{{ route('articles.markdown', $post->slug) }}">Markdown 版本</a></p>
                         <p><strong>版权声明：</strong>由 <strong>{{ $post->author->name }}</strong> 创作，使用
-                            <a href="http://creativecommons.org/licenses/by/4.0/deed.zh"><img src="https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square" alt="License: CC BY-SA 4.0"></a>
+                            <a href="http://creativecommons.org/licenses/by/4.0/deed.zh"><img class="license-badge" src="https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square" alt="License: CC BY-SA 4.0"></a>
                             创作共享协议，<a href="http://creativecommons.org/licenses/by/4.0/deed.zh">相关说明</a>
                         </p>
                         <p><strong>本文链接：</strong><a href="{{ route('articles.show', $post->slug) }}">{{ route('articles.show', $post->slug) }}</a></p>

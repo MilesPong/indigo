@@ -3,33 +3,21 @@
 namespace App\Models;
 
 use App\Presenters\PostPresenter;
-use App\Scopes\PublishedScope;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
-use Indigo\Contracts\Markdownable;
-use Indigo\Tools\MarkDownParser;
+use Indigo\Contracts\HasPublishedTime;
+use Indigo\Models\Article as ArticleModel;
 use Laracasts\Presenter\PresentableTrait;
+use Laravel\Scout\Searchable;
+use Spatie\Feed\Feedable;
+use Spatie\Feed\FeedItem;
 
 /**
  * Class Post
  * @package App\Models
  */
-class Post extends Model implements Markdownable
+class Post extends ArticleModel implements HasPublishedTime, Feedable
 {
-    use PresentableTrait, SoftDeletes;
-    /**
-     * Is draft status
-     */
-    const IS_DRAFT = 1;
-    /**
-     * Is not draft status
-     */
-    const IS_NOT_DRAFT = 0;
-    /**
-     * Cache key prefix of post's content
-     */
-    const CONTENT_CACHE_KEY_PREFIX = 'contents:';
+    use PresentableTrait, Searchable;
     /**
      * @var string
      */
@@ -51,24 +39,6 @@ class Post extends Model implements Markdownable
      * @var array
      */
     protected $dates = ['published_at', 'deleted_at'];
-    /**
-     * @var array
-     */
-    protected $casts = [
-        'is_draft' => 'boolean'
-    ];
-
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope(new PublishedScope);
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -92,24 +62,6 @@ class Post extends Model implements Markdownable
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable');
-    }
-
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public function getConst($name)
-    {
-        return constant("self::{$name}");
-    }
-
-    /**
-     * @return string
-     */
-    public function getContentAttribute()
-    {
-        // TODO cache
-        return MarkDownParser::md2html($this);
     }
 
     /**
@@ -168,14 +120,6 @@ class Post extends Model implements Markdownable
     /**
      * @return mixed
      */
-    public function getMarkdownContent()
-    {
-        return $this->getRawContentAttribute();
-    }
-
-    /**
-     * @return mixed
-     */
     public function getRawContentAttribute()
     {
         return $this->content()->getResults()->body;
@@ -197,5 +141,41 @@ class Post extends Model implements Markdownable
         $value = $this->getAttribute('feature_img');
 
         return starts_with($value, ['https://', 'http://']) ? $value : Storage::url($value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPermalink()
+    {
+        return route('articles.show', $this->getAttribute('slug'));
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return array_merge($this->toArray(), [
+            // Equal to $this->html_content
+            'content' => strip_tags($this->getAttribute('html_content'))
+        ]);
+    }
+
+    /**
+     * @return array|\Spatie\Feed\FeedItem
+     */
+    public function toFeedItem()
+    {
+        return FeedItem::create([
+            'id' => $this->slug,
+            'title' => $this->title,
+            'summary' => $this->getHtmlContentAttribute(),
+            'updated' => $this->published_at,
+            'link' => route('articles.show', $this->slug),
+            'author' => $this->author->name,
+        ]);
     }
 }

@@ -20,16 +20,24 @@
         @endforeach
 
             <td>
-                @if (isset($hrefShow))
+                @if (!empty($hrefShow) && empty($showTrash))
                     <vue-table-action link="{{ $hrefShow }}" identifier="{{ $item->id }}" icon="visibility"></vue-table-action>
                 @endif
 
-                @if (isset($hrefEdit))
+                @if (!empty($hrefEdit) && empty($showTrash))
                     <vue-table-action link="{{ $hrefEdit }}" identifier="{{ $item->id }}" class="blue" icon="mode_edit"></vue-table-action>
                 @endif
 
-                @if (isset($hrefDestroy))
+                @if (!empty($hrefDestroy) && empty($showTrash))
                     <vue-table-action link="{{ $hrefDestroy }}" identifier="{{ $item->id }}" class="red" icon="delete" is-destroy></vue-table-action>
+                @endif
+
+                @if (!empty($hrefForceDelete) && !empty($showTrash))
+                    <vue-table-action link="{{ $hrefForceDelete }}" identifier="{{ $item->id }}" class="red" icon="delete_forever" is-destroy></vue-table-action>
+                @endif
+
+                @if (!empty($hrefRestore) && !empty($showTrash))
+                    <vue-table-action link="{{ $hrefRestore }}" identifier="{{ $item->id }}" class="indigo" icon="refresh" is-restore></vue-table-action>
                 @endif
 
                 {{ $additional_action or null }}
@@ -43,7 +51,7 @@
 
 {{-- Pagination --}}
 <div class="center-align">
-    {{ $paginator->links('vendor.pagination.materialize') }}
+    {{ $paginator->appends(request()->query())->links('vendor.pagination.materialize') }}
 </div>
 
 {{-- FAB --}}

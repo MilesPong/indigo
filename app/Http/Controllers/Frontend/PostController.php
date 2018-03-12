@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Events\PostViewEvent;
+use App\Events\ViewedEvent;
 use App\Repositories\Contracts\PostRepository;
+use Illuminate\Support\Facades\Response;
 
 /**
  * Class PostController
@@ -52,8 +53,29 @@ class PostController extends FrontendController
         $previous = $this->postRepository->previous($post);
         $next = $this->postRepository->next($post);
 
-        event(new PostViewEvent($post->id));
+        event(new ViewedEvent($post));
 
         return view('posts.show', compact('post', 'previous', 'next'));
+    }
+
+    /**
+     * @param $slug
+     * @return \Illuminate\Http\Response
+     */
+    public function markdown($slug)
+    {
+        $markdown = $this->postRepository->markdown($slug);
+
+        return Response::make($markdown)->header('Content-Type', 'text/plain');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function archives()
+    {
+        $archives = $this->postRepository->archives();
+
+        return view('posts.archives', compact('archives'));
     }
 }

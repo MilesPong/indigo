@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Eloquent\Traits;
 
+use App\Repositories\Contracts\Helpers\HasPublishedStatus;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Trait Slugable
@@ -10,6 +12,30 @@ use Carbon\Carbon;
  */
 trait Slugable
 {
+    /**
+     * @param $slug
+     * @param string $field
+     * @return \Illuminate\Database\Eloquent\Model|static|string
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     * @see \App\Repositories\Contracts\Helpers\SlugableInterface::getBySlug()
+     */
+    public function getBySlug($slug, $field = 'slug')
+    {
+        $this->ifShouldIgnorePublishedStatus();
+
+        return $this->findBy($field, $slug);
+    }
+
+    /**
+     * @return void
+     */
+    protected function ifShouldIgnorePublishedStatus()
+    {
+        if ($this instanceof HasPublishedStatus && $this->wantIgnorePublishedStatus() && Auth::check()) {
+            $this->ignorePublishedStatusMode();
+        }
+    }
+
     /**
      * Auto create slug if request slug is null
      *
@@ -60,12 +86,14 @@ trait Slugable
     }
 
     /**
-     * @param $slug
-     * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
+     * @param $id
+     * @return string
+     * @see \App\Repositories\Contracts\Helpers\SlugableInterface::getSlug()
      */
-    public function getBySlug($slug)
+    public function getSlug($id)
     {
-        return $this->findBy('slug', $slug);
+        $column = 'slug';
+
+        return $this->useResource(false)->find($id, [$column])->getAttribute($column);
     }
 }

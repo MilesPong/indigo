@@ -4,7 +4,7 @@
     <div class="row materialize-red lighten-2 login-page">
 
         @if(count($errors) > 0)
-            <div class="col m4 offset-m4 s10 offset-s1 error-msg">
+            <div class="col l4 offset-l4 s10 offset-s1 error-msg">
                 <div class="card-panel z-depth-4">
                     <ul class="red-text">
                         @foreach($errors->all() as $error)
@@ -15,7 +15,7 @@
             </div>
         @endif
 
-        <div class="col m4 offset-m4 s10 offset-s1">
+        <div class="col l4 offset-l4 s10 offset-s1">
             <div class="card-panel z-depth-4 hoverable">
                 <form action="{{ route('login') }}" method="post">
                     {{ csrf_field() }}
