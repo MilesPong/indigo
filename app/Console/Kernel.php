@@ -5,6 +5,8 @@ namespace App\Console;
 use App\Console\Commands\SaveCounter;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Models\Post;
+use App\Models\Page;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command(SaveCounter::class)->hourly()->appendOutputTo(storage_path() . '/logs/counter.log');
+        $schedule->command(SaveCounter::class, [Post::class, Page::class])->hourly()->appendOutputTo(storage_path() . '/logs/counter.log');
         $schedule->command('backup:clean')->dailyAt('01:00');
         $schedule->command('backup:run')->dailyAt('02:00');
         $schedule->command('backup:monitor')->twiceMonthly();
