@@ -1,0 +1,68 @@
+@media only screen and (min-width: 993px) {
+  .body-field .CodeMirror-fullscreen, .body-field .fullscreen {
+    margin-left: 300px;
+  }
+}
+
+.file-path {
+  display: none;
+}
+
+.editor-toolbar {
+  margin-top: 15px;
+}
+
+.body-field {
+
+  .CodeMirror-fullscreen {
+    top: 110px;
+  }
+
+  .fullscreen {
+    margin-top: 64px;
+  }
+
+  .editor-preview, .editor-preview-side {
+    line-height: 2.0;
+    font-size: 16px;
+
+    strong {
+      font-weight: 600;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 2.32rem !important;
+    }
+    h2 {
+      font-size: 1.78rem !important;
+    }
+    h3 {
+      font-size: 1.60rem !important;
+    }
+    h4 {
+      font-size: 1.35rem !important;
+    }
+    h5 {
+      font-size: 1.20rem !important;
+    }
+    h6 {
+      font-size: 1.15rem !important;
+    }
+
+    ul {
+      margin-left: 25px;
+
+      li {
+        list-style-type: initial;
+      }
+    }
+
+    img {
+      max-width: 100%;
+    }
+  }
+}
