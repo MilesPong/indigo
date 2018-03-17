@@ -6,6 +6,10 @@ Indigo is a project I mainly learn to how to develop a Laravel application **in 
 
 There is an introduction(Chinese) about this project as well, you can access it [here](https://immiles.com/articles/indigo).
 
+## Screenshot
+
+![screenshot](https://user-images.githubusercontent.com/5867628/37555740-48334dc4-2a27-11e8-973f-f54f96d9e912.png)
+
 ## Features
 
  - Basic blog features like post, page, archives, search, etc.
