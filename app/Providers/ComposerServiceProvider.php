@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\ViewComposers\CategoriesComposer;
 use App\Http\ViewComposers\CommentComposer;
+use App\Http\ViewComposers\GoogleAnalyticsComposer;
 use App\Http\ViewComposers\HotPostsComposer;
 use App\Http\ViewComposers\TagsComposer;
 use Illuminate\Support\Facades\View;
@@ -26,6 +27,7 @@ class ComposerServiceProvider extends ServiceProvider
         View::composer('widgets.tag', TagsComposer::class);
         View::composer('widgets.hot', HotPostsComposer::class);
         View::composer('partials.comment', CommentComposer::class);
+        View::composer('partials.google_analytics', GoogleAnalyticsComposer::class);
     }
 
     /**
