@@ -57,30 +57,35 @@ YOUDAO_APP_SECRET=
 # Google Analytics
 GOOGLE_ANALYTICS_ID=
 
+# Visitor log
+ENABLE_VISITOR_LOG=false
+
 # Comment
-COMMENT_DRIVER=disqu
+COMMENT_DRIVER=
 DISQUS_SHORT_NAME=
 
-FILESYSTEM_DRIVER=
+FILESYSTEM_DRIVER=public
 
+# For receiving feedback while failed in backup
 ADMIN_EMAIL=
 
 MAIL_FROM_ADDRESS=
 MAIL_FROM_NAME=
 
 # Search
-SCOUT_QUEUE=true
-ALGOLIA_APP_ID=
-ALGOLIA_SECRET=
+SCOUT_QUEUE=false
+SCOUT_DRIVER=null
 ```
 
-Schedule are required by default, set it up as follow
+**Schedule** are required by default, set it up as follow
 
 ```bash
 $ crontab -e
 # Append this to the end
 # * * * * * php /path/to/project/artisan schedule:run >> /dev/null 2>&1
 ```
+
+**Auto backup** is enabled by default, you may have a look about the configuration under [config/backup.php](config/backup.php)
 
 ### Migration
 
