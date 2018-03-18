@@ -50,8 +50,6 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
      */
     protected function preHandleData(array $attributes)
     {
-        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['name']);
-
         return $attributes;
     }
 

@@ -33,7 +33,7 @@ class StoreUpdatePageRequest extends FormRequest
     {
         $rules = [
             'title' => 'required',
-            'slug' => 'unique:pages',
+            'slug' => 'required|unique:pages',
             'body' => 'required',
         ];
 
@@ -42,6 +42,7 @@ class StoreUpdatePageRequest extends FormRequest
             case 'PATCH':
                 $rules = array_merge($rules, [
                     'slug' => [
+                        'required',
                         Rule::unique('pages')->ignore($this->route('page'))
                     ]
                 ]);
