@@ -26,7 +26,7 @@ class StoreUpdateCategoryRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|min:2|max:255|unique:categories',
-            'slug' => 'unique:categories'
+            'slug' => 'required|unique:categories'
         ];
 
         switch ($this->method()) {
@@ -40,6 +40,7 @@ class StoreUpdateCategoryRequest extends FormRequest
                         Rule::unique('categories')->ignore($this->route('category'))
                     ],
                     'slug' => [
+                        'required',
                         Rule::unique('categories')->ignore($this->route('category'))
                     ]
                 ]);

@@ -45,10 +45,10 @@
 .post-main {
     padding-top: 1rem;
     font-size: 16px;
-    line-height: 1.8;
+    line-height: 2.0;
 
-    h1,h2,h3,h4,h5,h6 {
-        font-weight: 600;
+    h1,h2,h3,h4,h5,h6,strong {
+        font-weight: bold;
     }
 
     h2 {
@@ -74,6 +74,11 @@
 
         .card-panel {
             padding-bottom: 0;
+
+            @media #{$small-and-down} {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
 
             &.page-panel {
                 padding-bottom: 24px !important;

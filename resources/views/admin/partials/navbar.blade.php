@@ -4,6 +4,7 @@
         <div class="nav-wrapper">
             <a href="#!" class="brand-logo">Dashboard</a>
             <ul class="right hide-on-med-and-down">
+                <li><a href="{{ route('home') }}"><i class="material-icons">home</i></a></li>
                 <li><a href="#!"><i class="material-icons">notifications</i></a></li>
             </ul>
 

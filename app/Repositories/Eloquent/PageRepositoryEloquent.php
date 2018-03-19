@@ -90,8 +90,6 @@ class PageRepositoryEloquent extends BaseRepository implements PageRepository
      */
     protected function preHandleData(array $attributes)
     {
-        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['title']);
-
         return $this->handle($attributes);
     }
 

@@ -27,7 +27,7 @@ class StoreUpdateTagRequest extends FormRequest
         $rules = [
             'name' => 'required|min:2|max:255|unique:tags',
             'description' => 'max:255',
-            'slug' => 'unique:tags'
+            'slug' => 'required|unique:tags'
         ];
 
         switch ($this->method()) {
@@ -42,6 +42,7 @@ class StoreUpdateTagRequest extends FormRequest
                     ],
                     'description' => 'max:255',
                     'slug' => [
+                        'required',
                         Rule::unique('tags')->ignore($this->route('tag'))
                     ]
                 ];

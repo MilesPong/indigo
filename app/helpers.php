@@ -64,11 +64,21 @@ if (!function_exists('str_slug_with_cn')) {
             return '';
         }
 
-        if ($forceTrans || hasChinese($text)) {
+        if (($forceTrans || hasChinese($text)) && hasSetYouDao()) {
             return translug($text);
         }
 
         return str_slug($text);
+    }
+}
+
+if (!function_exists('hasSetYouDao')) {
+    /**
+     * @return bool
+     */
+    function hasSetYouDao()
+    {
+        return config('services.youdao.appKey') && config('services.youdao.appSecret');
     }
 }
 
@@ -114,7 +124,8 @@ if (!function_exists('human_filesize')) {
      * @param int $decimals
      * @return string
      */
-    function human_filesize($bytes, $decimals = 2) {
+    function human_filesize($bytes, $decimals = 2)
+    {
         $sz = 'BKMGTP';
         $factor = floor((strlen($bytes) - 1) / 3);
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];

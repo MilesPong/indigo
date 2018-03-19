@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## 1.0.4 - 2018-03-19
+### Added
+- [README.md](README.md)
+- License
+
+### Changed
+- Update composer packages
+- Latest Google Analytics js code
+- Default configurations
+
+### Fixed
+- Fix error while versioning copied files ([82ba259](https://github.com/MilesPong/indigo/commit/82ba25917cd87e1754fdc7309b2c7ae3d90d6995))
+- Fix shedule bug
+- Fix search bar height in chrome
+
 ## 1.0.0 - 2018-03-12
 ### Added
 - Package spatie/laravel-backup and related schedule

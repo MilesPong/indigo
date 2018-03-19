@@ -50,8 +50,6 @@ class TagRepositoryEloquent extends BaseRepository implements TagRepository
      */
     protected function preHandleData(array $attributes)
     {
-        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['name']);
-
         return $attributes;
     }
 

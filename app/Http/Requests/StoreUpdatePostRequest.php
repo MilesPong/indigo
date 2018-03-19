@@ -31,7 +31,7 @@ class StoreUpdatePostRequest extends FormRequest
             'title' => 'required',
             'description' => 'required|max:100',
             'category_id' => 'required|exists:categories,id',
-            'slug' => 'unique:posts',
+            'slug' => 'required|unique:posts',
             'body' => 'required',
             'feature_img' => 'required',
         ];
@@ -41,6 +41,7 @@ class StoreUpdatePostRequest extends FormRequest
             case "PATCH":
                 $rules = array_merge($rules, [
                     'slug' => [
+                        'required',
                         Rule::unique('posts')->ignore($this->route('post'))
                     ]
                 ]);

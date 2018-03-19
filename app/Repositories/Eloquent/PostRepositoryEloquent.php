@@ -118,8 +118,6 @@ class PostRepositoryEloquent extends BaseRepository implements PostRepository
      */
     protected function preHandleData(array $attributes)
     {
-        $attributes['slug'] = $this->autoSlug($attributes['slug'], $attributes['title']);
-
         return $this->handle($attributes);
     }
 

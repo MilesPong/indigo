@@ -13,7 +13,9 @@ const cpx = require('cpx');
 
 mix.setPublicPath(path.normalize('public/backend'))
     .js('resources/assets/admin/js/admin.js', 'js')
-    .sass('resources/assets/admin/sass/admin.scss', 'css');
+    .sass('resources/assets/admin/sass/admin.scss', 'css')
+    .js('resources/assets/admin/js/editor.js', 'js')
+    .sass('resources/assets/admin/sass/editor.scss', 'css');
 
 // Vendor extraction
 mix.extract(['lodash', 'jquery', 'materialize-css', 'vue', 'axios']);
