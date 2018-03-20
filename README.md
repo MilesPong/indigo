@@ -40,11 +40,11 @@ Also, additional services below may be used and **recommended**
 ## Installation
 
 ```bash
-$ git clone https://github.com/MilesPong/indigo
+$ git clone https://github.com/MilesPong/indigo.git
 $ cd indigo
+$ cp .env.example .env
 $ composer install
 $ php artisan key:generate
-$ cp .env.example .env
 ```
 
 Change your DB settings and other services' configurations
