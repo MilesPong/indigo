@@ -43,7 +43,7 @@ Also, additional services below may be used and **recommended**
 ### Use Docker
 
 > **To avoid some deployment issues, you can run this application in [Docker](https://www.docker.com/) as well.
-> Please check this [document](docker/README.md) for more details.**
+> Please check this [document](https://github.com/MilesPong/docker-lnmp/blob/indigo/README.md) for more details.**
 
 ### Configration
 
