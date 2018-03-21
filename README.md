@@ -1,3 +1,4 @@
+
 # Indigo
 
 A blog application built with [Laravel](https://laravel.com), [Materialize](http://materializecss.com) and [Vue.js](https://vuejs.org/).
@@ -38,6 +39,13 @@ Also, additional services below may be used and **recommended**
 - Youdao Translate
 
 ## Installation
+
+### Use Docker
+
+> **To avoid some deployment issues, you can run this application in [Docker](https://www.docker.com/) as well.
+> Please check this [document](docker/README.md) for more details.**
+
+### Configration
 
 ```bash
 $ git clone https://github.com/MilesPong/indigo.git
