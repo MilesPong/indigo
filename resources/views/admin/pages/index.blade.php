@@ -11,7 +11,6 @@
         'columns' => [
             'id' => 'ID',
             'title' => 'Title',
-            'author.name' => 'Author',
             'human_status' => 'Status',
             'created_at' => 'Created At'
         ],

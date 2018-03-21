@@ -27,7 +27,6 @@ class InitializationSeeder extends Seeder
             'title' => 'About',
             'slug' => 'about',
             'description' => null,
-            'user_id' => \App\Models\User::first()->id,
             'content_id' => factory(\App\Models\Content::class)->create([
                 'body' => "## This is the about page."
             ])->id,
@@ -40,7 +39,6 @@ class InitializationSeeder extends Seeder
             'title' => 'Links',
             'slug' => 'links',
             'description' => null,
-            'user_id' => \App\Models\User::first()->id,
             'content_id' => factory(\App\Models\Content::class)->create([
                 'body' => "## This is the links page."
             ])->id,

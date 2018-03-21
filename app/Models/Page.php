@@ -19,7 +19,6 @@ class Page extends ArticleModel
         'slug',
         'is_draft',
         'title',
-        'title',
     ];
     /**
      * @var array
@@ -40,14 +39,6 @@ class Page extends ArticleModel
     public function content()
     {
         return $this->belongsTo(Content::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function author()
-    {
-        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
