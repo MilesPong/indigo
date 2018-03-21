@@ -11,8 +11,12 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\Role::class, 15)->create()->each(function ($role) {
-            $role->perms()->sync(\App\Models\Permission::all()->random(rand(1, \App\Models\Permission::count())));
+        $permissionCount = \App\Models\Permission::count();
+
+        factory(\App\Models\Role::class, 15)->create()->each(function ($role) use ($permissionCount) {
+            /** @var \App\Models\Role $role */
+            $role->perms()->sync(\App\Models\Permission::inRandomOrder()->take(mt_rand(1,
+                $permissionCount))->pluck('id'));
         });
     }
 }

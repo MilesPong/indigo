@@ -13,7 +13,7 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(\App\Models\Content::class, function (\Faker\Generator $faker) {
+$factory->define(\App\Models\Content::class, function (Faker $faker) {
     return [
         'body' => markdownContent($faker)
     ];

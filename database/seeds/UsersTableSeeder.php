@@ -11,8 +11,11 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\User::class, 10)->create()->each(function ($user) {
-            $user->roles()->sync(\App\Models\Role::all()->random(rand(1, \App\Models\Role::count())));
+        $roleCount = \App\Models\Role::count();
+
+        factory(\App\Models\User::class, 10)->create()->each(function ($user) use ($roleCount) {
+            /** @var \App\Models\User $user */
+            $user->roles()->sync(\App\Models\Role::inRandomOrder()->take(mt_rand(1, $roleCount))->pluck('id'));
         });
     }
 }

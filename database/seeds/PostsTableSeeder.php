@@ -11,11 +11,9 @@ class PostsTableSeeder extends Seeder
      */
     public function run()
     {
-        // $tagCount = \App\Models\Tag::count();
-
-        factory(\App\Models\Post::class, 30)->create()->each(function (\App\Models\Post $post) {
-            $post->tags()->sync(\App\Models\Tag::inRandomOrder()->take(mt_rand(1, 4))->get());
-            // $post->tags()->attach(App\Models\Tag::all()->random(rand(1, App\Models\Tag::count())));
+        factory(\App\Models\Post::class, 30)->create()->each(function ($post) {
+            /** @var \App\Models\Post $post */
+            $post->tags()->sync(\App\Models\Tag::inRandomOrder()->take(mt_rand(1, 4))->pluck('id'));
         });
     }
 }
