@@ -45,7 +45,7 @@ Also, additional services below may be used and **recommended**
 > **To avoid some deployment issues, you can run this application in [Docker](https://www.docker.com/) as well.
 > Please check this [document](https://github.com/MilesPong/docker-lnmp/blob/indigo/README.md) for more details.**
 
-### Configration
+### Configuration
 
 ```bash
 $ git clone https://github.com/MilesPong/indigo.git
@@ -97,10 +97,20 @@ $ crontab -e
 
 ### Migration
 
-*Default user(admin) info is in [InitializationSeeder](database/seeds/InitializationSeeder.php ), you can modify it before running the seed task.*
+```bash
+$ php artisan migrate --seed
+```
+
+Create the first user (admin) by using command below:
 
 ```bash
-$ php artisan migrate --seed # Migration and seeding
+$ php artisan user:add
+```
+
+Fake data is support for development, just seed the database:
+
+```bash
+$ php artisan db:seed --class=FakeDataSeeder
 ```
 
 ### Compiling Assets
