@@ -31,4 +31,4 @@ mix.then(() => {
     cpx.copy('node_modules/simplemde/dist/simplemde.min.js', 'public/js');
 });
 
-mix.browserSync('indigo.dev');
+mix.browserSync('indigo.test');
