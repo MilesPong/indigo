@@ -85,6 +85,12 @@ SCOUT_QUEUE=false
 SCOUT_DRIVER=null
 ```
 
+Create a symbolic link for `public` driver of **filesystem** 
+
+```bash
+$ php artisan storage:link
+```
+
 **Schedule** are required by default, set it up as follow
 
 ```bash
@@ -134,7 +140,7 @@ Check this out in [Gist](https://gist.github.com/MilesPong/7529f9586fb7070a7f4c5
 ## Links
 
 - [Materialize](http://materializecss.com)
-- [Vuejs](https://vuejs.org)
+- [Vue.js](https://vuejs.org)
 - [Laravel](https://laravel.com)
 
 ## Contributing
