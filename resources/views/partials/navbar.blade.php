@@ -8,7 +8,7 @@
             {{-- Normal usage --}}
             <a href="#" data-target="slide-out" class="sidenav-trigger button-collapse hide-on-large-only"><i class="material-icons">menu</i></a>
 
-            <a href="/" class="brand-logo"><i class="material-icons hide-on-small-and-down">home</i>Miles' Blog</a>
+            <a href="/" class="brand-logo"><i class="material-icons hide-on-small-and-down">home</i>{{ setting('title', config('app.name', 'Laravel')) }}</a>
             <ul class="right hide-on-med-and-down">
 
                 <li>
