@@ -32,5 +32,6 @@ return [
         'pagination' => [
             'per_page' => env('REPOSITORY_DEFAULT_PER_PAGE', 15)
         ]
-    ]
+    ],
+    'supported_locales' => ['en', 'zh-CN']
 ];
