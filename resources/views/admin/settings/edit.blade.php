@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    settings | @parent
+    @lang('menus.settings') | @parent
 @endsection
 
 @section('content')

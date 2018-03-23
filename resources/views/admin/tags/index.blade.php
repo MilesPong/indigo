@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    tags | @parent
+    @lang('menus.tags') | @parent
 @endsection
 
 @section('content')
@@ -9,9 +9,9 @@
     @component('admin.components.table', [
         'paginator' => $tags,
         'columns' => [
-            'name' => 'Name',
-            'description' => 'Description',
-            'slug' => 'Slug'
+            'name' => __('generic.attributes.name'),
+            'description' => __('generic.attributes.description'),
+            'slug' => __('generic.attributes.slug')
         ],
         'hrefCreate' => route('admin.tags.create'),
         'hrefShow' => route('admin.tags.show', ':id'),

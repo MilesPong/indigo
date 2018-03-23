@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Roles | @parent
+    @lang('menus.roles') | @parent
 @endsection
 
 @section('content')
@@ -9,10 +9,10 @@
     @component('admin.components.table', [
         'paginator' => $roles,
         'columns' => [
-            'id' => 'ID',
-            'name' => 'Role Name',
-            'display_name' => 'Display Name',
-            'description' => 'Description'
+            'id' => __('generic.attributes.id'),
+            'name' => __('generic.attributes.name'),
+            'display_name' => __('generic.attributes.display_name'),
+            'description' => __('generic.attributes.description')
         ],
         'hrefCreate' => route('admin.roles.create'),
         'hrefShow' => route('admin.roles.show', ':id'),

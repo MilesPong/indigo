@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Tags | @parent
+    @lang('menus.tags') | @parent
 @endsection
 
 @section('content')

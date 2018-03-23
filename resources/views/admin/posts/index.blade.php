@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Posts | @parent
+    @lang('menus.posts') | @parent
 @endsection
 
 @section('content')
@@ -9,11 +9,11 @@
     @component('admin.components.table', [
         'paginator' => $posts,
         'columns' => [
-            'id' => 'ID',
-            'title' => 'Title',
-            'author.name' => 'Author',
-            'category.name' => 'Category',
-            'created_at' => 'Created At'
+            'id' => __('generic.attributes.id'),
+            'title' => __('generic.attributes.title'),
+            'author.name' => __('articles.attributes.author'),
+            'category.name' => trans_choice('generic.model.category', SINGULAR),
+            'created_at' => __('generic.attributes.created_at')
         ],
         'hrefCreate' => route('admin.posts.create'),
         'hrefShow' => route('admin.posts.show', [':id', 'from' => 'admin']),

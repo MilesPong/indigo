@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Users | @parent
+    @lang('menus.users') | @parent
 @endsection
 
 @section('content')
@@ -9,10 +9,10 @@
     @component('admin.components.table', [
         'paginator' => $users,
         'columns' => [
-            'name' => 'Name',
-            'email' => 'Email',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At'
+            'name' => __('generic.attributes.name'),
+            'email' => __('generic.attributes.email'),
+            'created_at' => __('generic.attributes.created_at'),
+            'updated_at' => __('generic.attributes.updated_at')
         ],
         'hrefCreate' => route('admin.users.create'),
         'hrefShow' => route('admin.users.show', ':id'),

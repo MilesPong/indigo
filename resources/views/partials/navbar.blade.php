@@ -25,12 +25,12 @@
                 <!-- Dropdown Trigger -->
                 <li>
                     <a class="dropdown-trigger" href="#!" data-target="cate-dropdown">
-                        Category
+                        @lang('menus.categories')
                         <i class="material-icons right">arrow_drop_down</i>
                     </a>
                 </li>
 
-                <li><a class="waves-effect waves-light" href="{{ route('pages.show', 'about') }}">About</a></li>
+                <li><a class="waves-effect waves-light" href="{{ route('pages.show', 'about') }}">@lang('menus.about')</a></li>
             </ul>
 
         </div>

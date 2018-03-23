@@ -1,17 +1,17 @@
 <div class="row">
     <div class="input-field col s12 m6">
         <input id="title" type="text" class="validate" name="title" value="{{ $post->title ?? null }}">
-        <label for="title">Title</label>
+        <label for="title">@lang('generic.attributes.title')</label>
     </div>
     <div class="input-field col s12 m6">
         <input id="slug" type="text" class="validate" name="slug" value="{{ $post->slug ?? null }}" @if(isset($post->id))readonly="readonly"@endif>
-        <label id="slug-label" for="slug">Slug</label>
+        <label id="slug-label" for="slug">@lang('generic.attributes.slug')</label>
     </div>
 
     <div class="input-field col s12 m6">
         @component('admin.components.select', [
             'name' => 'category_id',
-            'label' => 'Category',
+            'label' => trans_choice('generic.model.category', SINGULAR),
             'selected' => isset($post) ? $post->category_id : null
         ])
             @foreach(App\Models\Category::all() as $category)
@@ -24,7 +24,7 @@
     <div class="input-field col s12 m6">
         @component('admin.components.select', [
             'name' => 'tag',
-            'label' => 'Tags',
+            'label' => trans_choice('generic.model.tag', PLURAL),
             'isMultiple' => true,
             'selected' => isset($post) ? $post->tags->pluck('name')->toArray() : null
         ])
@@ -36,18 +36,18 @@
 
     <div class="input-field col s12">
         <textarea id="description" class="materialize-textarea" type="text" name="description">{{ $post->description ?? null }}</textarea>
-        <label for="description">Description</label>
+        <label for="description">@lang('generic.attributes.description')</label>
     </div>
 
     {{-- TODO show image --}}
     <div class="input-field col s8">
         <input id="feature_img" placeholder="e.g. https://example.org/one.jpg" type="text" class="validate" name="feature_img" value="{{ $post->feature_img ?? null }}">
-        <label for="feature_img">Feature Image</label>
+        <label for="feature_img">@lang('articles.attributes.feature_img')</label>
     </div>
 
     <div class="input-field file-field col s4">
         <div class="btn">
-            <span>Upload</span>
+            <span>@lang('forms.actions.upload')</span>
             <input id="file-upload" type="file" accept="image/*">
         </div>
         <div class="file-path-wrapper">
@@ -57,7 +57,7 @@
 
     <div class="input-field col s12 body-field">
         <textarea id="body" class="materialize-textarea" name="body">{{ isset($post->id) ? $post->rawContent : null }}</textarea>
-        <label id="body-label" for="body">Content</label>
+        <label id="body-label" for="body">@lang('articles.attributes.content')</label>
     </div>
 
     <div class="input-field col s6">
@@ -72,16 +72,16 @@
 
     <div class="input-field col s12">
         <input type="text" name="published_at" id="published_at" value="{{ isset($post->id) ? $post->published_at->toDatetimeString() : null }}" readonly>
-        <label id="published_at-label" for="published_at">Published At</label>
+        <label id="published_at-label" for="published_at">@lang('articles.attributes.published_at')</label>
     </div>
 
     <div class="input-field col s12">
         <div class="switch">
             <label>
-                Publish
+                @lang('generic.publish')
                 <input type="checkbox" name="is_draft" id="is_draft" @if($post->is_draft ?? false)checked="checked"@endif>
                 <span class="lever"></span>
-                Draft
+                @lang('generic.draft')
             </label>
         </div>
     </div>

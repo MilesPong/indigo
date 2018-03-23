@@ -4,7 +4,7 @@
         <slot></slot>
 
         <div class="row right-align">
-            <button class="btn waves-effect waves-light" type="submit">Submit
+            <button class="btn waves-effect waves-light" type="submit">{{ textSubmit }}
                 <i class="material-icons right">send</i>
             </button>
         </div>
@@ -21,6 +21,10 @@
             },
             redirectUrl: {
                 type: String
+            },
+            textSubmit: {
+                type: String,
+                default: 'Submit'
             }
         },
         methods: {

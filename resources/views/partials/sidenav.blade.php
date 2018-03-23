@@ -17,7 +17,7 @@
 
             <li>
                 <a class="collapsible-header waves-effect waves-teal">
-                    <i class="material-icons">apps</i>Category
+                    <i class="material-icons">apps</i>@lang('menus.categories')
                 </a>
                 <div class="collapsible-body">
                     <ul>
@@ -37,10 +37,10 @@
     </li>
     <li><div class="divider"></div></li>
     {{--<li><a class="subheader">Subheader</a></li>--}}
-    <li><a href="{{ route('articles.show', 'indigo') }}" class="waves-effect waves-teal"><i class="material-icons">bubble_chart</i>Indigo</a></li>
-    <li><a class="waves-effect waves-teal" href="{{ route('pages.show', 'archives') }}"><i class="material-icons">date_range</i>Archives</a></li>
-    <li><a class="waves-effect waves-teal" href="{{ route('pages.show', 'links') }}"><i class="material-icons">link</i>Links</a></li>
-    <li><a class="waves-effect waves-teal" href="{{ route('pages.show', 'about') }}"><i class="material-icons">person</i>About</a></li>
+    <li><a href="{{ route('articles.show', 'indigo') }}" class="waves-effect waves-teal"><i class="material-icons">bubble_chart</i>@lang('menus.project')</a></li>
+    <li><a class="waves-effect waves-teal" href="{{ route('pages.show', 'archives') }}"><i class="material-icons">date_range</i>@lang('menus.archives')</a></li>
+    <li><a class="waves-effect waves-teal" href="{{ route('pages.show', 'links') }}"><i class="material-icons">link</i>@lang('menus.links')</a></li>
+    <li><a class="waves-effect waves-teal" href="{{ route('pages.show', 'about') }}"><i class="material-icons">person</i>@lang('menus.about')</a></li>
     <li><a class="waves-effect waves-teal" href="https://github.com/MilesPong"><i class="material-icons">code</i>Github</a></li>
 
 </ul>
