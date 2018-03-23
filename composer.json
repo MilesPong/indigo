@@ -44,7 +44,8 @@
             "Indigo\\": "app/Indigo"
         },
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "bootstrap/constants.php"
         ]
     },
     "autoload-dev": {
