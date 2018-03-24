@@ -11,6 +11,7 @@ return [
         'deleted_at' => 'Deleted At',
         'display_name' => 'Display Name',
         'email' => 'E-mail',
+        'username' => 'Username',
         'password' => 'Password',
         'confirm_password' => 'Confirm Password',
         'slug' => 'Slug',
@@ -35,5 +36,8 @@ return [
     'dashboard' => 'Dashboard',
     'external_links' => 'External Links',
     'search' => 'Search',
-    'about_blog' => 'About Blog'
+    'about_blog' => 'About Blog',
+
+    'remember_me' => 'Remember me',
+    'login' => 'Login'
 ];

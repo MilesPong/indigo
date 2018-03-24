@@ -21,44 +21,44 @@
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="input-field col s12 center">
-                            <h4 class="center materialize-red-text text-lighten-2">{{ config('app.name') }} Dashboard</h4>
+                            <h4 class="center materialize-red-text text-lighten-2">{{ setting('title', config('app.name', 'Laravel')) }} - @lang('generic.dashboard')</h4>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
                             <i class="material-icons prefix">account_circle</i>
                             <input id="username" type="email" class="validate" name="email" value="{{ old('email') }}">
-                            <label for="username" class="center-align" data-error="Wrong email format">Username</label>
+                            <label for="username" class="center-align" data-error="Wrong email format">@lang('generic.attributes.email')</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
                             <i class="material-icons prefix">lock</i>
                             <input id="password" type="password" name="password" required>
-                            <label for="password">Password</label>
+                            <label for="password">@lang('generic.attributes.password')</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s12">
                             <label>
                                 <input type="checkbox" class="filled-in" name="remember" />
-                                <span>Remember me</span>
+                                <span>@lang('generic.remember_me')</span>
                             </label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <button class="btn waves-effect waves-light col s12">Login</button>
+                            <button class="btn waves-effect waves-light col s12">@lang('generic.login')</button>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="input-field col s6 m6 l6">
-                            <p class=""><a href="#">Register Now!</a></p>
-                        </div>
-                        <div class="input-field col s6 m6 l6">
-                            <p class="right-align"><a href="#">Forgot password ?</a></p>
-                        </div>
-                    </div>
+                    {{--<div class="row">--}}
+                        {{--<div class="input-field col s6 m6 l6">--}}
+                            {{--<p class=""><a href="#">Register Now!</a></p>--}}
+                        {{--</div>--}}
+                        {{--<div class="input-field col s6 m6 l6">--}}
+                            {{--<p class="right-align"><a href="#">Forgot password ?</a></p>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
                 </form>
             </div>

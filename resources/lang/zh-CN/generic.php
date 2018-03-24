@@ -11,6 +11,7 @@ return [
         'deleted_at' => '删除时间',
         'display_name' => '显示名称',
         'email' => 'E-mail',
+        'username' => '用户名',
         'password' => '密码',
         'confirm_password' => '确认密码',
         'slug' => 'Slug',
@@ -35,5 +36,8 @@ return [
     'dashboard' => '后台',
     'external_links' => '其他链接',
     'search' => '搜索',
-    'about_blog' => '关于博客'
+    'about_blog' => '关于博客',
+
+    'remember_me' => '记住我',
+    'login' => '登录'
 ];
