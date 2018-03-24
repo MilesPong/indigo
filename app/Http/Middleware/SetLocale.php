@@ -78,5 +78,19 @@ class SetLocale
     protected function setLocale($locale)
     {
         app()->setLocale($locale);
+
+        $this->setCarbonLocale($locale);
+    }
+
+    /**
+     * Set Carbon's locale.
+     *
+     * @param $locale
+     * @return bool
+     */
+    protected function setCarbonLocale($locale)
+    {
+        // e.g. en-US to en, zh-CN to zh, zh-TW to zh
+        return Carbon::setLocale(strtolower(substr($locale, 0, 2)));
     }
 }
