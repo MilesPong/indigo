@@ -20,7 +20,12 @@
         <div class="container">
             © 2018 <a class="grey-text text-lighten-4" href="https://immiles.com">Miles</a>. All rights reserved. <a
                         href="{{ route('feeds.main') }}" class="white-text"><i class="material-icons feed">rss_feed</i></a>
-            <a href="https://opensource.org/licenses/MIT" class="right grey-text text-lighten-4">MIT License</a>
+            <span class="right">
+                <a class="grey-text text-lighten-4 lang-dropdown-trigger locale" href="#" data-target='lang-dropdown'><i class="material-icons">language</i>{{ $currentLocaleName }}</a> | <a class="grey-text text-lighten-4" href="https://opensource.org/licenses/MIT">MIT License</a>
+            </span>
         </div>
     </div>
+
+    @include('common.locale-dropdown', ['localeLinks' => $localeLinks])
+
 </footer>

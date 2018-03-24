@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 class Localization
 {
     /**
+     * @var array
+     */
+    protected static $supportedLocales = [];
+
+    /**
      * Retrieve locale from cookie or header.
      *
      * @param \Illuminate\Http\Request $request
@@ -37,15 +42,21 @@ class Localization
      */
     protected static function isSupportedLocale($locale)
     {
-        return in_array($locale, self::getSupportedLocales());
+        $locales = self::supportedLocales();
+
+        return isset($locales[$locale]);
     }
 
     /**
      * @return array
      */
-    protected static function getSupportedLocales()
+    public static function supportedLocales()
     {
-        return config('indigo.supported_locales', ['en']);
+        if (empty(self::$supportedLocales)) {
+            self::$supportedLocales = config('indigo.supported_locales', ['en' => 'English']);
+        }
+
+        return self::$supportedLocales;
     }
 
     /**
@@ -76,10 +87,10 @@ class Localization
      */
     protected static function getBestAvailableLocale($locales)
     {
-        $supportedLocales = self::getSupportedLocales();
+        $supportedLocales = self::supportedLocales();
 
         foreach ($locales as $locale => $weight) {
-            if (in_array($locale, $supportedLocales)) {
+            if (isset($supportedLocales[$locale])) {
                 return $locale;
             }
         }

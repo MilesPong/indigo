@@ -33,5 +33,8 @@ return [
             'per_page' => env('REPOSITORY_DEFAULT_PER_PAGE', 15)
         ]
     ],
-    'supported_locales' => ['en', 'zh-CN']
+    'supported_locales' => [
+        'en' => 'English',
+        'zh-CN' => '简体中文'
+    ]
 ];
