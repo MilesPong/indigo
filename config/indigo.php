@@ -35,6 +35,7 @@ return [
     ],
     'supported_locales' => [
         'en' => 'English',
-        'zh-CN' => '简体中文'
+        'zh-CN' => '简体中文',
+        'zh-HK' => '繁體中文（香港）'
     ]
 ];
