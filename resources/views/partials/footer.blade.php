@@ -18,7 +18,7 @@
     </div>
     <div class="footer-copyright">
         <div class="container">
-            © 2018 <a class="grey-text text-lighten-4" href="https://immiles.com">Miles</a>. All rights reserved. <a
+            © 2018 <a class="grey-text text-lighten-4" href="https://immiles.com">Miles</a>. <span class="hide-on-small-and-down">All rights reserved.</span> <a
                         href="{{ route('feeds.main') }}" class="white-text"><i class="material-icons feed">rss_feed</i></a>
             <span class="right">
                 <a class="grey-text text-lighten-4 lang-dropdown-trigger locale" href="#" data-target='lang-dropdown'><i class="material-icons">language</i>{{ $currentLocaleName }}</a> | <a class="grey-text text-lighten-4" href="https://opensource.org/licenses/MIT">MIT License</a>
