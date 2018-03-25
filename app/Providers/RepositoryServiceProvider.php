@@ -13,7 +13,7 @@ class RepositoryServiceProvider extends ServiceProvider
     /**
      * @var array
      */
-    protected $bindings = [
+    public $bindings = [
         \App\Repositories\Contracts\PermissionRepository::class => \App\Repositories\Eloquent\PermissionRepositoryEloquent::class,
         \App\Repositories\Contracts\RoleRepository::class => \App\Repositories\Eloquent\RoleRepositoryEloquent::class,
         \App\Repositories\Contracts\UserRepository::class => \App\Repositories\Eloquent\UserRepositoryEloquent::class,
@@ -42,16 +42,6 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        foreach ($this->bindings() as $abstract => $concrete) {
-            $this->app->bind($abstract, $concrete);
-        }
-    }
 
-    /**
-     * @return array
-     */
-    public function bindings()
-    {
-        return $this->bindings;
     }
 }
