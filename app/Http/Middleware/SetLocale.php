@@ -79,6 +79,8 @@ class SetLocale
     {
         app()->setLocale($locale);
 
+        setlocale(LC_TIME, str_replace('-', '_', $locale) . '.utf8', 'en_US.utf8');
+
         $this->setCarbonLocale($locale);
     }
 
