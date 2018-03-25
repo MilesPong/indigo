@@ -85,6 +85,8 @@ SCOUT_QUEUE=false
 SCOUT_DRIVER=null
 ```
 
+Change **log channel** in case you are not using `slack` channel which is enabled in `stack` channel by default, such as `LOG_CHANNEL=single`.
+
 Create a symbolic link for `public` driver of **filesystem** 
 
 ```bash
