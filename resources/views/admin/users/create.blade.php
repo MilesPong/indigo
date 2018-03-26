@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Users | @parent
+    @lang('menus.users') | @parent
 @endsection
 
 @section('content')

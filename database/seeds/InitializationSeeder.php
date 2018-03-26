@@ -11,12 +11,6 @@ class InitializationSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\User::class)->create([
-            'name' => 'Miles Peng',
-            'email' => 'mingpeng16@gmail.com',
-            'password' => bcrypt('indigo')
-        ]);
-
         factory(\App\Models\Category::class)->create([
             'name' => 'Uncategorized',
             'description' => 'Default category',
@@ -27,7 +21,6 @@ class InitializationSeeder extends Seeder
             'title' => 'About',
             'slug' => 'about',
             'description' => null,
-            'user_id' => \App\Models\User::first()->id,
             'content_id' => factory(\App\Models\Content::class)->create([
                 'body' => "## This is the about page."
             ])->id,
@@ -40,7 +33,6 @@ class InitializationSeeder extends Seeder
             'title' => 'Links',
             'slug' => 'links',
             'description' => null,
-            'user_id' => \App\Models\User::first()->id,
             'content_id' => factory(\App\Models\Content::class)->create([
                 'body' => "## This is the links page."
             ])->id,
@@ -51,25 +43,25 @@ class InitializationSeeder extends Seeder
 
         factory(\App\Models\Setting::class)->create([
             'key' => 'title',
-            'value' => "Miles' Blog",
+            'value' => "Indigo",
             'tag' => 'website'
         ]);
 
         factory(\App\Models\Setting::class)->create([
             'key' => 'keywords',
-            'value' => 'miles,milespong,laravel,blog',
+            'value' => 'indigo,laravel,blog',
             'tag' => 'seo'
         ]);
 
         factory(\App\Models\Setting::class)->create([
             'key' => 'description',
-            'value' => 'A blog built with laravel by Miles',
+            'value' => 'A blog built with Laravel, Materialize and Vue.js',
             'tag' => 'seo'
         ]);
 
         factory(\App\Models\Setting::class)->create([
             'key' => 'heading',
-            'value' => 'Just Keep Learning',
+            'value' => 'Hello World',
             'tag' => 'website'
         ]);
     }

@@ -13,13 +13,13 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(\App\Models\Post::class, function (\Faker\Generator $faker) {
+$factory->define(\App\Models\Post::class, function (Faker $faker) {
     $title = $faker->unique()->sentence(mt_rand(3, 6));
 
     return [
         'title' => $title,
         'user_id' => App\Models\User::inRandomOrder()->first()->id,
-        'category_id' => \App\Models\Category::pluck('id')->random(),
+        'category_id' => \App\Models\Category::inRandomOrder()->first()->id,
         'description' => $faker->sentence(10),
         'slug' => str_slug($title),
         'feature_img' => random_img_url(),

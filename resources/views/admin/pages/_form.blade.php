@@ -1,30 +1,30 @@
 <div class="row">
     <div class="input-field col s12 m6">
         <input id="title" type="text" class="validate" name="title" value="{{ $page->title ?? null }}">
-        <label for="title">Title</label>
+        <label for="title">@lang('generic.attributes.title')</label>
     </div>
     <div class="input-field col s12 m6">
         <input id="slug" type="text" class="validate" name="slug" value="{{ $page->slug ?? null }}" @if(isset($page->id))readonly="readonly"@endif>
-        <label id="slug-label" for="slug">Slug</label>
+        <label id="slug-label" for="slug">@lang('generic.attributes.slug')</label>
     </div>
 
     <div class="input-field col s12">
         <textarea id="description" class="materialize-textarea" name="description">{{ $page->description ?? null }}</textarea>
-        <label for="description">Description</label>
+        <label for="description">@lang('generic.attributes.description')</label>
     </div>
 
     <div class="input-field col s12 body-field">
         <textarea id="body" class="materialize-textarea" type="text" name="body">{{ isset($page->id) ? $page->rawContent : null }}</textarea>
-        <label id="body-label" for="body">Content</label>
+        <label id="body-label" for="body">@lang('articles.attributes.content')</label>
     </div>
 
     <div class="input-field col s12">
         <div class="switch">
             <label>
-                Publish
+                @lang('generic.publish')
                 <input type="checkbox" name="is_draft" id="is_draft" @if($page->is_draft ?? false)checked="checked"@endif>
                 <span class="lever"></span>
-                Draft
+                @lang('generic.draft')
             </label>
         </div>
     </div>

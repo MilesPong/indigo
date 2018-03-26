@@ -13,7 +13,7 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(\App\Models\Tag::class, function (\Faker\Generator $faker) {
+$factory->define(\App\Models\Tag::class, function (Faker $faker) {
     $name = $faker->unique()->word;
 
     return [

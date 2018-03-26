@@ -32,5 +32,10 @@ return [
         'pagination' => [
             'per_page' => env('REPOSITORY_DEFAULT_PER_PAGE', 15)
         ]
+    ],
+    'supported_locales' => [
+        'en' => 'English',
+        'zh-CN' => '简体中文',
+        'zh-HK' => '繁體中文（香港）'
     ]
 ];

@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## 1.1.0 - 2018-03-26
+### Added
+- Docker support ([defe382](https://github.com/MilesPong/indigo/commit/defe3824d538163e5ad0cb52838963d7d03bc359), [4730e0f](https://github.com/MilesPong/indigo/commit/4730e0fc6480ebfcad3b73a5bb29a48a07c3a0c8))
+- `user:add` command
+- Show Algolia logo when using `algolia` driver
+- Localization support
+
+### Changed
+- Upgrade npm packages
+- Seeder and ModelFactory ([da69855](https://github.com/MilesPong/indigo/commit/da698558b3f13e66e14e29645e21019c37fc9266))
+- Upgrade to Laravel 5.6
+
+### Fixed
+- Bug of updating `updated_at` after saving counter
+
+### Removed
+- Column `user_id` on Page model
+
 ## 1.0.4 - 2018-03-19
 ### Added
 - [README.md](README.md)

@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Categories | @parent
+    @lang('menus.categories') | @parent
 @endsection
 
 @section('content')
@@ -9,9 +9,9 @@
     @component('admin.components.table', [
         'paginator' => $categories,
         'columns' => [
-            'name' => 'Name',
-            'description' => 'Description',
-            'slug' => 'Slug'
+            'name' => __('generic.attributes.name'),
+            'description' => __('generic.attributes.description'),
+            'slug' => __('generic.attributes.slug')
         ],
         'hrefCreate' => route('admin.categories.create'),
         'hrefShow' => route('admin.categories.show', ':id'),

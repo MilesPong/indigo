@@ -1,3 +1,4 @@
+
 # Indigo
 
 A blog application built with [Laravel](https://laravel.com), [Materialize](http://materializecss.com) and [Vue.js](https://vuejs.org/).
@@ -39,12 +40,19 @@ Also, additional services below may be used and **recommended**
 
 ## Installation
 
+### Use Docker
+
+> **To avoid some deployment issues, you can run this application in [Docker](https://www.docker.com/) as well.
+> Please check this [document](https://github.com/MilesPong/docker-lnmp/blob/indigo/README.md) for more details.**
+
+### Configuration
+
 ```bash
-$ git clone https://github.com/MilesPong/indigo
+$ git clone https://github.com/MilesPong/indigo.git
 $ cd indigo
+$ cp .env.example .env
 $ composer install
 $ php artisan key:generate
-$ cp .env.example .env
 ```
 
 Change your DB settings and other services' configurations
@@ -77,6 +85,14 @@ SCOUT_QUEUE=false
 SCOUT_DRIVER=null
 ```
 
+Change **log channel** in case you are not using `slack` channel which is enabled in `stack` channel by default, such as `LOG_CHANNEL=single`.
+
+Create a symbolic link for `public` driver of **filesystem** 
+
+```bash
+$ php artisan storage:link
+```
+
 **Schedule** are required by default, set it up as follow
 
 ```bash
@@ -89,10 +105,20 @@ $ crontab -e
 
 ### Migration
 
-*Default user(admin) info is in [InitializationSeeder](database/seeds/InitializationSeeder.php ), you can modify it before running the seed task.*
+```bash
+$ php artisan migrate --seed
+```
+
+Create the first user (admin) by using command below:
 
 ```bash
-$ php artisan migrate --seed # Migration and seeding
+$ php artisan user:add
+```
+
+Fake data is support for development, just seed the database:
+
+```bash
+$ php artisan db:seed --class=FakeDataSeeder
 ```
 
 ### Compiling Assets
@@ -116,7 +142,7 @@ Check this out in [Gist](https://gist.github.com/MilesPong/7529f9586fb7070a7f4c5
 ## Links
 
 - [Materialize](http://materializecss.com)
-- [Vuejs](https://vuejs.org)
+- [Vue.js](https://vuejs.org)
 - [Laravel](https://laravel.com)
 
 ## Contributing

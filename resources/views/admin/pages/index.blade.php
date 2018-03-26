@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Pages | @parent
+    @lang('menus.pages') | @parent
 @endsection
 
 @section('content')
@@ -9,11 +9,10 @@
     @component('admin.components.table', [
         'paginator' => $pages,
         'columns' => [
-            'id' => 'ID',
-            'title' => 'Title',
-            'author.name' => 'Author',
-            'human_status' => 'Status',
-            'created_at' => 'Created At'
+            'id' => __('generic.attributes.id'),
+            'title' => __('generic.attributes.title'),
+            'human_status' => __('articles.attributes.is_draft'),
+            'created_at' => __('generic.attributes.created_at')
         ],
         'hrefCreate' => route('admin.pages.create'),
         'hrefShow' => route('admin.pages.show', [':id', 'from' => 'admin']),

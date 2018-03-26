@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Permissions | @parent
+    @lang('menus.permissions') | @parent
 @endsection
 
 @section('content')

@@ -38,7 +38,8 @@ trait MarkdownHelper
      */
     public function markdownCopyright($permalink = '')
     {
-        // TODO i18n
-        return sprintf("\n\n原文链接：[%s](%s)", $permalink, $permalink);
+        $permalinkTrans = __('article.permalink');
+
+        return sprintf("\n\n{$permalinkTrans}：[%s](%s)", $permalink, $permalink);
     }
 }

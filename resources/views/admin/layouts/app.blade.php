@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ config('app.locale') }}">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,7 +15,7 @@
 
     @include('partials.favicon')
 
-    <title>@section('title'){{ config('app.name', 'Laravel') }}@show</title>
+    <title>@section('title'){{ setting('title', config('app.name', 'Laravel')) }}@show</title>
 
     <meta name="keywords" content="@section('keywords'){{ setting('keywords') }}@show">
     <meta name="description" content="@section('description'){{ setting('description') }}@show">

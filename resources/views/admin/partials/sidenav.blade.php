@@ -10,24 +10,24 @@
         </div>
     </li>
 
-    <li><a href="{{ route('admin.home') }}" class="waves-effect waves-teal"><i class="material-icons">home</i>Home</a></li>
+    <li><a href="{{ route('admin.home') }}" class="waves-effect waves-teal"><i class="material-icons">home</i>@lang('menus.home')</a></li>
 
     <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
             <li>
                 <a class="collapsible-header waves-effect waves-teal">
-                    <i class="material-icons">security</i>RBAC
+                    <i class="material-icons">security</i>@lang('menus.rbac')
                 </a>
                 <div class="collapsible-body">
                     <ul>
                         <li>
                             <a href="{{ route('admin.permissions.index') }}" class="waves-effect">
-                                <i class="material-icons"></i>Permissions
+                                <i class="material-icons"></i>@lang('menus.permissions')
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('admin.roles.index') }}" class="waves-effect">
-                                <i class="material-icons"></i>Roles
+                                <i class="material-icons"></i>@lang('menus.roles')
                             </a>
                         </li>
                     </ul>
@@ -36,10 +36,10 @@
         </ul>
     </li>
 
-    <li><a href="{{ route('admin.users.index') }}" class="waves-effect waves-teal"><i class="material-icons">people</i>Users</a></li>
-    <li><a href="{{ route('admin.categories.index') }}" class="waves-effect waves-teal"><i class="material-icons">library_books</i>Categories</a></li>
-    <li><a href="{{ route('admin.tags.index') }}" class="waves-effect waves-teal"><i class="material-icons">loyalty</i>Tags</a></li>
-    <li><a href="{{ route('admin.posts.index') }}" class="waves-effect waves-teal"><i class="material-icons">insert_drive_file</i>Posts</a></li>
-    <li><a href="{{ route('admin.pages.index') }}" class="waves-effect waves-teal"><i class="material-icons">note</i>Pages</a></li>
-    <li><a href="{{ route('admin.settings.index') }}" class="waves-effect waves-teal"><i class="material-icons">settings</i>Settings</a></li>
+    <li><a href="{{ route('admin.users.index') }}" class="waves-effect waves-teal"><i class="material-icons">people</i>@lang('menus.users')</a></li>
+    <li><a href="{{ route('admin.categories.index') }}" class="waves-effect waves-teal"><i class="material-icons">library_books</i>@lang('menus.categories')</a></li>
+    <li><a href="{{ route('admin.tags.index') }}" class="waves-effect waves-teal"><i class="material-icons">loyalty</i>@lang('menus.tags')</a></li>
+    <li><a href="{{ route('admin.posts.index') }}" class="waves-effect waves-teal"><i class="material-icons">insert_drive_file</i>@lang('menus.posts')</a></li>
+    <li><a href="{{ route('admin.pages.index') }}" class="waves-effect waves-teal"><i class="material-icons">note</i>@lang('menus.pages')</a></li>
+    <li><a href="{{ route('admin.settings.index') }}" class="waves-effect waves-teal"><i class="material-icons">settings</i>@lang('menus.settings')</a></li>
 </ul>

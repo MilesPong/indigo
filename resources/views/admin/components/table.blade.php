@@ -6,7 +6,7 @@
                 <th>{{ $displayName }}</th>
             @endforeach
 
-            <th>Action</th>
+            <th>@lang('forms.action')</th>
         </tr>
     </thead>
 

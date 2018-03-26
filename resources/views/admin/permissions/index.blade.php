@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Permissions | @parent
+    @lang('menus.permissions') | @parent
 @endsection
 
 @section('content')
@@ -9,10 +9,10 @@
     @component('admin.components.table', [
         'paginator' => $permissions,
         'columns' => [
-            'id' => 'ID',
-            'name' => 'Name',
-            'display_name' => 'Display Name',
-            'description' => 'Description'
+            'id' => __('generic.attributes.id'),
+            'name' => __('generic.attributes.name'),
+            'display_name' => __('generic.attributes.display_name'),
+            'description' => __('generic.attributes.description')
         ],
         'hrefCreate' => route('admin.permissions.create'),
         'hrefShow' => route('admin.permissions.show', ':id'),

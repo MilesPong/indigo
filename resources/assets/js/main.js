@@ -54,3 +54,6 @@ M.Tooltip.init(document.querySelector('.tooltipped'));
 M.Collapsible.init(document.querySelectorAll('.collapsible.expandable'), {
     accordion: false
 });
+
+// Footer locale dropdown
+M.Dropdown.init(document.querySelector('.lang-dropdown-trigger'));

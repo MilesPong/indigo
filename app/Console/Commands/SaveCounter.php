@@ -122,6 +122,8 @@ class SaveCounter extends Command
         $tableData = [];
 
         foreach ($data as $identifier => $increment) {
+            // Just update "view_count" without touching "updated_at".
+            $viewable->timestamps = false;
             $viewable->newQuery()->where($viewable->getKeyName(), $identifier)->increment($viewable->getCountField(),
                 $increment);
             array_push($tableData, [$identifier, $increment]);

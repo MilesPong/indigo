@@ -8,7 +8,7 @@
             {{-- Normal usage --}}
             <a href="#" data-target="slide-out" class="sidenav-trigger button-collapse hide-on-large-only"><i class="material-icons">menu</i></a>
 
-            <a href="/" class="brand-logo"><i class="material-icons hide-on-small-and-down">home</i>Miles' Blog</a>
+            <a href="/" class="brand-logo"><i class="material-icons hide-on-small-and-down">home</i>{{ setting('title', config('app.name', 'Laravel')) }}</a>
             <ul class="right hide-on-med-and-down">
 
                 <li>
@@ -25,12 +25,12 @@
                 <!-- Dropdown Trigger -->
                 <li>
                     <a class="dropdown-trigger" href="#!" data-target="cate-dropdown">
-                        Category
+                        @lang('menus.categories')
                         <i class="material-icons right">arrow_drop_down</i>
                     </a>
                 </li>
 
-                <li><a class="waves-effect waves-light" href="{{ route('pages.show', 'about') }}">About</a></li>
+                <li><a class="waves-effect waves-light" href="{{ route('pages.show', 'about') }}">@lang('menus.about')</a></li>
             </ul>
 
         </div>

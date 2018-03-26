@@ -76,7 +76,6 @@ class PageRepositoryEloquent extends BaseRepository implements PageRepository
         $model = DB::transaction(function () use ($attributes) {
             return tap($this->getNewModelInstance($attributes), function (Model $instance) use ($attributes) {
                 $instance->setAttribute('content_id', $this->contentModel->create($attributes)->getKey());
-                $instance->setAttribute('user_id', Auth::id());
                 $instance->save();
             });
         });
@@ -91,19 +90,6 @@ class PageRepositoryEloquent extends BaseRepository implements PageRepository
     protected function preHandleData(array $attributes)
     {
         return $this->handle($attributes);
-    }
-
-    /**
-     * @param null $perPage
-     * @param array $columns
-     * @return mixed
-     * @throws \App\Repositories\Exceptions\RepositoryException
-     */
-    public function paginate($perPage = null, $columns = ['*'])
-    {
-        $this->with('author');
-
-        return parent::paginate($perPage, $columns);
     }
 
     /**

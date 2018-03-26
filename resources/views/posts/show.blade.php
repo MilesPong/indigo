@@ -49,12 +49,12 @@
             <div class="col s12 post-copyright">
                 <div class="card-panel grey lighten-3">
                     <blockquote class="">
-                        <p><strong>原始内容：</strong><a href="{{ route('articles.markdown', $post->slug) }}">Markdown 版本</a></p>
-                        <p><strong>版权声明：</strong>由 <strong>{{ $post->author->name }}</strong> 创作，使用
-                            <a href="http://creativecommons.org/licenses/by/4.0/deed.zh"><img class="license-badge" src="https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square" alt="License: CC BY-SA 4.0"></a>
-                            创作共享协议，<a href="http://creativecommons.org/licenses/by/4.0/deed.zh">相关说明</a>
+                        <p>
+                            <strong>@lang('articles.source')：</strong><a href="{{ route('articles.markdown', $post->slug) }}">@lang('articles.markdown_version')</a></p>
+                        <p>
+                            <strong>@lang('articles.copyright')：</strong>@lang('articles.copyright_content', ['name' => $post->author->name, 'badge' => 'https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square'])
                         </p>
-                        <p><strong>本文链接：</strong><a href="{{ route('articles.show', $post->slug) }}">{{ route('articles.show', $post->slug) }}</a></p>
+                        <p><strong>@lang('articles.permalink')：</strong><a href="{{ route('articles.show', $post->slug) }}">{{ route('articles.show', $post->slug) }}</a></p>
                     </blockquote>
                 </div>
             </div>

@@ -4,6 +4,8 @@
 // Bootstrap
 @import "~materialize-css/sass/materialize.scss";
 
+@import "modules/footer.scss";
+
 [v-cloak] { display: none; }
 
 html, body {

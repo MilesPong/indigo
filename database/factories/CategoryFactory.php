@@ -13,7 +13,7 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(\App\Models\Category::class, function (\Faker\Generator $faker) {
+$factory->define(\App\Models\Category::class, function (Faker $faker) {
     $name = $faker->unique()->sentence(2);
 
     return [

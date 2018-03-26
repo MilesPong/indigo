@@ -41,14 +41,6 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function pages()
-    {
-        return $this->hasMany(Page::class);
-    }
-
-    /**
      * TODO condition should be compared with role
      *
      * @return bool

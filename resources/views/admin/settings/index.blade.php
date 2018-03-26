@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Settings | @parent
+    @lang('menus.settings') | @parent
 @endsection
 
 @section('content')
@@ -9,10 +9,10 @@
     @component('admin.components.table', [
         'paginator' => $settings,
         'columns' => [
-            'id' => 'ID',
-            'key' => 'Key',
-            'value' => 'Value',
-            'tag' => 'Tag'
+            'id' => __('generic.attributes.id'),
+            'key' => __('generic.attributes.key'),
+            'value' => __('generic.attributes.value'),
+            'tag' => __('generic.attributes.tag')
         ],
         'hrefCreate' => route('admin.settings.create'),
         'hrefEdit' => route('admin.settings.edit', ':id'),

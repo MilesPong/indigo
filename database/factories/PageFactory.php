@@ -7,7 +7,6 @@ $factory->define(App\Models\Page::class, function (Faker $faker) {
 
     return [
         'title' => $title,
-        'user_id' => \App\Models\User::inRandomOrder()->first()->id,
         'description' => $faker->sentence(10),
         'slug' => str_slug($title),
         'content_id' => function () {
