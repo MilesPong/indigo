@@ -17,7 +17,7 @@ class GithubWebhookEvent
     /**
      * @var
      */
-    public $event;
+    public $hookEvent;
     /**
      * @var
      */
@@ -26,12 +26,12 @@ class GithubWebhookEvent
     /**
      * Create a new event instance.
      *
-     * @param $event
+     * @param $hookEvent
      * @param $payload
      */
-    public function __construct($event, $payload)
+    public function __construct($hookEvent, $payload)
     {
-        $this->event = $event;
+        $this->hookEvent = $hookEvent;
         $this->payload = $payload;
     }
 
