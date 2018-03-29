@@ -61,3 +61,6 @@ Route::group(['namespace' => 'Frontend'], function () {
     // Page
     Route::get('{slug}', 'PageController@show')->name('pages.show');
 });
+
+// Webhook
+Route::post('webhook', 'WebhookController@index')->name('webhook');
