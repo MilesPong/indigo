@@ -37,7 +37,7 @@ class Deployer
             return Log::error('Deployer has not been set up.');
         }
 
-        $command = "cd {$this->deployerPath} && {$this->binDep} deploy localhost --branch=master --npm-env=prod -vv 2>&1";
+        $command = "cd {$this->deployerPath} && {$this->binDep} deploy localhost --branch=master --npm-env=prod -vvv 2>&1";
 
         exec($command, $output, $return);
 
