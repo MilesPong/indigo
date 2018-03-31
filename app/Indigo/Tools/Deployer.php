@@ -70,6 +70,8 @@ class Deployer
         if ($return !== 0) {
             Log::error(implode(PHP_EOL, $output));
         }
+
+        return true;
     }
 
     /**

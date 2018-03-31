@@ -5,22 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Indigo\Tools\GithubWebhook;
 
+/**
+ * Class WebhookController
+ * @package App\Http\Controllers
+ */
 class WebhookController extends Controller
 {
-    public function index(Request $request, GithubWebhook $webhook)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
     {
-        // Validate
-
-        // Log header and payload
-        $this->log($request);
-
-        // React based on event, ping-pong or execute deployment in queue
-        return $webhook->handle();
-
-    }
-
-    protected function log($request)
-    {
-
+        // Reaction based on event, ping-pong or execute deployment in queue
+        return with(new GithubWebhook($request))->handle();
     }
 }
