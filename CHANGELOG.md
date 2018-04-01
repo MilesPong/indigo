@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## 1.2.0 - 2018-04-01
+### Added
+- Webhook event and listener ([f5288a6](https://github.com/MilesPong/indigo/commit/f5288a6eeae7740ccf2ddf85535a79f960b3cc1e), [c95a83c](https://github.com/MilesPong/indigo/commit/c95a83cd9af096e5d6ca939000be94106c649809))
+- Feature **Deployer** integration
+
+### Changed
+- Update package-lock.json
+
+### Fixed
+- Some namespaces
+
+### Removed
+- Default closure in `routes/api.php`
+
 ## 1.1.0 - 2018-03-26
 ### Added
 - Docker support ([defe382](https://github.com/MilesPong/indigo/commit/defe3824d538163e5ad0cb52838963d7d03bc359), [4730e0f](https://github.com/MilesPong/indigo/commit/4730e0fc6480ebfcad3b73a5bb29a48a07c3a0c8))
