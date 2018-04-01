@@ -37,5 +37,11 @@ return [
         'en' => 'English',
         'zh-CN' => '简体中文',
         'zh-HK' => '繁體中文（香港）'
+    ],
+    'github_webhook_secret' => env('GITHUB_WEBHOOK_SECRET'),
+    'deployer' => [
+        'branch' => env('DEPLOYER_BRANCH', 'master'),
+        'stage_or_hostname' => env('STAGE_OR_HOSTNAME', 'localhost'),
+        'npm_env' => env('NPM_ENV', 'prod')
     ]
 ];
