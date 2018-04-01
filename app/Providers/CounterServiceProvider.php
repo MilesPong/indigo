@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Barryvdh\Debugbar\ServiceProvider;
 use Indigo\Tools\Counter;
+use Illuminate\Support\ServiceProvider;
 
 /**
  * Class CounterServiceProvider

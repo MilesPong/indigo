@@ -2,9 +2,9 @@
 
 namespace App\Http\ViewComposers;
 
-use App\Indigo\Tools\Localization;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Indigo\Tools\Localization;
 
 /**
  * Class FooterComposer

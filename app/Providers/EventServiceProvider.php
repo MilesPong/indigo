@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\GithubWebhookEvent;
+use App\Listeners\GithubWebhookListener;
 use App\Repositories\Listeners\RepositoryEventSubscriber;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -20,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ViewedEvent' => [
             'App\Listeners\ViewedEventListener',
         ],
+        GithubWebhookEvent::class => [
+            GithubWebhookListener::class
+        ]
     ];
 
     /**

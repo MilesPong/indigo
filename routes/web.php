@@ -17,6 +17,9 @@ Auth::routes();
 
 Route::feeds();
 
+// Github Webhook
+Route::post('webhook', 'WebhookController@index')->name('webhook');
+
 Route::group(['namespace' => 'Backend', 'middleware' => 'auth', 'prefix' => 'dashboard', 'as' => 'admin.'], function () {
     Route::get('/', 'DashboardController@index')->name('home');
 

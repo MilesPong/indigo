@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Indigo\Tools\Localization;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Indigo\Tools\Localization;
 use Symfony\Component\HttpFoundation\Cookie;
 
 /**

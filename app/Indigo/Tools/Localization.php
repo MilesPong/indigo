@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indigo\Tools;
+namespace Indigo\Tools;
 
 use Illuminate\Http\Request;
 
