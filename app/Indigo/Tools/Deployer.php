@@ -57,7 +57,7 @@ class Deployer
     /**
      * @return bool
      */
-    public function release()
+    public function deploy()
     {
         if (!$this->validSetUp()) {
             return Log::error('Deployer has not been set up.');
