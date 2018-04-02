@@ -34,9 +34,40 @@ class GithubWebhookListener implements ShouldQueue
     public function handle(GithubWebhookEvent $event)
     {
         switch ($event->hookEvent) {
-            case 'release':
-                with(new Deployer)->release();
+            case 'push':
+                if ($this->isDeployBranch($event->payload)) {
+                    with(new Deployer)->deploy();
+                }
             default:
         }
+    }
+
+    /**
+     * @param $payload
+     * @return bool
+     */
+    protected function isDeployBranch($payload)
+    {
+        $formattedPayload = $this->formatPayload($payload);
+
+        return isset($formattedPayload['ref']) && (str_replace('refs/heads/', '',
+                    $formattedPayload['ref']) === $this->getDeployBranch());
+    }
+
+    /**
+     * @param $payload
+     * @return mixed
+     */
+    protected function formatPayload($payload): mixed
+    {
+        return json_decode($payload, true);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDeployBranch()
+    {
+        return config('indigo.deployer.branch', 'master');
     }
 }
