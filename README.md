@@ -22,7 +22,7 @@ There is an introduction(Chinese) about this project as well, you can access it 
  - Counter with multiple drivers support
  - Backup with Google Drive storage support
  - Multiple Mix for compiling backend and frontend
- - [Deployer integrated](https://github.com/MilesPong/laravel-deployer/blob/indigo/README.md)
+ - [Deployer integration](https://github.com/MilesPong/laravel-deployer/blob/indigo/README.md)
 
 More features can be found in [CHANGELOG.md](CHANGELOG.md)
 
