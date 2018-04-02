@@ -11,7 +11,7 @@
     @component('components.header')
         <div class="center white-text">
             <div class="row">
-                <h1>Category: {{ $category->name }}</h1>
+                <h1>@lang('generic.model.category'): {{ $category->name }}</h1>
                 <p class="flow-text">{{ $category->description }}</p>
             </div>
         </div>
