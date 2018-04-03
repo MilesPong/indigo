@@ -1,8 +1,8 @@
 # Indigo
 
-**Indigo** 是一个基于 [Laravel](https://laravel.com/)、[Materialize](http://materializecss.com/)、[Vue.js](https://vuejs.org/) 开发的个人博客项目。
+[README](README.md) | [简体中文](README_zh.md)
 
-> 其他语言版本: [English](https://github.com/MilesPong/indigo)，[简体中文](https://github.com/MilesPong/indigo/blob/master/README_zh.md)。
+**Indigo** 是一个基于 [Laravel](https://laravel.com/)、[Materialize](http://materializecss.com/)、[Vue.js](https://vuejs.org/) 开发的个人博客项目。
 
 ## 预览
 

@@ -1,12 +1,12 @@
 # Indigo
 
+[README](README.md) | [简体中文](README_zh.md)
+
 A blog application built with [Laravel](https://laravel.com), [Materialize](http://materializecss.com) and [Vue.js](https://vuejs.org/).
 
 Indigo is a project I mainly learn to how to develop a Laravel application **in the right way**, include using design patterns, modern coding tricks, and other useful skills.
 
 There is an introduction(Chinese) about this project as well, you can access it [here](https://immiles.com/articles/indigo).
-
-> Read this in other languages: [English](https://github.com/MilesPong/indigo), [简体中文](https://github.com/MilesPong/indigo/blob/master/README_zh.md).
 
 ## Screenshot
 
