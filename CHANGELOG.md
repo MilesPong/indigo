@@ -11,16 +11,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-## 1.2.0 - 2018-04-01
+## 1.2.2 - 2018-04-01
 ### Added
 - Webhook event and listener ([f5288a6](https://github.com/MilesPong/indigo/commit/f5288a6eeae7740ccf2ddf85535a79f960b3cc1e), [c95a83c](https://github.com/MilesPong/indigo/commit/c95a83cd9af096e5d6ca939000be94106c649809))
 - Feature **Deployer** integration
+- Migration for failed queue job
 
 ### Changed
 - Update package-lock.json
 
 ### Fixed
 - Some namespaces
+- Missing HOME environment variable for composer in deployer submodule ([ceb7ac8](https://github.com/MilesPong/indigo/commit/ceb7ac8ce8959608a53800d6db012a81ff62e8ee))
 
 ### Removed
 - Default closure in `routes/api.php`
