@@ -1,7 +1,7 @@
 {{-- NavBar --}}
 <div class="navbar-fixed">
     <nav id="nav-bar" class="z-depth-0">
-        <div class="nav-wrapper container">
+        <div class="nav-wrapper container" id="nav-main-bar">
             {{-- Only for large screen --}}
             <a href="#" data-target="slide-out" class="sidenav-trigger hide-on-med-and-down menu-on-large"><i class="material-icons">menu</i></a>
 
@@ -33,7 +33,26 @@
                 <li><a class="waves-effect waves-light" href="{{ route('pages.show', 'about') }}">@lang('menus.about')</a></li>
             </ul>
 
+            {{-- Mobile Search --}}
+            <ul class="right hide-on-large-only">
+                <li>
+                    <i class="material-icons mobile-search">search</i>
+                </li>
+            </ul>
+
         </div>
+
+        {{-- Mobile Search --}}
+        <div class="nav-wrapper hide" id="nav-search-bar">
+            <form action="{{ route('search') }}">
+                <div class="input-field">
+                    <input id="mobile-search-input" type="search" name="q" required>
+                    <label class="label-icon" for="mobile-search-input"><i class="material-icons">search</i></label>
+                    <i class="material-icons mobile-search-close">close</i>
+                </div>
+            </form>
+        </div>
+
     </nav>
 </div>
 
