@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## 1.3.0 - 2018-04-04
+### Added
+- Mobile search ([3c3a78a](https://github.com/MilesPong/indigo/commit/3c3a78ac2caba61a649395371f5050877dd487c0))
+- Chinese [README_zh.md](README_zh.md)
+
+### Changed
+- Github webhook event set to `push` ([153b1b8](https://github.com/MilesPong/indigo/commit/153b1b8ad4a53f1bf1457800f2dfbce6b4db7473))
+- Localization
+- Frontend table style
+
 ## 1.2.2 - 2018-04-01
 ### Added
 - Webhook event and listener ([f5288a6](https://github.com/MilesPong/indigo/commit/f5288a6eeae7740ccf2ddf85535a79f960b3cc1e), [c95a83c](https://github.com/MilesPong/indigo/commit/c95a83cd9af096e5d6ca939000be94106c649809))
