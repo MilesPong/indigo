@@ -81,3 +81,13 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        $(function () {
+            $('.post-content').find('table').each((idx, elem) => {
+                $(elem).addClass('striped centered responsive-table');
+            });
+        })
+    </script>
+@endpush

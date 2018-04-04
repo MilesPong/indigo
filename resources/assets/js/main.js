@@ -36,6 +36,24 @@ jQuery(document).ready(function () {
             nav.addClass("z-depth-0");
         }
     });
+
+    // Mobile search
+    let toggleNavBar = function () {
+        $('#nav-main-bar, #nav-search-bar').toggleClass('hide');
+    };
+
+    $('.mobile-search, .mobile-search-close').click(e => {
+        e.preventDefault();
+        toggleNavBar();
+    });
+
+    $('.mobile-search').click(() => {
+        $('#mobile-search-input').focus();
+    });
+
+    $('#mobile-search-input').blur(() => {
+        toggleNavBar();
+    })
 });
 
 // Navigation bar's dropdown

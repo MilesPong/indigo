@@ -1,5 +1,6 @@
-
 # Indigo
+
+[README](README.md) | [简体中文](README_zh.md)
 
 A blog application built with [Laravel](https://laravel.com), [Materialize](http://materializecss.com) and [Vue.js](https://vuejs.org/).
 
