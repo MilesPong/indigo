@@ -85,8 +85,17 @@
 @push('js')
     <script>
         $(function () {
-            $('.post-content').find('table').each((idx, elem) => {
+            let postBody = $('.post-content');
+            
+            postBody.find('table').each((idx, elem) => {
                 $(elem).addClass('striped centered responsive-table');
+            });
+
+            postBody.find('pre:not([class])').each((idx, elem) => {
+                $(elem).addClass('language-bash');
+                $(elem).find('code:not([class])').each((idx, elem) => {
+                    $(elem).addClass('language-bash');
+                });
             });
         })
     </script>
