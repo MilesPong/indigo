@@ -34,6 +34,8 @@ class ViewedEventListener implements ShouldQueue
      */
     public function handle(ViewedEvent $event)
     {
-        $this->counter->increment($event->viewable);
+        if (!$event->isAuth && !$event->isRobot) {
+            $this->counter->increment($event->viewable);
+        }
     }
 }
